@@ -1,0 +1,26 @@
+@color: #71777c;
+@activeColor: #007fff;
+@mainColor: #007fff;
+@mainColor1: #0876e4;
+@lineColor: #f1f1f1;
+
+
+.main-color{
+  color: @mainColor
+}
+
+.flex(@jc: flex-start, @ai: flex-start, @dir: row){
+  display: flex;
+  flex-direction: @dir;
+  justify-content: @jc;
+  align-items: @ai;
+}
+
+.border(@px: 1px, @bcolor:hsla(0,0%,59.2%,.2), @style: solid){
+  border: @arguments;
+}
+
+
+.line(@dir,@c:@lineColor){
+  border-@{dir}: 1px solid @c;
+}
