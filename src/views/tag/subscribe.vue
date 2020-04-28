@@ -1,11 +1,11 @@
 <template>
   <div class="">
-    homeList
+    <!-- 所有标签 -->
   </div>
 </template>
 <script>
 export default {
-  name: 'homeList',
+  name: '',
   components: {},
   data () {
     return {}

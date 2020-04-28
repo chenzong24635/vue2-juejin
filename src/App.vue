@@ -14,6 +14,9 @@ export default{
   components: {
     headerBase,
     suspensionIcon
+  },
+  created(){
+    console.log(1);
   }
 }
 </script>

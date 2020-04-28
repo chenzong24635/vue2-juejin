@@ -11,7 +11,7 @@
           <input type="password" placeholder="请输入密码">
         </div>
         <div class="form-list">
-          <button class="btn-primary">登录</button>
+          <button @click="login" class="btn-primary">登录</button>
         </div>
         <div class="form-list form-prompt">
           <p>
@@ -45,8 +45,9 @@
   </div>
 </template>
 <script>
+// import {loginAuth} from '@/api/auth'
 export default {
-  name: 'register',
+  name: 'login',
   components: {},
   props: {
     show: {
@@ -57,9 +58,15 @@ export default {
   data () {
     return {
       thirdAuthShow: false,
+      phoneNumber: '1',
+      password: '123'
     }
   },
   created () {
+    /* console.log(loginAuth);
+    loginAuth(this.phoneNumber, this.password).then(res => {
+      console.log(res);
+    }) */
   },
   methods: {
     close() {
@@ -72,6 +79,9 @@ export default {
     },
     thirdAuth() {
       this.thirdAuthShow = true;
+    },
+    login() {
+
     }
   }
 }

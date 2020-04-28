@@ -1,0 +1,226 @@
+<template>
+  <div class="">
+    <!-- 首页-文章列表 -->
+    <slot></slot>
+    <ul class="lists" >
+      <li class="list" v-for="list in listsNew" :key="list.id"
+        @mouseenter="changeShow(list,1)" 
+        @mouseleave="changeShow(list,2)"
+      >
+        <div class="list-cnt">
+          <div class="list-flags">
+            <p class="flag dot zl">专栏</p>
+            <p class="flag dot">{{list.user.username}}</p>
+            <p class="flag dot">{{list.createdAt}}</p>
+            <p class="dot">
+              <span class="slash" v-for="tag in list.tags" :key="tag.id">
+                {{tag.title}}
+              </span>
+            </p>
+          </div>
+          <h3 class="list-title">{{list.title}}</h3>
+          <ul class="list-icons" >
+            <li class="list-icon">
+              <div class="icon-box">
+                <svg-icon name="praise" :size="14"></svg-icon>
+                <span class="icon-num">{{list.collectionCount}}</span>
+              </div>
+              <div class="icon-box">
+                <svg-icon name="message1" :size="14"></svg-icon>
+                <span class="icon-num">{{list.commentsCount}}</span>
+              </div>
+
+              <div @click="share(list)" v-show="list.uploadIconShow" class="icon-box icon-upload" title="分享">
+                <svg-icon name="upload" :size="14"></svg-icon>
+                <div @click="shareWb(list)" v-show="list.uploadBoxShow" class="share">
+                  <svg-icon name="weibo" :size="20"></svg-icon>
+                  <span>微博</span>
+                </div>
+              </div>
+              <div v-show="list.uploadIconShow&&type==='tag'" class="icon-box" title="收藏">
+                <svg-icon name="collect" :size="14"></svg-icon>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div v-if="list.screenshot" class="list-img">
+          <img :src="list.screenshot" alt="">
+        </div>
+      </li>
+    </ul>
+  </div>
+</template>
+<script>
+
+import {throttle, dateDis} from '@/libs/util'
+import {mapState} from 'vuex'
+
+export default {
+  name: 'homeList',
+  components: {},
+  props: {
+    lists: {
+      type: Array,
+      required: true,
+    },
+    type: {
+      type: String,
+      default: 'home'
+    },
+    hasNextPage: { //是否有下一页
+      type: Boolean,
+      default: true
+    },
+  },
+  computed: {
+    ...mapState([
+      'homeApiData'
+    ]),
+    listsNew: {
+      get (){
+        let arr = this.lists.map(item => {
+          if(item.node){
+            item.node.createdAt = dateDis(item.node.createdAt)
+            return item.node
+          }
+          else {
+            item.createdAt = dateDis(item.createdAt)
+            return item
+          }  
+        })
+        return arr
+      }
+    }
+  },
+  data () {
+    return {
+      scrollTop: 0, //当前滚动位置，判断上下滚动
+      defaultScreenshot: "https://b-gold-cdn.xitu.io/images/weibo-share.png"
+    }
+  },
+  created() {
+    console.log(throttle);
+  },
+  mounted () {
+    window.addEventListener('scroll', throttle(this.scrollBottom,200))
+    console.log(this.lists,this.listsNew);
+
+  },
+  methods: {
+    changeShow (obj, type) { //鼠标移入移出时，分享图标显示隐藏
+      if(type / 1 === 1){
+        this.$set(obj, 'uploadIconShow', true)
+      }else{
+        !obj.uploadBoxShow && this.$set(obj, 'uploadIconShow', false)
+      }
+    },
+    share(obj) { //显示分享框
+      this.$set(obj, 'uploadBoxShow', !obj.uploadBoxShow)
+    },
+    shareWb(obj) { // 点击分享到微薄
+      let title = obj.title + '-' + obj.user.username + '- 掘金专栏';
+      let href = `
+        http://service.weibo.com/share/share.php?url=
+        ${obj.originalUrl}&sharesource=weibo&title=${title}
+        &pic=${obj.screenshot ? encodeURIComponent(obj.screenshot) : encodeURIComponent(this.defaultScreenshot)}
+        &sudaref=juejin.im&display=0&retcode=6102#_loginLayer_1587971734906
+      `;
+      window.open(href)
+    },
+    scrollBottom() {
+      let rect = document.body.getBoundingClientRect();
+      let scrollTop = - rect.top;//滚动条距离顶部的高度
+      let bodyHeight = rect.height; //当前页面的总高度
+      let clientHeight = document.documentElement.clientHeight; //当前可视的页面高度
+      console.log(this.scrollTop, scrollTop);
+      if(this.scrollTop > scrollTop){ //判断是否上滚
+        this.scrollTop = scrollTop;
+        return
+      }
+      this.scrollTop = scrollTop;
+      if(scrollTop + clientHeight > (bodyHeight - clientHeight/2)) {   //距离顶部+当前高度 >=文档总高度 即代表滑动到底部 
+        //滚动条到达底部
+        if(this.type === 'home'){
+          this.$emit('getLists2', this.homeApiData);
+        }else{
+          this.$emit('getLists2');
+        }
+        
+      }
+    }
+  }
+}
+</script>
+<style scoped lang="less">
+.list{
+  /* max-width: 700px;
+  width: 100%; */
+  // width: 700px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  background-color: #fff;
+  color: #b2bac2;
+  cursor: pointer;
+  .flex(@jc: space-between);
+  .line(bottom);
+  &-cnt{width: 100%;.ov();}
+  &-img{
+        flex: 0 0 auto;
+    width: 5rem;
+    height: 5rem;
+    margin-left: 2rem;
+    background-color: #fff;
+    border-radius: 2px;
+  }
+  .zl{
+    font-weight: 500;
+    color: #b71ed7;
+  }
+  &-title{
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #2e3135;
+    margin: .5rem 0 1rem;
+    .ov();
+  }
+  &-flags{
+    .flex();
+  }
+  &-icons{
+    .list-icon{
+      .flex(@ai: center);
+      .icon-box{
+        .flex(@ai: center);
+        .border(@bcolor:#edeeef);
+        position: relative;
+        padding: .4rem .8rem;
+        cursor: pointer;
+        // margin-right: 2rem;
+      }
+      .icon-box+.icon-box{
+        border-left: none;
+      }
+    }
+  }
+}
+.icon-upload{
+  .share{
+    position: absolute;
+    top: 100%;
+    left: -1px;
+    margin-top: 1rem;
+    width: 11rem;
+    padding: .5rem 1.2rem;
+    font-size: 1.167rem;
+    color: #8f969c;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 #e0e4e9;
+    z-index: 10;
+    .border();
+  }
+  .share+.share{
+    border-bottom: 1px solid #eee;
+  }
+}
+</style>

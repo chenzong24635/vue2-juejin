@@ -3,11 +3,17 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-import headerMainRoutes from './baseheader'
+import baseHeader from './baseHeader'
+import tag from './tag'
+
+
+console.log(baseHeader);
+
+
 const routes = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/home/recommended',
   },
   {
     path: '/test',
@@ -40,7 +46,8 @@ const routes = [
       },
     ]
   },
-  ...headerMainRoutes
+  ...baseHeader,
+  ...tag
 ]
 
 const router = new VueRouter({

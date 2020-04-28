@@ -13,12 +13,21 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      '/v1/topicList': {
+      /* '/v1/topicList': {
+        target: 'https://web-api.juejin.im/query',
+        changeOrigin: true,
+      }, */
+      '/v1/topicList': {/* topic */
         target: 'https://short-msg-ms.juejin.im',
         changeOrigin: true,
-        /* pathRewrite: {
-          '/v1': '/topicList'
-        } */
+      },
+      '/auth/type': {
+        target: 'https://juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/get_tag_entry': { /* tag */
+        target: 'https://timeline-merger-ms.juejin.im',
+        changeOrigin: true,
       },
     }
   },  

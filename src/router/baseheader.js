@@ -1,3 +1,5 @@
+import homeHeader from './homeHeader' //首页的二级导航
+
 const Home = () => import('@/views/home/home.vue')
 const Pins = () => import('@/views/pins/pins.vue')
 const Topics = () => import('@/views/topics/topics.vue')
@@ -9,11 +11,15 @@ const Events = () => import('@/views/events/events.vue')
 const baseHeader = [
   {
     path: '/home',
+    redirect: '/home/recommended',
     name: 'Home',
     meta: {
       title: '首页'
     },
     component: Home,
+    children: [
+      ...homeHeader
+    ]
   },
   {
     path: '/pins',
@@ -48,5 +54,4 @@ const baseHeader = [
     component: Events
   }
 ]
-
 export default baseHeader

@@ -1,5 +1,5 @@
 <template>
-  <div class="header" >
+  <header class="header" >
     <login-box :show="loginFormShow" @toReg="showHide2" @closeModal="showHide1"></login-box>
     <register-box :show="registerFormShow" @toLogin="showHide1" @closeModal="showHide2" ></register-box>
     <div id="header-base">
@@ -54,7 +54,7 @@
               <span>写文章</span>
               <div v-show="writeBoxShow" class="write-box">
                 <div class="title">来掘金写文章，您将有机会</div>
-                <ul class="benefit-list">
+                <ul class="write-list">
                   <li class="item">与超过 300 万开发者分享您的经验和观点</li>
                   <li class="item">被编辑推荐，获得更多曝光和关注</li>
                   <li class="item">加入专栏作者群，结识众多优秀开发者</li>
@@ -71,14 +71,14 @@
         </nav>
       </div>
     </div>
-  </div>
+  </header>
 </template>
 <script>
 
 import LoginBox from '@/views/login/login'
 import RegisterBox from '@/views/login/register'
 
-import baseHeader from '@/router/baseheader'
+import baseHeader from '@/router/baseHeader'
 import {mapState} from 'vuex'
 
 export default {
@@ -124,6 +124,7 @@ export default {
 <style lang="less" scoped>
 .header{
   height: 5rem;
+  border-bottom: 1px solid #eee;
 }
 #header-base{
   position: fixed;
@@ -131,6 +132,8 @@ export default {
   left: 0;
   right: 0;
   height: 5rem;
+  z-index: 101;
+  border-bottom: 1px solid #eee;
   background-color: #fff;
   .container{
     .flex(@ai:center);
@@ -278,5 +281,59 @@ export default {
   height: 2.5rem;
   border-radius: 50%;
   position: relative;
+}
+
+.write{
+  &-box{
+    position: absolute;
+    top: 200%;
+    width: 326px;
+    box-sizing: border-box;
+    padding: 2.5rem 2rem;
+    border-radius: 2px;
+    color: #909090;
+    font-size: 1.1rem;
+    background-color: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+    border: 1px solid rgba(178,181,187,.5);
+    cursor: default;
+    z-index: 11;
+    &:before{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 1rem;
+      height: 1rem;
+      border-top: 1px solid rgba(178,181,187,.5);
+      border-left: 1px solid rgba(178,181,187,.5);
+      background-color: #fff;
+      transform: rotate(45deg) translate(-50%,-50%);
+      transform-origin: 0 0;
+    }
+    .title{
+      font-size: 1.4rem;
+      line-height: 1;
+      font-weight: 700;
+      color: #000;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    button{
+      display: block;
+      margin: 2rem auto 0;
+      background-color: #83c73a;
+      font-size: 1.2rem;
+      padding: 1rem 4rem;
+    }
+  }
+  &-list{
+    padding-left: 2rem;
+    .item{
+      list-style: initial;
+      margin-bottom: 1rem;
+    }
+  }
+  
 }
 </style>
