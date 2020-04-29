@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     async getLists() {
-      let {s, d} = await tagAPI.lists(this.tagid, this.page, this.pageSize, this.sort)
+      let {s, d} = await tagAPI.tags(this.tagid, this.page, this.pageSize, this.sort)
       if (s === 1) {
         this.lists = this.lists.concat(d.entrylist);
         this.page ++;

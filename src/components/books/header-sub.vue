@@ -1,17 +1,16 @@
 <template>
   <div class="container">
-    <!--首页二级导航 -->
+    <!--二级导航 -->
     <nav id="header-sub">
       <ul class="navs">
-        <li class="nav" v-for="item in headerSubs" :key="item.name">
-          <router-link @click.native="changeRoute(item)" :to="item.path" >{{item.meta.title}}</router-link>
+        <li class="nav" v-for="item in headerSubs" :key="item.id">
+          <router-link @click.native="changeRoute(item)" :to="'/books/'+item.alias" >{{item.name}}</router-link>
         </li>
       </ul>
     </nav>
   </div>
 </template>
 <script>
-import {mapState, mapMutations} from 'vuex'
 export default {
   name: '',
   components: {},
@@ -23,33 +22,15 @@ export default {
   },
   data () {
     return {
-      apiData: {},
     }
-  },
-  computed: {
-    ...mapState([
-      'homeApiData',
-      'path'
-    ])
   },
   created () {
-    let path = this.$route.path;
-    //刷新时根据当前页面路径判断加载
-    //如果当前 path 与刷新前存储的 path 相同且存在接口所需的参数
-    if (this.path === path && Object.keys(this.homeApiData).length) {
-      this.apiData = this.homeApiData;
-    }else{ //否则加载默认（推荐）
-      this.apiData = this.headerSubs[0].meta.apiData;
-    }
   },
   methods: {
-    ...mapMutations([
-      'setHomeApiData'
-    ]),
     changeRoute(item) {
       //存储当前参数，刷新时用
-      this.setHomeApiData({path: item.path, homeApiData: item.meta.apiData});
-      this.$emit('getLists1', item.meta.apiData);
+      console.log(item);
+      this.$emit('getLists', item.alias);
     },
   }
 }

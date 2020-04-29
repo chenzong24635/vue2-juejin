@@ -1,9 +1,9 @@
 <template>
-  <section class="tags">
+  <div class="tags">
     <!-- 首页-未登录-热门标签 -->
     <p class="top">
       <span>热门标签</span>
-      <router-link to="">查看全部</router-link>
+      <router-link to="/subscribe">查看全部</router-link>
     </p>
     <nav>
       <ul class="tags-lists">
@@ -12,7 +12,7 @@
         </li>
       </ul>
     </nav>
-  </section>
+  </div>
 </template>
 <script>
 export default {

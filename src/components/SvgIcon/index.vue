@@ -1,6 +1,6 @@
 <template>
     <svg 
-      class="svg-icon" 
+      :class="svgClass" 
       aria-hidden="true" 
       v-on="$listeners" 
       :style="{'font-size': size + 'px','fill': color}"
@@ -24,19 +24,22 @@ export default {
     size: {
       type: Number,
       default: 20
+    },
+    className: {
+      type: String,
     }
   },
   computed: {
     iconName() {
       return `#icon-${this.name}`
     },
-    /* svgClass() {
+    svgClass() {
       if (this.className) {
         return 'svg-icon ' + this.className
       } else {
         return 'svg-icon'
       }
-    } */
+    }
   }
 }
 </script>

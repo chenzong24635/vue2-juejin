@@ -10,11 +10,12 @@
   color: @mainColor
 }
 
-.flex(@jc: flex-start, @ai: flex-start, @dir: row){
+.flex(@jc: flex-start, @ai: flex-start, @dir: row,@wrap: wrap){
   display: flex;
   flex-direction: @dir;
   justify-content: @jc;
   align-items: @ai;
+  white-space: @wrap;
 }
 
 .border(@px: 1px, @bcolor:hsla(0,0%,59.2%,.2), @style: solid){
@@ -22,9 +23,21 @@
 }
 
 
-.line(@dir,@c:@lineColor){
+.line(@dir: bottom,@c:@lineColor){
   border-@{dir}: 1px solid @c;
 }
+
+.delimiter(@str: '/',@c: inherit){
+  position: relative;
+  padding: if(@str = '·', 0 4px 0 6px, 0 0 0 7px);
+  &:not(:first-of-type):before{
+    content: @str;
+    position: absolute;
+    left: 0;
+    color: @c;
+  }
+}
+
 
 .ov(@line: 1){
   white-space: nowrap;

@@ -104,7 +104,9 @@ export default {
   mounted () {
     window.addEventListener('scroll', throttle(this.scrollBottom,200))
     console.log(this.lists,this.listsNew);
-
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollBottom)
   },
   methods: {
     changeShow (obj, type) { //鼠标移入移出时，分享图标显示隐藏
@@ -186,6 +188,12 @@ export default {
   }
   &-flags{
     .flex();
+  }
+  .dot{
+    .delimiter('·');
+  }
+  .slash{
+    .delimiter()
   }
   &-icons{
     .list-icon{

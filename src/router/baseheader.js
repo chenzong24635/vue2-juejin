@@ -38,8 +38,9 @@ const baseHeader = [
     component: Topics
   },
   {
-    path: '/books',
+    path: '/books/:id?',
     name: 'books',
+    props: true,
     meta: {
       title: '小册'
     },

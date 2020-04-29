@@ -13,11 +13,7 @@ module.exports = {
   },
   devServer: {
     proxy: {
-      /* '/v1/topicList': {
-        target: 'https://web-api.juejin.im/query',
-        changeOrigin: true,
-      }, */
-      '/v1/topicList': {/* topic */
+      '/v1/topicList': {/* topics */
         target: 'https://short-msg-ms.juejin.im',
         changeOrigin: true,
       },
@@ -29,6 +25,18 @@ module.exports = {
         target: 'https://timeline-merger-ms.juejin.im',
         changeOrigin: true,
       },
+      '/v1/tags/type': { /* subscribe */
+        target: 'https://gold-tag-ms.juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/getListByLastTime': { /* books */
+        target: 'https://xiaoce-timeline-api-ms.juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/getNavList': { /* books-navs */
+        target: 'https://xiaoce-timeline-api-ms.juejin.im',
+        changeOrigin: true,
+      }
     }
   },  
   chainWebpack(config) {

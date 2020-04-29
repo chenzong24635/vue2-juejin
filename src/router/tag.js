@@ -14,9 +14,6 @@ const tags = [
   {
     path: '/subscribe',
     name: 'subscribe',
-    props: {
-      id: ''
-    },
     meta: {
       title: '全部标签'
     },
