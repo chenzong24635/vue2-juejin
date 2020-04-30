@@ -10,7 +10,7 @@
   color: @mainColor
 }
 
-.flex(@jc: flex-start, @ai: flex-start, @dir: row,@wrap: wrap){
+.flex(@jc: flex-start, @ai: flex-start, @dir: row,@wrap: normal){
   display: flex;
   flex-direction: @dir;
   justify-content: @jc;
@@ -23,8 +23,8 @@
 }
 
 
-.line(@dir: bottom,@c:@lineColor){
-  border-@{dir}: 1px solid @c;
+.line(@dir: bottom,@width:1px,@type:solid,@c:@lineColor){
+  border-@{dir}: @width @type @c;
 }
 
 .delimiter(@str: '/',@c: inherit){

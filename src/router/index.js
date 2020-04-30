@@ -52,6 +52,17 @@ const routes = [
     props: true,
     component: () => import('@/views/user/user.vue'),
   },
+  {
+    path: '/book/:id',
+    name: 'user',
+    props: true,
+    component: () => import('@/views/books/book.vue'),
+  },
+  {
+    path: '/feedback',
+    name: 'feedback',
+    component: () => import('@/views/feedback/feedback.vue'),
+  },
   ...baseHeader,
   ...tag
 ]

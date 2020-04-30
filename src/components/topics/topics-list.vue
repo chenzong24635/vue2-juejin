@@ -2,7 +2,7 @@
   <ul class="lists">
     <li class="list" v-for="item in lists" :key="item.objectId">
       <div class="list-img" >
-        <img :src="item.icon" :alt="item.title" :title="item.description">
+        <img :src="item.icon" :title="item.description">
         <span class="list-img-num" v-if="type === 1">{{item.msgsCount}}</span>
       </div>
       <div class="list-content">

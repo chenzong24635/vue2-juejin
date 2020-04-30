@@ -10,6 +10,7 @@ html {
 body{
   word-break: break-word;
   overflow-y: scroll;
+  line-height: normal;
 }
 
 .container{
@@ -93,3 +94,4 @@ h1 {
 html,body{
   /* height: 30000px; */
 }
+

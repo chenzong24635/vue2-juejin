@@ -32,7 +32,7 @@ export default {
     ])
   },
   created() {
-    // this.getTopicList();
+    this.getTopicList();
     this.isLogin && this.getTopicListFollowed();
   },
   methods: {

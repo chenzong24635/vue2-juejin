@@ -5,9 +5,11 @@
       <books-list :lists="lists" />
       <books-right />
     </div>
+    <copy-right />
   </div>
 </template>
 <script>
+import copyRight from '@/components/common/copy-right'
 import headerSub from '@/components/books/header-sub'
 import booksList from '@/components/books/books-list'
 import booksRight from '@/components/books/books-right'
@@ -18,7 +20,8 @@ export default {
   components: {
     headerSub,
     booksList,
-    booksRight
+    booksRight,
+    copyRight
   },
   props: ["id"],
   mixins: [scroll],
@@ -83,7 +86,7 @@ export default {
     }
   },
   created () {
-    this.getNavLists()
+    this.getNavLists();
     this.getLists(this.id);
     this.alias = this.id;
     console.log(this.alias);

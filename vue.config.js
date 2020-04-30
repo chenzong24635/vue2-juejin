@@ -36,7 +36,15 @@ module.exports = {
       '/v1/getNavList': { /* books-navs */
         target: 'https://xiaoce-timeline-api-ms.juejin.im',
         changeOrigin: true,
-      }
+      },
+      '/v1/getCityList': { /* event-city */
+        target: 'https://event-storage-api-ms.juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/getEventList': { /* event-list */
+        target: 'https://event-storage-api-ms.juejin.im',
+        changeOrigin: true,
+      },
     }
   },  
   chainWebpack(config) {

@@ -1,15 +1,13 @@
 <template>
   <div class="">
-    book-{{id}}
-    <!-- https://juejin.im/book/59e414a5518825541b03ce66 -->
-    <!-- https://juejin.im/book/5c90640c5188252d7941f5bb/section/5c9065385188252da6320022 -->
+    feedback
+    <!-- https://juejin.im/feedback -->
   </div>
 </template>
 <script>
 export default {
   name: '',
   components: {},
-  props: ['id'],
   data () {
     return {}
   },
