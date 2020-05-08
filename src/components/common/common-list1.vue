@@ -52,8 +52,7 @@
 </template>
 <script>
 
-import {throttle, dateDis} from '@/libs/util'
-import {mapState} from 'vuex'
+import { dateDis} from '@/libs/util'
 
 export default {
   name: 'homeList',
@@ -73,9 +72,6 @@ export default {
     },
   },
   computed: {
-    ...mapState([
-      'homeApiData'
-    ]),
     listsNew: {
       get (){
         let arr = this.lists.map(item => {
@@ -98,16 +94,6 @@ export default {
       defaultScreenshot: "https://b-gold-cdn.xitu.io/images/weibo-share.png"
     }
   },
-  created() {
-    console.log(throttle);
-  },
-  mounted () {
-    window.addEventListener('scroll', throttle(this.scrollBottom,200))
-    console.log(this.lists,this.listsNew);
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollBottom)
-  },
   methods: {
     changeShow (obj, type) { //鼠标移入移出时，分享图标显示隐藏
       if(type / 1 === 1){
@@ -129,27 +115,6 @@ export default {
       `;
       window.open(href)
     },
-    scrollBottom() {
-      let rect = document.body.getBoundingClientRect();
-      let scrollTop = - rect.top;//滚动条距离顶部的高度
-      let bodyHeight = rect.height; //当前页面的总高度
-      let clientHeight = document.documentElement.clientHeight; //当前可视的页面高度
-      console.log(this.scrollTop, scrollTop);
-      if(this.scrollTop > scrollTop){ //判断是否上滚
-        this.scrollTop = scrollTop;
-        return
-      }
-      this.scrollTop = scrollTop;
-      if(scrollTop + clientHeight > (bodyHeight - clientHeight/2)) {   //距离顶部+当前高度 >=文档总高度 即代表滑动到底部 
-        //滚动条到达底部
-        if(this.type === 'home'){
-          this.$emit('getLists2', this.homeApiData);
-        }else{
-          this.$emit('getLists2');
-        }
-        
-      }
-    }
   }
 }
 </script>
@@ -163,7 +128,7 @@ export default {
   background-color: #fff;
   color: #b2bac2;
   cursor: pointer;
-  .flex(@jc: space-between);
+  .flex(@jc: space-between,@ai: center);
   .line(bottom);
   &-cnt{width: 100%;.ov();}
   &-img{
@@ -202,7 +167,8 @@ export default {
         .flex(@ai: center);
         .border(@bcolor:#edeeef);
         position: relative;
-        padding: .4rem .8rem;
+        padding: 0 .6rem;
+        height: 2rem;
         cursor: pointer;
         // margin-right: 2rem;
       }

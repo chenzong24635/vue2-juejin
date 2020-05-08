@@ -10,7 +10,7 @@
         <nav class="navs">
           <ul class="navs-left">
             <li v-for="(item,index) in baseHeader" :key="index">
-              <router-link :to="item.path" >{{item.meta.title}}</router-link>
+              <router-link :to="{name: item.name, params: {id: 'all'}}" >{{item.meta.title}}</router-link>
             </li>
           </ul>
           <ul class="navs-right">

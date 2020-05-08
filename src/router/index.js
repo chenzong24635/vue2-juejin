@@ -16,6 +16,10 @@ const routes = [
     redirect: '/home/recommended',
   },
   {
+    path: '/home/all',
+    redirect: '/home/recommended',
+  },
+  {
     path: '/test',
     component: () => import('@/views/test.vue')
   },

@@ -37,23 +37,38 @@ const banner = () => {
   })
 }
 
-const eventList = (cityAlias = '') => {
+const eventList = (type = 1, cityAlias = '', pageNum = 1, pageSize = 20) => {
+  /* 
+   * @params {type} 1:列表； 0:banner
+   */
+  let params = { 
+    uid: '',
+    client_id: '',
+    token: '',
+    src: 'web',
+    orderType: 'startTime',
+    pageNum,
+    pageSize,
+  }
+  if(type){
+    params = {
+      ...params,
+      cityAlias,
+    }
+  }else{
+    params = {
+      ...params,
+      bannerStartTime: new Date().toISOString(),
+      showBanner: 1
+    }
+  }
   return request({
     method: 'GET',
     url: '/v1/getEventList',
-    params: { 
-      uid: '',
-      client_id: '',
-      token: '',
-      src: 'web',
-      orderType: 'startTime',
-      cityAlias,
-      pageNum: 1,
-      pageSize: 20,
-      showBanner: 1,
-    }
+    params
   })
 }
+
 
 export default {
   cityList,

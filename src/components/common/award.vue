@@ -73,9 +73,9 @@ export default {
 }
 .close-icon{
   position: absolute;
-  top: 10px;
+  top: 2px;
   right: 10px;
-  font-size: 18px;
+  font-size: 22px;
   color: #eed7a1;
   text-align: center;
   cursor: pointer;

@@ -10,12 +10,12 @@
   color: @mainColor
 }
 
-.flex(@jc: flex-start, @ai: flex-start, @dir: row,@wrap: normal){
+.flex(@jc: flex-start, @ai: flex-start, @dir: row,@wrap: nowrap){
   display: flex;
   flex-direction: @dir;
   justify-content: @jc;
   align-items: @ai;
-  white-space: @wrap;
+  flex-wrap: @wrap;
 }
 
 .border(@px: 1px, @bcolor:hsla(0,0%,59.2%,.2), @style: solid){

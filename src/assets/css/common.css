@@ -91,7 +91,9 @@ h1 {
   object-fit: cover;
 }
 
-html,body{
-  /* height: 30000px; */
+.nodata{
+  font-size: 16px;
+  margin: 20px auto;
+  text-align: center;
 }
 

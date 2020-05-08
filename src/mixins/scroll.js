@@ -12,11 +12,18 @@ export default{
   mounted () {
     window.addEventListener('scroll', throttle(this.scrollBottom,200))
   },
-  destroyed() {
-    window.removeEventListener('scroll', this.scrollBottom)
+  beforeDestroy(){
+    console.log('de');
+    window.removeEventListener("scroll",throttle)
+    window.removeEventListener("scroll",this.scrollBottom)
+    window.removeEventListener("scroll",throttle(this.scrollBottom,200))
   },
   methods: {
+    fn() {
+      
+    },
     scrollBottom() {
+      console.log(1);
       let rect = document.body.getBoundingClientRect();
       let scrollTop = - rect.top;//滚动条距离顶部的高度
       let bodyHeight = rect.height; //当前页面的总高度
