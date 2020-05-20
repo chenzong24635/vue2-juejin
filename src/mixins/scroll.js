@@ -1,6 +1,41 @@
 import {throttle} from '@/libs/util'
+/**
+ * 公用触底事件
+ */
 
-export default{
+export default {
+  data() {
+    return {
+      _scrollingElement: null,
+      _isReachBottom: false,
+      reachBottomDistance: 200 // 距离底部多远触发
+    }
+  },
+  mounted() {
+    this._scrollingElement = document.scrollingElement
+    window.addEventListener('scroll', throttle(this._windowScrollHandler))
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this._windowScrollHandler)
+  },
+  methods: {
+    _windowScrollHandler() {
+      let scrollHeight = this._scrollingElement.scrollHeight
+      let currentHeight = this._scrollingElement.scrollTop + this._scrollingElement.clientHeight + this.reachBottomDistance
+      if (currentHeight < scrollHeight && this._isReachBottom) {
+        this._isReachBottom = false
+      }
+      if (this._isReachBottom) {
+        return
+      }
+      if (currentHeight >= scrollHeight) {
+        this._isReachBottom = true
+        typeof this.getLists === 'function' && this.getLists()
+      }
+    }
+  },
+}
+/* export default{
   data() {
     return {
       scrollTop: 0, //当前滚动位置，判断上下滚动
@@ -14,6 +49,7 @@ export default{
   },
   beforeDestroy(){
     console.log('de');
+    
     window.removeEventListener("scroll",throttle)
     window.removeEventListener("scroll",this.scrollBottom)
     window.removeEventListener("scroll",throttle(this.scrollBottom,200))
@@ -40,4 +76,4 @@ export default{
       }
     }
   }
-}
+} */

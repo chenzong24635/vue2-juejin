@@ -1,4 +1,4 @@
-const Tag = () => import('@/views/tag/tag.vue');
+const Tag = () => import('@/views/tag/index.vue');
 const Subscribe = () => import('@/views/tag/subscribe.vue');
 
 const tags = [

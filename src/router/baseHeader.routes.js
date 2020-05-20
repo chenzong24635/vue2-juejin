@@ -1,29 +1,25 @@
 // import homeHeader from './homeHeader' //首页的二级导航
 
-const Home = () => import('@/views/home/home.vue')
-const Pins = () => import('@/views/pins/pins.vue')
-const Topics = () => import('@/views/topics/topics.vue')
-const Books = () => import('@/views/books/books.vue')
-const Events = () => import('@/views/events/events.vue')
+const Home = () => import('@/views/home/index.vue')
+const Pins = () => import('@/views/pins/index.vue')
+const Topics = () => import('@/views/topics/index.vue')
+const Books = () => import('@/views/books/index.vue')
+const Events = () => import('@/views/events/index.vue')
 
 //共用的头部导航路由
 
 const baseHeader = [
   {
-    path: '/home/:id',
+    path: '/home/:id?',
     props: true,
-    // redirect: '/home/recommended',
-    name: 'Home',
+    name: 'home',
     meta: {
       title: '首页'
     },
     component: Home,
-    /* children: [
-      ...homeHeader
-    ] */
   },
   {
-    path: '/pins',
+    path: '/pins/:id?',
     name: 'pins',
     meta: {
       title: '沸点'
@@ -48,7 +44,7 @@ const baseHeader = [
     component: Books
   },
   {
-    path: '/events/:id',
+    path: '/events/:id?',
     name: 'events',
     props: true,
     meta: {

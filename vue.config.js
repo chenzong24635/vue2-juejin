@@ -45,6 +45,15 @@ module.exports = {
         target: 'https://event-storage-api-ms.juejin.im',
         changeOrigin: true,
       },
+      '/v1/getHotRecommendList': { /* pins hot */
+        target: 'https://short-msg-ms.juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/pinList/topic': { /* pins list2 */
+        target: 'https://short-msg-ms.juejin.im',
+        changeOrigin: true,
+      },
+
     }
   },  
   chainWebpack(config) {

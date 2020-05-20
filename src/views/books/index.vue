@@ -15,8 +15,8 @@
 </template>
 <script>
 import copyRight from '@/components/common/copy-right'
-import headerSub from '@/components/events/header-sub'
-import booksList from '@/components/books/books-list'
+import headerSub from '@/components/header/header-sub'
+import booksList from '@/components/books/list'
 import booksRight from '@/components/books/books-right'
 import booksAPI from '@/api/books'
 import scroll from '@/mixins/scroll'
@@ -66,7 +66,7 @@ export default {
             name: "全部",
             score: "0",
             createdAt: "2018-08-21T15:11:46.000Z",
-            alias: "all",
+            alias: "",
           },
           ...d
         ];

@@ -1,6 +1,6 @@
 <template>
-  <div class="modal" @clcik="closeModal">
-    <div v-show="modalShow" class="modal-slot">
+  <div class="modal">
+    <div  @clcik.stop="closeModal" v-show="modalShow" class="modal-slot">
       <slot></slot>
     </div>
   </div>
@@ -17,10 +17,11 @@ export default {
   created () {},
   methods: {
     showModal() {
-      this.modalShow = false;
+      this.modalShow = true;
     },
     closeModal() {
-      this.modalShow = true;
+      console.log(111);
+      this.modalShow = false;
     }
   }
 }

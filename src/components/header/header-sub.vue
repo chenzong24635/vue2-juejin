@@ -1,17 +1,35 @@
-<template>
-  <div class="container">
-    <!--首页二级导航 -->
+<template >
+  <div >
+    <!--二级导航 -->
     <nav id="header-sub">
-      <ul class="navs">
-        <li class="nav" v-for="item in headerSubs" :key="item.name">
-          <router-link @click.native="changeRoute(item)" :to="item.path" >{{item.meta.title}}</router-link>
-        </li>
-      </ul>
+      <div class="header-box">
+        <ul class="navs">
+          <li class="nav" v-for="(item, index) in headerSubs" :key="index">
+            <router-link :to="'/' + mainRoute + '/'+item[subRoute]" >
+              {{item[routeTitle]}}
+            </router-link>
+          </li>
+          <li v-if="mainRoute === 'events'" class="nav others-events">
+            <div class="txt">其他</div>
+            <div name="" id="selectCity">
+              <div 
+                class="other"
+                v-for="(item, index) in headerSubs1" 
+                :key="index"
+              >
+                <router-link  :to="'/' + mainRoute + '/'+item[subRoute]" >
+                  {{item[routeTitle]}}
+                </router-link>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <slot name="events"></slot>
+      </div>
     </nav>
   </div>
 </template>
 <script>
-import {mapState, mapMutations} from 'vuex'
 export default {
   name: '',
   components: {},
@@ -20,75 +38,106 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data () {
-    return {
-      apiData: {},
-    }
-  },
-  computed: {
-    ...mapState([
-      'homeApiData',
-      'path'
-    ])
-  },
-  created () {
-    let path = this.$route.path;
-    //刷新时根据当前页面路径判断加载
-    //如果当前 path 与刷新前存储的 path 相同且存在接口所需的参数
-    if (this.path === path && Object.keys(this.homeApiData).length) {
-      this.apiData = this.homeApiData;
-    }else{ //否则加载默认（推荐）
-      this.apiData = this.headerSubs[0].meta.apiData;
-    }
-  },
-  methods: {
-    ...mapMutations([
-      'setHomeApiData'
-    ]),
-    changeRoute(item) {
-      //存储当前参数，刷新时用
-      this.setHomeApiData({path: item.path, homeApiData: item.meta.apiData});
-      this.$emit('getLists1', item.meta.apiData);
+    headerSubs1: {
+      type: Array,
     },
-  }
+    mainRoute: { //页面路径
+      type: String,
+      required: true,
+    },
+    subRoute: { //子路径
+      type: String,
+      default: '',
+      required: true,
+    },
+    routeTitle: { //显示的标题
+      type: String,
+      required: true,
+    },
+  },
 }
 </script>
 <style scoped lang="less">
 #header-sub{
-    position: fixed;
-    left: 0;
-    top: 5rem;
-    width: 100%;
-    height: 4rem;
-    z-index: 100;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
-    transition: all .2s;
-    transform: translateZ(0);
-    background-color: #fff;
+  position: fixed;
+  left: 0;
+  top: 5rem;
+  width: 100%;
+  // height: 4rem;
+  // padding: 1.2rem 0;
+  z-index: 100;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+  transition: all .2s;
+  transform: translateZ(0);
+  background-color: #fff;
+}
+.header-box{
+  margin: auto;
+  max-width: 960px;
+  .flex(space-between,center);
 }
 .navs{
   .flex();
-    max-width: 960px;
     height: 100%;
-    margin: auto;
     display: flex;
     align-items: center;
     line-height: 1;
   .nav{
-    height: 100%;
     font-size: 1.16rem;
     color: #71777c;
     cursor: pointer;
-    &:hover{
+    &:hover > a{
       color: @mainColor;
     }
-    a{
+    &>a{
       .flex(center,center);
       flex-shrink: 0;
       height: 100%;
-      padding: 0 1rem;
+      padding: 1.2rem 1rem;
     }
   }
+}
+
+.others-events{
+  position: relative;
+  &:hover #selectCity{
+    display: block;
+  }
+  .txt{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    height: 100%;
+    padding: 0 1rem;
+    font-size: 1.16rem;
+    cursor: pointer;
+  }
+  .other{
+    display: block;
+    padding-left: 10px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    cursor: pointer;
+    &:hover{
+      color: @activeColor;
+      background-color: #f9f9f9;
+      
+    }
+    
+  }
+}
+#selectCity{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 100px;
+  border-radius: 2px;
+  background-color: #fff;
+  box-shadow: 0 2px 6px 0 rgba(0,0,0,.15);
 }
 </style>

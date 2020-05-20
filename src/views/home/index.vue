@@ -2,7 +2,7 @@
   <div class="">
     <!-- home -->
     <header-sub
-      :headerSubs="homeHeader"
+      :headerSubs="homeHeaderParams"
       mainRoute="home"
       subRoute="name"
       routeTitle="title"
@@ -29,10 +29,10 @@
 </template>
 <script>
 
-import headerSub from '@/components/events/header-sub'
+import headerSub from '@/components/header/header-sub'
 import homeRightContent from '@/components/home/home-right/index'
 import commonList1 from '@/components/common/common-list1'
-import homeHeader from '@/router/homeHeader'
+import homeHeaderParams from '@/components/home/homeHeaderParams'
 import scroll from '@/mixins/scroll'
 
 import homeAPI from '@/api/home'
@@ -52,7 +52,7 @@ export default {
   mixins: [scroll],
   data() {
     return {
-      homeHeader,
+      homeHeaderParams,
       hasNextPage: true,
       endCursor: '',
       lists: [],
@@ -97,9 +97,13 @@ export default {
   },
   methods: {
     getApiData() {
-      this.apiParmas = homeHeader.filter(item => {
-        return item.name === this.id
-      })[0].apiData
+      try{
+        this.apiParmas = homeHeaderParams.filter(item => {
+          return item.name === this.id
+        })[0].apiData
+      }catch(e){
+        this.apiParmas = homeHeaderParams[0].apiData
+      }
       console.log('this.apiParmas',this.apiParmas);
     },
     subChange(item, index) {

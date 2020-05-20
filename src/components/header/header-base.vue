@@ -10,7 +10,7 @@
         <nav class="navs">
           <ul class="navs-left">
             <li v-for="(item,index) in baseHeader" :key="index">
-              <router-link :to="{name: item.name, params: {id: 'all'}}" >{{item.meta.title}}</router-link>
+              <router-link :to="{name: item.name}" >{{item.meta.title}}</router-link>
             </li>
           </ul>
           <ul class="navs-right">
@@ -78,7 +78,7 @@
 import LoginBox from '@/views/login/login'
 import RegisterBox from '@/views/login/register'
 
-import baseHeader from '@/router/baseHeader'
+import baseHeader from '@/router/baseHeader.routes'
 import {mapState} from 'vuex'
 
 export default {
@@ -99,9 +99,6 @@ export default {
     ...mapState([
       'isLogin'
     ])
-  },
-  created () {
-    // this.$on('showLogin')
   },
   methods: {
     showWriteBox() { //未登录 点击写文章显示 box

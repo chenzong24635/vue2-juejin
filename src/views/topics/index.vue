@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import topicsList from '@/components/topics/topics-list';
+import topicsList from '@/components/topics/list';
 import {topicList, topicListFollowed} from '@/api/topics.js';
 import {mapState} from 'vuex';
 

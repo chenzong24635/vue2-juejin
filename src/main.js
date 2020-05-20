@@ -8,6 +8,7 @@ Vue.use(VueScroller)
 Vue.config.productionTip = false
 
 Vue.prototype.$eventBus = new Vue();
+// import './components/globalComponent'
 
 new Vue({
   router,

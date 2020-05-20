@@ -3,70 +3,25 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-import baseHeader from './baseHeader'
-import tag from './tag'
+import baseHeader from './baseHeader.routes'
+import main from './main.routes'
+import tag from './tag.routes'
 
 
-console.log(baseHeader);
+/* const routerList = []  // 路由数组 - 存放所有路由
+function importAll(routerArr){
+    // 该函数用于将所有分区路由中的路由添加到路由数组
+    routerArr.keys().forEach( key => {
+        console.log(key)
+        routerList.push(routerArr(key).default)
+    })
+}
+importAll(require.context('.',true,/\.routes\.js/))
+console.log(...routerList); */
 
 
 const routes = [
-  {
-    path: '/',
-    redirect: '/home/recommended',
-  },
-  {
-    path: '/home/all',
-    redirect: '/home/recommended',
-  },
-  {
-    path: '/test',
-    component: () => import('@/views/test.vue')
-  },
-  {
-    path: '/resetPwd',
-    name: 'resetPwd',
-    redirect: '/resetPwd/email',
-    meta: {
-      hideHeader: true
-    },
-    component: () => import('@/views/login/reset-password.vue'),
-    children: [
-      {
-        path: 'email',
-        name: 'email',
-        component: () => import('@/views/login/reset-password-email.vue'),
-        meta: {
-          hideHeader: true
-        },
-      },
-      {
-        path: 'phone',
-        name: 'phone',
-        component: () => import('@/views/login/reset-password-phone.vue'),
-        meta: {
-          hideHeader: true
-        },
-      },
-    ]
-  },
-  {
-    path: '/user/:id',
-    name: 'user',
-    props: true,
-    component: () => import('@/views/user/user.vue'),
-  },
-  {
-    path: '/book/:id',
-    name: 'user',
-    props: true,
-    component: () => import('@/views/books/book.vue'),
-  },
-  {
-    path: '/feedback',
-    name: 'feedback',
-    component: () => import('@/views/feedback/feedback.vue'),
-  },
+  ...main,
   ...baseHeader,
   ...tag
 ]

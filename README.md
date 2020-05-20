@@ -28,6 +28,14 @@
     }
   }
 }
+# 沸点
+推荐沸点  
+https://short-msg-ms.juejin.im/v1/getHotRecommendList?uid=&device_id=&token=&src=web
+
+列表  
+https://web-api.juejin.im/query
+{"operationName":"","query":"","variables":{"after":"","first":20},"extensions":{"query":{"id":"f0a2fbbc03d4d46266e40762139c414c"}}}
+
 
 # 话题
 我关注的话题
@@ -37,7 +45,7 @@ https://short-msg-ms.juejin.im/v1/topicList/followed
 {
   uid: 59deb810f265da431f4a0dff
   device_id: 1587546014607
-  token:  eyJhY2Nlc3NfdG9rZW4iOiJ4R25QdWRqWlJWYm45NzVhIiwicmVmcmVzaF90b2tlbiI6Ik0yaGZSSGNEdUxxZWVSS0UiLCJ0b2tlbl90eXBlIjoibWFjIiwiZXhwaXJlX2luIjoyNTkyMDAwfQ==
+  token:  
   src: web
   after: 0
   page: 0

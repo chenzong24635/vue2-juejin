@@ -9,16 +9,16 @@
             <p class="list-title">{{item.title}}</p>
             <div class="list-date">
               <svg-icon name="calendar"></svg-icon>
-              <!-- <span>{{item.startTime | date}}</span> -->
+              <span>{{item.startTime | date}}</span>
             </div>
             <div class="list-address">
               <p class="list-address-city">
                 <svg-icon name="address" color="#909090" :size="16"></svg-icon>
                 <span>{{item.city}}</span>
               </p>
-              <!-- <button :class="['btn btn-primary', (item.endTime | date) ? 'active' : '']">
-                {{(item.endTime | date) ? '报名参加' : '活动详情'}}
-              </button> -->
+              <button :class="['btn btn-primary']">
+                {{item.endTime | isActive }}
+              </button>
             </div>
           </div>
         </a>
@@ -62,7 +62,7 @@ export default {
       let nowDate = +new Date()
       let activeDate = +new Date(val)
       console.log(activeDate < nowDate);
-      return activeDate < nowDate
+      return activeDate < nowDate ? '报名参加' : '活动详情'
     }
   },
   created () {},

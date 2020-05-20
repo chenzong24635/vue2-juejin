@@ -1,11 +1,6 @@
 import request from './index'
 
-//推荐
-/**
- * @parmas {queryId} 默认为推荐
- * 
- * 
-*/
+
 const lists = (data) => {
   return request({
     method: 'POST',

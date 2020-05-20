@@ -46,8 +46,8 @@
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 import eventAPI from '@/api/events'
-import headerSub from '@/components/events/header-sub'
-import eventsList from '@/components/events/events-list'
+import headerSub from '@/components/header/header-sub'
+import eventsList from '@/components/events/list'
 import copyRight from '@/components/common/copy-right'
 import scroll from '@/mixins/scroll'
 
@@ -81,7 +81,7 @@ export default {
       defaultCity: [
         {
           cityName: "热门活动",
-          cityAlias: "all",
+          cityAlias: "",
           weight: 0
         },
         {
@@ -111,7 +111,7 @@ export default {
         }
       ],
       lists: [],
-      pageNum: 0
+      pageNum: 1
     }
   },
   watch: {
@@ -142,7 +142,7 @@ export default {
   methods: {
     reset() {
       // this.alias = '';
-      this.pageNum = 0;
+      this.pageNum = 1;
       this.lists = [];
     },
     async getCityList() {
