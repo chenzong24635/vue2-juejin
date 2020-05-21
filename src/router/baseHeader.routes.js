@@ -21,6 +21,7 @@ const baseHeader = [
   {
     path: '/pins/:id?',
     name: 'pins',
+    props: true,
     meta: {
       title: '沸点'
     },

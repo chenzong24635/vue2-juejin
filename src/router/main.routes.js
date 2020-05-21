@@ -8,10 +8,6 @@ export default [
     redirect: '/pins/recommended'
   },
   {
-    path: '/test',
-    component: () => import('@/views/test.vue')
-  },
-  {
     path: '/resetPwd',
     name: 'resetPwd',
     redirect: '/resetPwd/email',
@@ -37,6 +33,15 @@ export default [
         },
       },
     ]
+  },
+  {
+    path: '/pin/:id?',
+    name: 'pin',
+    props: true,
+    meta: {
+      title: '沸点'
+    },
+    component: () => import('@/views/pins/pin.vue')
   },
   {
     path: '/user/:id',

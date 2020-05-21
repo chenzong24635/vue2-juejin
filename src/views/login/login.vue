@@ -1,14 +1,14 @@
 <template>
   <div v-show="show" class="auth resgister">
     <div class="auth-modal">
-      <form class="auth-form">
+      <div class="auth-form">
         <svg-icon @click="close" class="close" name="close" color="#333"></svg-icon>
         <h1 class="title">登录</h1>
         <div class="form-list">
-          <input type="text" placeholder="请输入手机号或邮箱">
+          <input type="text" v-model="phoneNumber" placeholder="请输入手机号或邮箱">
         </div>
         <div class="form-list">
-          <input type="password" placeholder="请输入密码">
+          <input type="password" v-model="password" placeholder="请输入密码">
         </div>
         <div class="form-list">
           <button @click="login" class="btn-primary">登录</button>
@@ -40,12 +40,12 @@
             </li>
           </ul>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
 <script>
-// import {loginAuth} from '@/api/auth'
+import {loginAuth} from '@/api/auth'
 export default {
   name: 'login',
   components: {},
@@ -63,10 +63,7 @@ export default {
     }
   },
   created () {
-    /* console.log(loginAuth);
-    loginAuth(this.phoneNumber, this.password).then(res => {
-      console.log(res);
-    }) */
+    
   },
   methods: {
     close() {
@@ -81,7 +78,9 @@ export default {
       this.thirdAuthShow = true;
     },
     login() {
-
+      loginAuth(this.phoneNumber, this.password).then(res => {
+        console.log(res);
+      })
     }
   }
 }

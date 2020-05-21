@@ -13,11 +13,19 @@ module.exports = {
   },
   devServer: {
     proxy: {
+      '/login/oauth/access_token': {/* auth */
+        target: 'https://github.com',
+        changeOrigin: true,
+      },
       '/v1/topicList': {/* topics */
         target: 'https://short-msg-ms.juejin.im',
         changeOrigin: true,
       },
       '/auth/type': {
+        target: 'https://juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/auth/login': {
         target: 'https://juejin.im',
         changeOrigin: true,
       },

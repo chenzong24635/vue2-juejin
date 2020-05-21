@@ -5,16 +5,14 @@
 </template>
 
 <script>
-
 export default {
   name: 'Home',
   components: {
   },
   created() {
-
+ 
   },
   methods: {
-
   }
 }
 </script>

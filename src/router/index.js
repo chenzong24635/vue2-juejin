@@ -21,6 +21,11 @@ console.log(...routerList); */
 
 
 const routes = [
+  {
+    name: 'test',
+    path: '/test',
+    component: () => import('@/views/test.vue')
+  },
   ...main,
   ...baseHeader,
   ...tag

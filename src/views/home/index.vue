@@ -79,8 +79,8 @@ export default {
     '$route': function(to ,from){
       console.log(to ,from);
       if(to.name === from.name && to.params.id!==from.params.id){
-        this.getApiData()
         this.reset(2)
+        this.getApiData()
         this.getLists()
       }
     }
@@ -129,12 +129,11 @@ export default {
       // }
       this.apiParmas.variables.order = this.order;
       homeAPI.lists(this.apiParmas).then(res => {
-        console.log(res);
         if(this.hasNextPage && res.data){
-          this.lists = this.lists.concat(res.data.articleFeed.items.edges);
-          this.hasNextPage = res.data.articleFeed.items.pageInfo.hasNextPage;
-          let endCursor = res.data.articleFeed.items.pageInfo.endCursor;
-          this.endCursor = endCursor;
+          let result = res.data.articleFeed.items;
+          this.lists = this.lists.concat(result.edges);
+          this.hasNextPage = result.pageInfo.hasNextPage;
+          this.endCursor = result.pageInfo.endCursor;
         }
       })
     },
