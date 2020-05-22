@@ -1,0 +1,99 @@
+
+html {
+  font-size: 12px;
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;
+  word-break: break-word;
+  text-rendering: optimizeLegibility;
+  color: #333;
+  background-color: #f4f5f5;
+}
+body{
+  word-break: break-word;
+  overflow-y: scroll;
+  line-height: normal;
+}
+
+.container{
+  position: relative;
+  max-width: 960px;
+  margin: 0 auto;
+  background: #fff;
+}
+
+ul,li{
+  list-style: none;
+}
+
+a{
+  display: inline-block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+img{display: inline-block;}
+input :-webkit-input-placeholder{
+  color: red
+}
+
+button{
+  -webkit-appearance: none;
+  appearance: none;
+  /* padding: .5rem 1.3rem; */
+  /* background-color: #007fff; */
+  color: #fff;
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  /* transition: background-color .3s,color .3s; */
+  cursor: pointer;
+}
+.btn-primary{
+  width: 100%;
+  padding: 1rem 1.3rem;
+  background-color: #007fff;
+}
+
+input{
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #e9e9e9;
+  border-radius: 2px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+::-webkit-input-placeholder { color: #AAAAAB; }
+:-moz-placeholder { color: #AAAAAB; }
+::-moz-placeholder { color: #AAAAAB; }
+:-ms-input-placeholder { color: #AAAAAB; }
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: left;
+  color: #0e0e0e;
+}
+.title{
+  /* padding: 2rem 0; */
+}
+.cp{
+  cursor: pointer;
+}
+.tac{text-align: center;}
+
+.router-link-active{
+  color: #007fff;
+}
+
+.list-img > img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nodata{
+  font-size: 16px;
+  margin: 20px auto;
+  text-align: center;
+}
+

@@ -1,0 +1,99 @@
+.test-enter-active, .test-leave-active {
+  transition: opacity .5s;
+  // background-color: red;
+}
+.test-enter, .test-leave-active {
+  opacity: 0;
+}
+
+
+@color: #71777c;
+@bgColor: #f4f5f5;
+@activeColor: #007fff;
+@mainColor: #007fff;
+@mainColor1: #0876e4;
+@lineColor: #f1f1f1;
+
+
+.main-color{
+  color: @mainColor
+}
+
+.flex(@jc: flex-start, @ai: flex-start, @dir: row,@wrap: nowrap){
+  display: flex;
+  flex-direction: @dir;
+  justify-content: @jc;
+  align-items: @ai;
+  flex-wrap: @wrap;
+}
+
+.border(@px: 1px, @bcolor:hsla(0,0%,59.2%,.2), @style: solid){
+  border: @arguments;
+}
+
+
+.line(@dir: bottom,@width:1px,@type:solid,@c:@lineColor){
+  border-@{dir}: @width @type @c;
+}
+
+.delimiter(@str: '/',@c: inherit){
+  position: relative;
+  padding: if(@str = '·', 0 4px 0 6px, 0 0 0 7px);
+  &:not(:first-of-type):before{
+    content: @str;
+    position: absolute;
+    left: 0;
+    color: @c;
+  }
+}
+
+
+.ov1{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ov(@clamp: 2){
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  word-break: break-all;
+  -webkit-line-clamp: @clamp; /* 限制在显示的文本的行数 */
+  display: -webkit-box; /* 将对象作为弹性伸缩盒子模型显示 */
+  /* 防止打包后这段代码被删除 */
+  /*! autoprefixer: off */
+    -webkit-box-orient: vertical;/* 伸缩盒子的子元素排列：从上到下 */
+  /* autoprefixer: on */
+}
+
+
+
+.button--green {
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #3b8070;
+  color: #3b8070;
+  text-decoration: none;
+  padding: 10px 30px;
+}
+
+.button--green:hover {
+  color: #fff;
+  background-color: #3b8070;
+}
+
+.button--grey {
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #35495e;
+  color: #35495e;
+  text-decoration: none;
+  padding: 10px 30px;
+  margin-left: 15px;
+}
+
+.button--grey:hover {
+  color: #fff;
+  background-color: #35495e;
+}
