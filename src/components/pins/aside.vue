@@ -68,6 +68,7 @@ export default {
     &-title{
       flex: 1;
       padding-right: 1rem;
+      font-size: 13px;
       .ov();
     }
     &-img{

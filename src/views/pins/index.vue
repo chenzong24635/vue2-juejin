@@ -101,19 +101,22 @@ export default {
       console.log('this.apiParmas',this.apiParmas);
     },
     async getLists() {
-      this.apiParmas.variables.after = this.endCursor;
+      
       switch(this.routeName) {
         case 'recommended':
+          this.apiParmas.variables.after = this.endCursor;
           this.getListsRecommended()
           break
         case 'hot':
+          this.apiParmas.variables.after = this.endCursor;
           this.getListsHot()
           break
         case 'following':
+          this.apiParmas.variables.after = this.endCursor;
           this.getListsFollowing()
           break
         default:
-          this.getListsRecommended()
+          this.getLists2()
       }
     },
     async getListsRecommended() { // 推荐
@@ -122,10 +125,12 @@ export default {
       console.log(data);
       let res = data.recommendedActivityFeed.items;
       if(this.hasNextPage && res.edges){
-        this.lists = this.lists.concat(res.edges);
+        let lists = res.edges.map(item=>item.node)
+        this.lists = this.lists.concat(lists);
         this.hasNextPage = res.pageInfo.hasNextPage;
         this.endCursor = res.pageInfo.endCursor;
       }
+      console.log(this.lists );
     },
     async getListsHot() { // 热门
       let apiParmas = this.apiParmas;
@@ -133,10 +138,12 @@ export default {
       console.log(data);
       let res = data.popularPinList.items;
       if(this.hasNextPage && res.edges){
-        this.lists = this.lists.concat(res.edges);
+        let lists = res.edges.map(item=>item.node)
+        this.lists = this.lists.concat(lists);
         this.hasNextPage = res.pageInfo.hasNextPage;
         this.endCursor = res.pageInfo.endCursor;
       }
+      console.log(this.lists );
     },
     async getListsFollowing() { // 关注
       if(!this.isLogin){
@@ -153,7 +160,19 @@ export default {
         this.endCursor = res.pageInfo.endCursor;
       }
     },
-    async getHotLists() {
+    async getLists2() { // 开源推荐等
+      let apiParmas = this.apiParmas;
+      let {s, d} = await pinsAPI.lists2(apiParmas)
+      if (s === 1) {
+        if(d.total <= this.lists.length){
+          this.lists = this.lists.concat(d.list)
+        }else{
+          this.lists = d.list
+        }
+        console.log(this.lists);
+      }
+    },
+    async getHotLists() { // 推荐沸点
       let {s, d} = await pinsAPI.hotLists()
       if (s === 1) {
         this.hotLists = d.list

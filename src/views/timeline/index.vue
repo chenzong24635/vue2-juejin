@@ -3,7 +3,7 @@
     <!-- home -->
     <header-sub
       :headerSubs="homeHeaderParams"
-      mainRoute="home"
+      mainRoute="timeline"
       subRoute="name"
       routeTitle="title"
     />
@@ -23,16 +23,16 @@
           </ul>
         </nav>
       </common-list1>
-      <home-right-content />
+      <home-right />
     </div>
   </div>
 </template>
 <script>
 
 import headerSub from '@/components/header/header-sub'
-import homeRightContent from '@/components/home/home-right/index'
+import homeRight from '@/components/timeline/right'
 import commonList1 from '@/components/common/common-list1'
-import homeHeaderParams from '@/components/home/homeHeaderParams'
+import homeHeaderParams from '@/components/timeline/homeHeaderParams'
 import scroll from '@/mixins/scroll'
 
 import homeAPI from '@/api/home'
@@ -45,7 +45,7 @@ import {mapState} from 'vuex'
 export default {
   components: {
     headerSub,
-    homeRightContent,
+    homeRight,
     commonList1
   },
   props: ['id'],
@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       homeHeaderParams,
+      isLoading: false,
       hasNextPage: true,
       endCursor: '',
       lists: [],
@@ -77,7 +78,6 @@ export default {
   },
     watch: {
     '$route': function(to ,from){
-      console.log(to ,from);
       if(to.name === from.name && to.params.id!==from.params.id){
         this.reset(2)
         this.getApiData()
@@ -86,30 +86,29 @@ export default {
     }
   },
   created() {
-    console.log(this.id);
     this.getApiData()
     this.getLists()
   },
   computed: {
     ...mapState([
       'isLogin',
-    ])
+    ]),
   },
   methods: {
     getApiData() {
+      let params = null
       try{
-        this.apiParmas = homeHeaderParams.filter(item => {
+        params = homeHeaderParams.filter(item => {
           return item.name === this.id
         })[0].apiData
       }catch(e){
-        this.apiParmas = homeHeaderParams[0].apiData
+        params = homeHeaderParams[0].apiData
       }
-      console.log('this.apiParmas',this.apiParmas);
+      this.apiParmas = params
     },
     subChange(item, index) {
       this.subIndex = index;
       this.order = this.subNavs.filter(item1 => item1.title === item.title)[0].order;
-      console.log(this.order);
       this.reset(1)
       this.getLists()
     },
@@ -123,19 +122,24 @@ export default {
       }
     },
     getLists(){
-      console.log(this.apiParmas,'下拉');
-      // if(this.endCursor) {
-        this.apiParmas.variables.after = this.endCursor;
-      // }
+      this.apiParmas.variables.after = this.endCursor;
       this.apiParmas.variables.order = this.order;
-      homeAPI.lists(this.apiParmas).then(res => {
-        if(this.hasNextPage && res.data){
-          let result = res.data.articleFeed.items;
-          this.lists = this.lists.concat(result.edges);
-          this.hasNextPage = result.pageInfo.hasNextPage;
-          this.endCursor = result.pageInfo.endCursor;
-        }
-      })
+      if(this.isLoading) return
+      this.isLoading = true
+      homeAPI.lists(this.apiParmas)
+        .then(res => {
+          if(this.hasNextPage && res.data){
+            let result = res.data.articleFeed.items;
+            this.lists = this.lists.concat(result.edges);
+            this.hasNextPage = result.pageInfo.hasNextPage;
+            this.endCursor = result.pageInfo.endCursor;
+            this.isLoading = false
+          }
+        })
+        .catch((e) => {
+          this.isLoading = false
+          console.log(e);
+        })
     },
   }
 }

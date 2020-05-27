@@ -3,7 +3,7 @@
     <!-- 首页-未登录-热门标签 -->
     <p class="top">
       <span>热门标签</span>
-      <router-link to="/subscribe">查看全部</router-link>
+      <router-link to="/subscribe/all">查看全部</router-link>
     </p>
     <nav>
       <ul class="tags-lists">

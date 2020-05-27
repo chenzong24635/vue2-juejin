@@ -9,7 +9,6 @@
 import headerBase from '@/components/header/header-base'
 import suspensionIcon from '@/components/common/suspension-icon'
 
-
 export default{
   components: {
     headerBase,

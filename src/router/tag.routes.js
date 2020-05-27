@@ -12,7 +12,7 @@ const tags = [
     component: Tag
   },
   {
-    path: '/subscribe',
+    path: '/subscribe/:id',
     name: 'subscribe',
     meta: {
       title: '全部标签'

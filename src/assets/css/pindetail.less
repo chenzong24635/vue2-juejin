@@ -1,6 +1,7 @@
 @import 'main.less';
 .box{
   &-top{
+    padding: 20px 20px 0;
     .flex(space-between,center);
   }
   &-focus{
@@ -40,6 +41,58 @@
     }
   }
   &-content{
+    font-size: 15px;
     padding: 0.5rem 4.75rem 0;
+  }
+  .topic{
+    font-size: 13px;
+    display: inline-block;
+    line-height: 22px;
+    padding: 0 12px;
+    border: 1px solid #007fff;
+    border-radius: 14px;
+    color: #007fff;
+    user-select: none;
+    margin: 10px 0;
+    
+  }
+  .pics{
+    .flex(@wrap:wrap);
+    margin: 10px 0;
+    .pic{
+      width: 12.333rem;
+      margin: 0 3px 3px 0;
+      background-position: 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  }
+  .pics1{
+    .pic{
+      position: relative;
+      width: calc((100% - 8px)/3);
+      max-width: 9.166rem;
+      
+      &:before{
+        content: '';
+        position: absolute;
+        // padding-top: 100%;
+      }
+    }
+  }
+}
+.box-actions{
+  .flex(space-between,center);
+}
+.box-action{
+  .flex(center,center);
+  .line(top);
+  flex: 1 1 33.333%;
+  padding: 6px;
+  text-align: center;
+  cursor: pointer;
+  span{
+    color: #8a93a0;
+    padding-left: 4px;
   }
 }

@@ -1,4 +1,4 @@
-export function debounce(fn, delay = 500) {
+function debounce(fn, delay = 500) {
   let timer = null;
   return function (args) {
     timer && clearTimeout(timer);
@@ -8,7 +8,7 @@ export function debounce(fn, delay = 500) {
   }
 }
 
-export function throttle(fn, delay = 500) {
+function throttle(fn, delay = 500) {
   let timer = null;
   return function (args) {
     if(timer)return;
@@ -19,7 +19,7 @@ export function throttle(fn, delay = 500) {
   }
 }
 
-export const dateDis = date => {
+const dateDis = date => {
   let stime = new Date(date + '').getTime()
   // console.log(date,stime);
   let etime = Date.now()
@@ -41,4 +41,9 @@ export const dateDis = date => {
     return minutes + '分钟前'
   }
   return '刚刚'
+}
+export default{
+  debounce,
+  throttle,
+  dateDis
 }

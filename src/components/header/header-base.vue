@@ -10,7 +10,7 @@
         <nav class="navs">
           <ul class="navs-left">
             <li v-for="(item,index) in baseHeader" :key="index">
-              <router-link :to="{name: item.name}" >{{item.meta.title}}</router-link>
+              <router-link :to="item.path" >{{item.title}}</router-link>
             </li>
           </ul>
           <ul class="navs-right">
@@ -78,7 +78,6 @@
 import LoginBox from '@/views/login/login'
 import RegisterBox from '@/views/login/register'
 
-import baseHeader from '@/router/baseHeader.routes'
 import {mapState} from 'vuex'
 
 export default {
@@ -88,7 +87,28 @@ export default {
   },
   data () {
     return {
-      baseHeader,
+      baseHeader: [
+        {
+          path: '/timeline/recommended',
+          title: '首页',
+        },
+        {
+          path: '/pins/recommended',
+          title: '沸点',
+        },
+        {
+          path: '/topics',
+          title: '话题',
+        },
+        {
+          path: '/books',
+          title: '小册',
+        },
+        {
+          path: '/events',
+          title: '活动',
+        },
+      ],
       moreListShow: false,
       registerFormShow: false,
       loginFormShow: false,
@@ -121,24 +141,19 @@ export default {
 <style lang="less" scoped>
 .header{
   height: 5rem;
-  border-bottom: 1px solid #eee;
 }
 #header-base{
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 5rem;
+  height: 5.1rem;
   z-index: 101;
   border-bottom: 1px solid #eee;
   background-color: #fff;
   .container{
     .flex(@ai:center);
   }
-}
-
-
-.logo{
 }
 .navs{
   .flex(space-between, center);

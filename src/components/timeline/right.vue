@@ -9,7 +9,7 @@
     </section>
     <section class="box">
       <a href="https://juejin.im/app" target="_blank" class="qr">
-        <img class="qr-img" src="../../../assets/image/juejin-welcome.png" alt="">
+        <img class="qr-img" src="../../assets/image/juejin-welcome.png" alt="">
         <div class="qr-txt">
           <p class="title">下载掘金客户端</p>
           <p class="desc">一个帮助开发者成长的社区</p>
@@ -19,23 +19,23 @@
     <section class="box">
       <div class="others">
         <div class="others-list">
-          <img src="../../../assets/image/collections.945b9ae.png" alt="收藏集" title="收藏集">
+          <img src="../../assets/image/collections.945b9ae.png" alt="收藏集" title="收藏集">
           <router-link class="title" to="">收藏集</router-link>
         </div>
         <div class="others-list">
-          <img src="../../../assets/image/book.75582b2.png" alt="掘金社区漫游指南" title="掘金社区漫游指南">
+          <img src="../../assets/image/book.75582b2.png" alt="掘金社区漫游指南" title="掘金社区漫游指南">
           <router-link class="title" to="">掘金社区漫游指南</router-link>
         </div>
         <div class="others-list">
-          <img src="../../../assets/image/juejin-extension-icon.4b79fb4.png" alt="下载掘金浏览器插件" title="下载掘金浏览器插件">
+          <img src="../../assets/image/juejin-extension-icon.4b79fb4.png" alt="下载掘金浏览器插件" title="下载掘金浏览器插件">
           <a class="title" href="https://juejin.im/extension" rel="nofollow noopener noreferrer" target="_blank">下载掘金浏览器插件</a>
         </div>
         <div class="others-list">
-          <img src="../../../assets/image/juejin-miner.b78347c.png" alt="前往掘金翻译计划" title="前往掘金翻译计划">
+          <img src="../../assets/image/juejin-miner.b78347c.png" alt="前往掘金翻译计划" title="前往掘金翻译计划">
           <a class="title" href="https://github.com/xitu/gold-miner" rel="nofollow noopener noreferrer" target="_blank">前往掘金翻译计划</a>
         </div>
         <div class="others-list">
-          <img src="../../../assets/image/juejin-partner.4dd2d8c.png" alt="商务合作" title="商务合作">
+          <img src="../../assets/image/juejin-partner.4dd2d8c.png" alt="商务合作" title="商务合作">
           <a class="title" href="https://bd.juejin.im/" rel="nofollow noopener noreferrer" target="_blank">商务合作</a>
         </div>
       </div>

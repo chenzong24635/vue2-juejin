@@ -13,25 +13,34 @@
             <p class="flag dot">{{list.user.username}}</p>
             <p class="flag dot">{{list.createdAt}}</p>
             <p class="dot">
-              <span class="slash" v-for="tag in list.tags" :key="tag.id">
+              <router-link 
+                :to="'/tag/'+ encodeURIComponent(tag.title)" 
+                class="slash" 
+                v-for="tag in list.tags" 
+                :key="tag.id"
+                target="_blank"
+              >
                 {{tag.title}}
-              </span>
+              </router-link>
             </p>
           </div>
-          <h3 class="list-title">{{list.title}}</h3>
+          <router-link :to="'/post/'+list.id" class="list-title">{{list.title}}</router-link>
           <ul class="list-icons" >
             <li class="list-icon">
               <div class="icon-box">
-                <svg-icon name="praise" :size="14"></svg-icon>
+                <img src="https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg" alt="">
+                <!-- <svg-icon name="praise" :size="14"></svg-icon> -->
                 <span class="icon-num">{{list.collectionCount}}</span>
               </div>
               <div class="icon-box">
-                <svg-icon name="message1" :size="14"></svg-icon>
+                <!-- <svg-icon name="message1" :size="14"></svg-icon> -->
+                <img src="https://b-gold-cdn.xitu.io/v3/static/img/comment.4d5744f.svg" alt="">
                 <span class="icon-num">{{list.commentsCount}}</span>
               </div>
 
               <div @click="share(list)" v-show="list.uploadIconShow" class="icon-box icon-upload" title="分享">
-                <svg-icon name="upload" :size="14"></svg-icon>
+                <!-- <svg-icon name="upload" :size="14"></svg-icon> -->
+                <img src="https://b-gold-cdn.xitu.io/v3/static/img/share.1d55e69.svg" alt="">
                 <div @click="shareWb(list)" v-show="list.uploadBoxShow" class="share">
                   <svg-icon name="weibo" :size="20"></svg-icon>
                   <span>微博</span>
@@ -51,8 +60,6 @@
   </div>
 </template>
 <script>
-
-import { dateDis} from '@/libs/util'
 
 export default {
   name: 'homeList',
@@ -76,14 +83,14 @@ export default {
       get (){
         let arr = this.lists.map(item => {
           if(item.node){
-            item.node.createdAt = dateDis(item.node.createdAt)
+            item.node.createdAt = this.$utils.dateDis(item.node.createdAt)
             return item.node
-          }
-          else {
-            item.createdAt = dateDis(item.createdAt)
+          }else {
+            item.createdAt = this.$utils.dateDis(item.createdAt)
             return item
           }  
         })
+        console.log(arr);
         return arr
       }
     }
@@ -93,6 +100,9 @@ export default {
       scrollTop: 0, //当前滚动位置，判断上下滚动
       defaultScreenshot: "https://b-gold-cdn.xitu.io/images/weibo-share.png"
     }
+  },
+  created(){
+    console.log(this.lists);
   },
   methods: {
     changeShow (obj, type) { //鼠标移入移出时，分享图标显示隐藏

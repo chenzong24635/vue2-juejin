@@ -5,7 +5,7 @@
 @mainColor1: #0876e4;
 @lineColor: #f1f1f1;
 
-
+.active{color: @mainColor}
 .main-color{
   color: @mainColor
 }
@@ -56,4 +56,18 @@
   /*! autoprefixer: off */
     -webkit-box-orient: vertical;/* 伸缩盒子的子元素排列：从上到下 */
   /* autoprefixer: on */
+}
+
+.btn-primary(@color: #027fff,@padding:2px 10px,@size: 14px){
+  display: inline-block;
+  font-size: @size;
+  color: @color;
+  padding: @padding;
+  background: transparent;
+  border-radius: 2px;
+  border: 1px solid @color;
+  text-align: center;
+}
+.btn{
+  .btn-primary();
 }

@@ -2,18 +2,26 @@
   <div class="">
     <!-- 标签页面 -->
     <div class="tag-top">
-      <h1 class="title">
-        {{title}}
-      </h1>
+      <h1 class="title">{{title}}</h1>
+      <p class="counts">
+        <span>{{subscribe.subscribersCount}} 关注，</span>
+        <span>{{subscribe.entryCount}} 文章</span>
+      </p>
     </div>
     <div class="container">
-      <ul class="subs">
-        <li 
-          @click="subChange(item, index)" 
-          :class="['sub', index === subIndex ? 'active' : '']" 
-          v-for="(item, index) in subNavs" :key="item.sort"
-        >{{item.title}}</li>
-      </ul>
+      <div class="tag-header">
+        <div class="focus">
+          <img :src="subscribe.icon" alt="" class="focus-icon">
+          <c-button type="success cutout">关注</c-button>
+        </div>
+        <ul class="subs">
+          <li 
+            @click="subChange(item, index)" 
+            :class="['sub', index === subIndex ? 'active' : '']" 
+            v-for="(item, index) in subNavs" :key="item.sort"
+          >{{item.title}}</li>
+        </ul>
+      </div>
       <common-list1 type="tag" :lists="lists" @getLists2="getLists" />
     </div>
   </div>
@@ -21,6 +29,8 @@
 <script>
 
 import commonList1 from '@/components/common/common-list1'
+import scroll from '@/mixins/scroll'
+
 import tagAPI from '@/api/tag'
 export default {
   name: '',
@@ -28,6 +38,7 @@ export default {
     commonList1
   },
   props: ['title'],
+  mixins: [scroll],
   data () {
     return {
       tags: [
@@ -84,13 +95,15 @@ export default {
       page: 0,
       pageSize: 20,
       total: 0,
-      lists: []
+      lists: [],
+      subscribe: {}
     }
   },
-  mounted () {
-    this.tagid = this.filterId();
+  async mounted () {
+    // this.tagid = this.filterId();
     console.log('tagPage',this.title,this.tagid);
-    this.getLists();
+    await this.getTagDetail();
+    await this.getLists();
   },
   methods: {
     async getLists() {
@@ -101,6 +114,13 @@ export default {
         this.total = d.total;
       }
       console.log(d,this.lists);
+    },
+    async getTagDetail() {
+      let {s, d} = await tagAPI.tagDetail(encodeURIComponent(this.title))
+      if (s === 1) {
+        this.tagid = d.id
+        this.subscribe = d
+      }
     },
     subChange(item, index) {
       this.subIndex = index;
@@ -125,23 +145,34 @@ export default {
 .tag-top{
   position: relative;
   height: 150px;
-  font-size: 25px;
   line-height: 30px;
   padding: 4rem 0;
-  font-weight: 700;
   margin-bottom: .3rem;
   background-color: #f8f9fa;
   border-bottom: 1px solid #f1f1f1;
   text-align: center;
+  h1{font-size: 25px;font-weight: 700;}
+  .counts span{
+    color: #666;
+  }
 }
 .title{
   text-align: center;
   color: #666;
-
+}
+.tag-header{
+  .flex(@jc:space-between,@ai:center);
+  padding: 15px 0; 
+}
+.focus{
+  .flex(@ai:center);
+  &-icon{
+    height: 2rem;
+    margin-right: 1rem;
+  }
 }
 .subs{
   .flex(flex-end,center);
-  padding: 2rem;
   background-color: #f4f5f5;
   .sub{
     font-size: 1.3rem;

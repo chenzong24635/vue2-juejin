@@ -2,11 +2,17 @@
 import request from './index'
 
 //
+/* url: 'https://juejin.im/auth/type/phoneNumber',
+    method: "POST",
+    body: {
+      password: ctx.request.body.password,
+      phoneNumber: ctx.request.body.phoneNumber
+    } */
 export const loginAuth = (phoneNumber, password) => {
   return request({
     method: 'POST',
-    url: '/v1/auth/login',
-    params: {
+    url: '/auth/type/phoneNumber',
+    data: {
       phoneNumber,
       password
     }

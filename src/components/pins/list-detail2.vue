@@ -1,20 +1,47 @@
 <template>
-<!-- 热门 -->
+<!-- 热门,开源推荐等 -->
   <div class="box">
-    222
-    <!-- {{$attrs}} -->
     <div class="box-top">
       <div class="user">
-        <!-- <img :src="userData.user.avatarLarge" :alt="userData.user.username" class="user-avatar">
+        <router-link target="_blank" :to="'/user/'+list.user.objectId">
+          <img :src="list.user.avatarLarge" :alt="list.user.username" class="user-avatar">
+        </router-link>
         <div class="user-message">
-          <p class="user-name">{{userData.user.username}}</p>
-          <p class="user-job_time">
-            <span class="user-job">{{userData.user.username}}</span>
-            <span class="user-time">{{userData.user.createdAt}}</span>
+          <p class="user-name">{{list.user.username}}</p>
+          <p class="user-meta">
+            <span >{{list.user.jobTitle}}</span>
+            <span>@</span>
+            <span >{{list.user.company}}</span>
+            <span>{{list.user.createdAt}}</span>
           </p>
-        </div> -->
+        </div>
       </div>
       <div class="box-focus">关注</div>
+    </div>
+    <div class="box-content">
+      <div v-html="list.content"></div>
+      <div :class="['pics', list.pictures.length>1? 'pics1' : '']">
+        <div v-for="(img, imgIndex) in list.pictures" :key="imgIndex" class="pic" :style="{backgroundImage: `url(${img})`}">
+          <div style="padding-top:100%"></div>
+        </div>
+      </div>
+      <div v-if="list.topic" class="topic">
+        <router-link :to="'/topic/' +list.topic.objectId" target="_blank">{{list.topic.title}}</router-link>
+      </div>
+    </div>
+    <div class="box-actions">
+      <div class="box-action">
+        <svg-icon name="praise1"></svg-icon>
+        <span>{{ list.likeCount || '赞'}}</span>
+      </div>
+      <div class="box-action">
+        <svg-icon name="message2"></svg-icon>
+        <span>{{ list.commentCount || '评论'}}</span>
+      </div>
+      <div class="box-action">
+        <svg-icon name="upload"></svg-icon>
+        <span>分享</span>
+      </div>
     </div>
   </div>
 </template>
@@ -22,29 +49,20 @@
 export default {
   name: '',
   props: {
-    user: {
+    list: {
       type: Object,
     },
-    id: {
-      type: String,
-    }
   },
   data () {
     return {
-      userData: {}
     }
   },
   created () {
-    console.log(this.user);
-    this.userData = this.user
   },
   methods: {}
 }
 </script>
 <style scoped lang="less">
-.box{
-  &-top{
-    .flex(space-between,center);
-  }
-}
+@import '../../assets/css/pindetail.less';
+
 </style>
