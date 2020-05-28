@@ -53,6 +53,10 @@ module.exports = {
         target: 'https://timeline-merger-ms.juejin.im',
         changeOrigin: true,
       },
+      '/v1/getUserList': { /* user 沸点 */
+        target: 'https://short-msg-ms.juejin.im',
+        changeOrigin: true,
+      },
       '/v1/get_related_entry': { /* post 侧边相关文章 */
         target: 'https://timeline-merger-ms.juejin.im',
         changeOrigin: true,
@@ -79,6 +83,14 @@ module.exports = {
       },
       '/v1/getNavList': { /* books-navs */
         target: 'https://xiaoce-timeline-api-ms.juejin.im',
+        changeOrigin: true,
+      },
+      'v1/get': { /* book */
+        target: 'https://xiaoce-cache-api-ms.juejin.im',
+        changeOrigin: true,
+      },
+      'v1/getListSection': { /* book 目录 */
+        target: 'https://xiaoce-cache-api-ms.juejin.im',
         changeOrigin: true,
       },
       '/v1/getCityList': { /* event-city */

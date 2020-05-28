@@ -35,7 +35,7 @@ import commonList1 from '@/components/common/common-list1'
 import homeHeaderParams from '@/components/timeline/homeHeaderParams'
 import scroll from '@/mixins/scroll'
 
-import homeAPI from '@/api/home'
+import timelineAPI from '@/api/timeline'
 import {mapState} from 'vuex'
 
 /**
@@ -124,9 +124,9 @@ export default {
     getLists(){
       this.apiParmas.variables.after = this.endCursor;
       this.apiParmas.variables.order = this.order;
-      if(this.isLoading) return
+      if(this.isLoading || !this.hasNextPage) return
       this.isLoading = true
-      homeAPI.lists(this.apiParmas)
+      timelineAPI.lists(this.apiParmas)
         .then(res => {
           if(this.hasNextPage && res.data){
             let result = res.data.articleFeed.items;

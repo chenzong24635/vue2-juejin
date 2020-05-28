@@ -4,12 +4,13 @@
     <register-box :show="registerFormShow" @toLogin="showHide1" @closeModal="showHide2" ></register-box>
     <div id="header-base">
       <div class="container">
-        <div class="logo">
-            <svg-icon style="height:0.5em" name="logo" color="#007fff" :size="90" />
-        </div>
+        <router-link to="/timeline/recommended" class="logo">
+          <svg-icon style="height:0.5em" name="logo" color="#007fff" :size="100" />
+        </router-link>
         <nav class="navs">
           <ul class="navs-left">
             <li v-for="(item,index) in baseHeader" :key="index">
+              <!-- :class="{routerLinkActive: }" -->
               <router-link :to="item.path" >{{item.title}}</router-link>
             </li>
           </ul>
@@ -89,11 +90,11 @@ export default {
     return {
       baseHeader: [
         {
-          path: '/timeline/recommended',
+          path: '/timeline',
           title: '首页',
         },
         {
-          path: '/pins/recommended',
+          path: '/pins',
           title: '沸点',
         },
         {
@@ -113,6 +114,14 @@ export default {
       registerFormShow: false,
       loginFormShow: false,
       writeBoxShow: false
+    }
+  },
+  watch:{
+    "$route":function(to, from){
+      console.log(to, from);
+      // if (to.name === from.name && to.params.id !== from.params.id) {
+      //   //do something 
+      // }
     }
   },
   computed: {

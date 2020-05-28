@@ -1,7 +1,11 @@
 export default [
   {
     path: '/',
-    redirect: { name: 'timeline', params: { id: 'recommended' }}
+    redirect: '/timeline/recommended'
+  },
+  {
+    path: '/timeline',
+    redirect: '/timeline/recommended'
   },
   {
     path: '/timeline/:id?',
@@ -13,13 +17,17 @@ export default [
     component: () => import('@/views/timeline/index.vue'),
   },
   {
-    path: '/pins/:id?',
+    path: '/pins/:id',
     name: 'pins',
     props: true,
     meta: {
       title: '沸点'
     },
     component: () => import('@/views/pins/index.vue')
+  },
+  {
+    path: '/pins',
+    redirect: '/pins/recommended'
   },
   {
     path: '/topics',
@@ -30,7 +38,7 @@ export default [
     component: () => import('@/views/topics/index.vue')
   },
   {
-    path: '/books/:id?',
+    path: '/books/:id',
     name: 'books',
     props: true,
     meta: {
@@ -39,13 +47,30 @@ export default [
     component: () => import('@/views/books/index.vue')
   },
   {
-    path: '/events/:id?',
+    path: '/books',
+    redirect: '/books/all'
+  },
+  {
+    path: '/book/:id',
+    name: 'book',
+    props: true,
+    meta: {
+      title: '小册'
+    },
+    component: () => import('@/views/books/book.vue')
+  },
+  {
+    path: '/events/:id',
     name: 'events',
     props: true,
     meta: {
       title: '活动'
     },
     component: () => import('@/views/events/index.vue')
+  },
+  {
+    path: '/events',
+    redirect: '/events/all'
   },
   {
     path: '/pin/:id?',
@@ -66,7 +91,7 @@ export default [
     component: () => import('@/views/topics/topic.vue')
   },
   {
-    path: '/user/:id',
+    path: '/user/:id/:title?',
     name: 'user',
     props: true,
     component: () => import('@/views/user/index.vue'),

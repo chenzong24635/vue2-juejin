@@ -1,7 +1,7 @@
 <template>
   <div class="">
-    <ul v-if="lists.length>0" class="lists">
-      <li v-for="item in lists" :key="item._id" class="list">
+    <ul v-if="listsNew.length>0" class="lists">
+      <li v-for="item in listsNew" :key="item._id" class="list">
         <a class="list-box" :href="item.eventUrl" target="_blank">
           <div :style="{'background-image': 'url(' + item.screenshot + ')'}" class="list-img">
           </div>
@@ -16,8 +16,8 @@
                 <svg-icon name="address" color="#909090" :size="16"></svg-icon>
                 <span>{{item.city}}</span>
               </p>
-              <button :class="['btn btn-primary']">
-                {{item.endTime | isActive }}
+              <button :class="['btn', item.isActive ? 'active':'']">
+                {{item.isActive ? '报名参加' : '活动详情' }}
               </button>
             </div>
           </div>
@@ -58,14 +58,20 @@ export default {
       let day = dayArr[val.getDay()]
       return month + '-' + date + ' ' + day
     },
-    isActive: function(val) { //判断活动是否过期
+  },
+  computed: {
+    listsNew() {
       let nowDate = +new Date()
-      let activeDate = +new Date(val)
-      console.log(activeDate < nowDate);
-      return activeDate < nowDate ? '报名参加' : '活动详情'
+      return this.lists.map(item => {
+        let activeDate = +new Date(item.endTime)
+        item.isActive = activeDate > nowDate
+        return item
+      })
     }
   },
-  created () {},
+  updated () {
+    console.log(this.listsNew);
+  },
   methods: {
 
   }

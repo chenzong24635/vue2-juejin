@@ -1,12 +1,12 @@
 <template>
   <div class="container ">
-    <div class="detail" >
+    <div class="detail container-left" >
       <div class="detail-box">
         <div class="info">
-          <img class="info-avatar" :src="articleInfo.user.avatarLarge" alt="">
+          <img class="info-avatar" :src="articleInfo.user ? articleInfo.user.avatarLarge : ''" alt="">
           <div class="info-box">
             <div class="info-box-top">
-              <p class="username">{{articleInfo.user.username}}</p>
+              <p class="username">{{articleInfo.user ? articleInfo.user.username : ''}}</p>
               <user-level :level="3" />
             </div>
             <div class="info-box-bottom">
@@ -14,18 +14,18 @@
               <span>阅读 {{articleInfo.viewsCount}}</span>
             </div>
           </div>
-            <div class="info-box-btn">关注</div>
+          <c-button type="success cutout" >关注</c-button>
         </div>
         <h1 class="title" >{{articleInfo.title}}</h1>
         <div class="content" v-if="articleContent" v-html="articleContent.content"></div>
-        <focus-more :tags="articleInfo.tags" />
+        <focus-more :tags="articleInfo.tags || []" />
       </div>
       <div class="recommend-entry-lists">
         <p class="title">相关推荐</p>
         <common-list1 :lists="recommendEntryLists" />
       </div>
     </div>
-    <aside class="aside">
+    <aside class="aside container-right">
       <about-author :articleInfo="articleInfo" />
       <!-- <aside-book /> -->
       <related-article :lists="relatedEntryLists" />
@@ -161,6 +161,7 @@ export default {
 
 .container{
   .flex(space-between);
+  padding-top: 30px;
 }
 /deep/ .aside{
   position: relative;
@@ -177,7 +178,6 @@ export default {
   }
 }
 .detail{
-  max-width: 700px;
   background-color: #fff;
   &-box{
     padding: 2rem;
@@ -217,9 +217,6 @@ export default {
         margin-right: 10px;
       }
     }
-    &-btn{
-      .btn-primary(#6cbd45);
-    }
   }
 }
 /deep/ img{
@@ -236,6 +233,7 @@ export default {
     border-bottom: 1px solid #d1e9ff;
   }
   .heading{
+    padding-top: 35px;
     padding: 12px 0;
     font-size: 24px;
     border-bottom: 1px solid #ececec;

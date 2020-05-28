@@ -5,12 +5,7 @@
 </template>
 <script>
 export default {
-  props: {
-    level: {
-      type: Number,
-      required: true
-    }
-  },
+  props: ['level'],
   data () {
     return {}
   },

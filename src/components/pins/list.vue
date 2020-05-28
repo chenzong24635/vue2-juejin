@@ -1,14 +1,26 @@
 <template>
   <div class="">
-    <div class="following " v-if="type === 'following' && !isLogin">
-      <svg-icon name="order" size=60 color="#e6e6e6"></svg-icon>
-      <p>你关注人的动态会出现在这里</p>
-      <button class="login btn">登录</button>
-    </div>
+    <article-nothing v-if="type === 'following' && !isLogin" title="你关注人的动态会出现在这里">
+      <template>
+        <c-button type="primary cutout">登录</c-button>
+      </template>
+    </article-nothing>
     <ul>
       <li class="list" v-for="item in lists" :key="item.id">
-        <list-detail1 v-if="type === 'recommended' || type === 'following'" :list="item" v-bind="$attrs" />
-        <list-detail2 v-else :list="item" v-bind="$attrs" />
+        <template v-if="type === 'recommended' || type === 'following'">
+          <list-detail1  :list="item" v-bind="$attrs" />
+          <article-actions 
+            :likeCount="item.likeCount"
+            :commentCount="item.commentCount"
+          /> 
+        </template>
+        <template  v-else>
+          <list-detail2 :list="item" v-bind="$attrs" />
+          <article-actions 
+            :likeCount="item.likeCount"
+            :commentCount="item.commentCount"
+          /> 
+        </template>
       </li>
     </ul>
   </div>
@@ -54,16 +66,7 @@ export default {
   margin-bottom: 6px;
   background-color: #fff;
 }
-.following{
-  padding: 80px 20px;
-  background-color: #fff;
-  text-align: center;
-  p{
-    font-size: 15px;
-    font-weight: 400;
-    color: #b2bac2;
-  }
-}
+
 .login{
   margin-top: 10px;
 }

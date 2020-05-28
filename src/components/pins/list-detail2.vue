@@ -29,20 +29,10 @@
         <router-link :to="'/topic/' +list.topic.objectId" target="_blank">{{list.topic.title}}</router-link>
       </div>
     </div>
-    <div class="box-actions">
-      <div class="box-action">
-        <svg-icon name="praise1"></svg-icon>
-        <span>{{ list.likeCount || '赞'}}</span>
-      </div>
-      <div class="box-action">
-        <svg-icon name="message2"></svg-icon>
-        <span>{{ list.commentCount || '评论'}}</span>
-      </div>
-      <div class="box-action">
-        <svg-icon name="upload"></svg-icon>
-        <span>分享</span>
-      </div>
-    </div>
+    <!-- <article-actions 
+      :likeCount="list.likeCount"
+      :commentCount="list.commentCount"
+    /> -->
   </div>
 </template>
 <script>

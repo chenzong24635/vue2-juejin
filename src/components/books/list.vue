@@ -6,7 +6,7 @@
         v-for="item in lists"
         :key="item.id"
       >
-        <router-link to="" class="list-a">
+        <router-link target="_blank" :to="'/book/' + item.id" class="list-a">
           <img :src="item.img" alt="" class="list-img">
           <div class="list-cnt">
             <h1 class="title">{{item.title}}</h1>

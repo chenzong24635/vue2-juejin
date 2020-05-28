@@ -6,15 +6,43 @@
   </div>
 </template>
 <script>
+import bookAPI from '@/api/books.js'
 export default {
   name: '',
   components: {},
   props: ['id'],
   data () {
-    return {}
+    return {
+      bookDesc: {},
+      bookSection: [],
+    }
   },
-  created () {},
-  methods: {}
+  created () {
+    this.getBookDesc()
+    // this.getBookSection()
+  },
+  methods: {
+    async getBookDesc() {
+      try {
+        let {s,d} = await bookAPI.bookDesc(this.id)
+        if(s === 1) {
+          this.bookDesc = d
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async getBookSection() {
+      try {
+        let {s,d} = await bookAPI.bookSection(this.id)
+        if(s === 1) {
+          this.bookSection = d
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
 }
 </script>
 <style scoped lang="less">

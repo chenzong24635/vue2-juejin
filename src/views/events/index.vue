@@ -16,7 +16,7 @@
     </header-sub>
 
     <div class="panel">
-      <swiper class="swiper" ref="mySwiper" :options="swiperOptions">
+      <!-- <swiper class="swiper" ref="mySwiper" :options="swiperOptions">
         <swiper-slide v-for="item in banners" :key="item._id">
           <a class="swiper-a" :href="item.eventUrl">
             <img class="swiper-img" :src="item.screenshot" alt="">
@@ -25,11 +25,10 @@
         <div v-if="banners.length>1" class="swiper-button-prev" slot="button-prev"></div>
         <div v-if="banners.length>1" class="swiper-button-next" slot="button-next"></div>
         <div v-if="banners.length>1" class="swiper-pagination" slot="pagination"></div>
-      </swiper>
-      <div class="date">
+      </swiper> -->
+      <!-- <div class="date">
         日历
-        <!-- {{allCity}} -->
-      </div>
+      </div> -->
     </div>
     <div>
       <events-list  
@@ -43,8 +42,8 @@
   </div>
 </template>
 <script>
-import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
+// import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
+// import 'swiper/css/swiper.css'
 import eventAPI from '@/api/events'
 import headerSub from '@/components/header/header-sub'
 import eventsList from '@/components/events/list'
@@ -54,14 +53,14 @@ import scroll from '@/mixins/scroll'
 
 export default {
   components: {
-    Swiper,
-    SwiperSlide,
+    // Swiper,
+    // SwiperSlide,
     headerSub,
     eventsList,
     copyRight
   },
   directives: {
-    swiper: directive
+    // swiper: directive
   },
   props: ['id'],
   mixins: [scroll],
@@ -81,7 +80,7 @@ export default {
       defaultCity: [
         {
           cityName: "热门活动",
-          cityAlias: "",
+          cityAlias: "all",
           weight: 0
         },
         {
@@ -111,7 +110,8 @@ export default {
         }
       ],
       lists: [],
-      pageNum: 1
+      pageNum: 1,
+      isLoading: false,
     }
   },
   watch: {
@@ -161,10 +161,13 @@ export default {
 
     },
     async getLists() {
+      if(this.isLoading) return
+      this.isLoading = true
       let id = this.id ==='all' ? '' : this.id
       let {s, d} = await eventAPI.eventList(1, id, this.pageNum++);
       if(s === 1){
         this.lists = this.lists.concat(d);
+        this.isLoading = false
       }
       console.log(s,d);
     }
@@ -206,6 +209,7 @@ export default {
   padding-top: 6rem;
 }
 .events-slot{
+  .flex(@ai:center);
   span{
     margin-left: 6px;
     font-size: 1.16rem;

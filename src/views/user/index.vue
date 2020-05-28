@@ -3,7 +3,7 @@
     <div class="container-left">
       <div v-if="authorInfo" class="author">
         <div class="author-left">
-          <img class="author-avatar" :src="authorInfo.avatarLarge" alt="">
+          <img class="author-avatar" :src="authorInfo.avatarLarge || ''" alt="">
           <div class="author-info">
             <div class="username">
               <span>{{authorInfo.username}}</span>
@@ -38,7 +38,7 @@
           :key="index"
         >
           <span class="tab-title">{{item.title}}</span>
-          <span v-if="item.showCount" class="tab-count">{{item.count}}</span>
+          <!-- <span v-if="item.showCount" class="tab-count">{{item.count}}</span> -->
           <ul v-if="item.selects && item.showSelects && item.selects.length" class="selects">
             <li
               @click.stop="chooseSelect(item1, index1, item, index)"
@@ -47,10 +47,28 @@
               :key="index1"
             >
               {{item1.title}}
+              <!-- <span v-if="item.showCount">{{item1.count}}</span> -->
             </li>
           </ul>
         </li>
       </ul>
+      <activities-list
+        v-if="tabIndex === 0"
+        :lists="lists" 
+        :username="authorInfo.username" 
+      />
+      <posts-list
+        v-else-if="tabIndex === 1"
+        :lists="lists" 
+      />
+      <pins-list
+        v-else-if="tabIndex === 2"
+        :lists="lists" 
+      />
+      <shares-list
+        v-else-if="tabIndex === 3"
+        :lists="lists" 
+      />
     </div>
     <aside class="container-right">
       <section class="aside-box aside-box1">
@@ -96,11 +114,23 @@
   </main>
 </template>
 <script>
+import activitiesList from '@/components/user/activitiesList.vue'
+import postsList from '@/components/user/postsList.vue'
+import pinsList from '@/components/user/pinsList.vue'
+import sharesList from '@/components/user/sharesList.vue'
 import userAPI from '@/api/user.js'
+import scroll from '@/mixins/scroll'
+
 export default {
   name: '',
-  components: {},
-  props: ['id'],
+  components: {
+    activitiesList,
+    postsList,
+    pinsList,
+    sharesList,
+  },
+  props: ['id','title'],
+  mixins: [scroll],
   filters: {
     date(val) {
       return new Date(val).toLocaleDateString()
@@ -110,9 +140,17 @@ export default {
     return {
       authorInfo: {},
       after: '',
+      isLoading: false,
       hasNextPage: true,
       tabIndex: 0,
-      
+      numbers: {
+        postedPostsCount: 0, //专栏数
+        pinCount: 0, //沸点数
+        postedEntriesCount: 0, //分享数
+        collectedEntriesCount: 0, //zan-文章数
+        likedPinCount: 0, //zan-沸点数
+        purchasedBookletCount: 0, //小册数
+      },
       tabs: [
         {
           title: '动态',
@@ -123,18 +161,21 @@ export default {
           title: '专栏',
           route: 'posts',
           count: 0,
+          type: 'postedPostsCount',
           showCount: true
         },
         {
           title: '沸点',
           route: 'pins',
           count: 0,
+          type: 'pinCount',
           showCount: true
         },
         {
           title: '分享',
           route: 'shares',
           count: 0,
+          type: 'postedEntriesCount',
           showCount: true
         },
         {
@@ -148,12 +189,14 @@ export default {
             {
               title: '文章',
               route: 'likes',
+              type: 'collectedEntriesCount',
               count: 0,
               
             },
             {
               title: '沸点',
               route: 'praise',
+              type: 'likedPinCount',
               count: 0,
             },
           ]
@@ -162,11 +205,11 @@ export default {
           title: '小册',
           route: 'books',
           count: 0,
+          type: 'purchasedBookletCount',
           showCount: true
         },
         {
           title: '更多',
-          count: 0,
           showCount: false,
           showSelects: false,
           selectIndex: -1,
@@ -181,45 +224,106 @@ export default {
             },
           ]
         },
-      ]
+      ],
+      lists: [],
     }
   },
   created () {
     this.getAuthor()
-    // this.getAuthorSection()
+    console.log(this.id,this.title);
+    // 根据路由切换tab
+    this.tabs.some((item, index) => {
+      if(item.selects) {
+        return item.selects.some((item1) => {
+          if(item1.route === this.title){
+            this.tabIndex = index
+            return true
+          }
+        })
+      }else{
+        if(item.route === this.title){
+          this.tabIndex = index
+          return true
+        }
+      }
+    })
+    this.getLists()
   },
   methods: {
     changeTab(item, index) {
-      console.log(item);
-      this.hideSelects()
       if(item.selects) {
+        this.hideSelects('showSelects')
         item.showSelects = !item.showSelects
       } else {
+        this.hideSelects('')
         this.tabIndex = index
-        this.hideSelects('selectIndex')
-
-        // this.selectIndex = -1
+        this.routeTo(item.route)
+        this.reset()
+        this.getLists()
       }
     },
     chooseSelect(item1, index1, item, index){
-      console.log(item1);
+      // 设置当前下拉框 选中
+      this.hideSelects('')
       item.selectIndex = index1
       this.tabIndex = index
-      this.hideSelects('showSelects')
+      this.reset()
+      this.routeTo(item1.route)
+      this.getLists()
     },
+    routeTo(route) {
+      this.$router.push(`/user/${this.id}/${route}`)
+    },
+    /** 
+     * @parmas {String} type:showSelects 有下拉框；type:selectIndex 其他
+     */
     hideSelects(type) {
       console.log('hide');
-      this.tabs = this.tabs.map(item => {
-        if(type == 'showSelects'){
-          item[type] = false
-        }else{
-          item[type] = -1
-        }
-        
-        return item
-      })
+      if(type === 'showSelects') {
+        // 设置所有下拉框 未选中
+        this.tabs.forEach(item => {
+          (item.showSelects !== 'undefined') && (item[type] = false)
+        })
+      }else if(type === 'selectIndex'){
+        this.tabs.forEach(item => {
+          (item.selectIndex !== 'undefined') && (item[type] = -1)
+        })
+      }else{
+        this.tabs.forEach(item => {
+          if(item.showSelects !== 'undefined'){
+            item['showSelects'] = false
+          }
+          if(item.selectIndex !== 'undefined'){
+            item['selectIndex'] =  -1
+          }
+        })
+      }
     },
-    async getAuthor() {
+    reset() {
+      this.lists = [];
+      this.after = '';
+      this.hasNextPage = true;
+      this.isLoading = false;
+      
+    },
+    getLists() {
+      if(this.isLoading) return
+      this.isLoading = true
+      let listsObj = {
+        0: 'getActivities',
+        1: 'getPosts',
+        2: 'getPins',
+        3: 'getShares',
+        4: 'getLikes',
+        5: 'getPraise',
+        6: 'getBooks',
+        7: 'getCollections',
+        8: 'getTags',
+      }
+      console.log(this.tabIndex,listsObj[this.tabIndex]);
+      this[listsObj[this.tabIndex]]()
+    },
+    async getAuthor() { // 用户信息
       if(!this.hasNextPage)return
       try{
         let {s, d} = await userAPI.author(this.id)
@@ -231,16 +335,53 @@ export default {
       }
       console.log(this.authorInfo);
     },
-    async getAuthorSection() {
+    async getActivities() { //动态
+      if(!this.hasNextPage)return
       try{
-        let {data} = await userAPI.authorSection(this.id, this.after)
+        let {data} = await userAPI.activities(this.id, this.after)
         let items = data.ownActivityFeed.items
-        this.authorInfo = items.edges
+        this.lists = this.lists.concat(items.edges)
         this.hasNextPage = items.pageInfo.hasNextPage
         this.after = items.pageInfo.endCursor
+        this.isLoading = false
       }catch(e){
         console.log(e);
       }
+      console.log(this.lists);
+    },
+    async getPosts() { //专栏
+      try{
+        let {s, d} = await userAPI.posts(this.id)
+        if(s === 1) {
+          this.lists = d.entrylist
+          this.isLoading = false
+        }
+      }catch(e){
+        console.log(e);
+      }
+    },
+    async getPins() { //沸点
+      try{
+        let {s, d} = await userAPI.pins(this.id, this.after)
+        if(s === 1) {
+          this.lists = d.list
+          this.isLoading = false
+        }
+      }catch(e){
+        console.log(e);
+      }
+    },
+    async getShares() { //分享
+    },
+    async getLikes() { //赞-文章
+    },
+    async getPraise() { //赞-沸点
+    },
+    async getBooks() { //小册
+    },
+    async getCollections() { //收藏集
+    },
+    async getTags() { //关注
     },
   }
 }
@@ -277,11 +418,16 @@ export default {
   }
   &-info{
     .username{
+      .flex();
       font-size: 26px;
       font-weight: 600;
       line-height: 1.2;
       margin-bottom: 16px;
       color: #000;
+      span{
+        line-height: 1;
+        margin-right: 4px;
+      }
     }
   }
   &-right{
@@ -301,17 +447,24 @@ export default {
     position: relative;
     flex: 0 0 auto;
     width: 75px;
-    padding: 15px 0;
+    height: 50px;
+    line-height: 50px;
+    // padding: 15px 0;
     text-align: center;
     cursor: pointer;
+    &.active{
+      .line(@dir:bottom,@width:2px,@c: @mainColor)
+    }
   }
 }
 .selects{
+  .border();
   position: absolute;
   top: 100%;
   width: 100%;
   padding: 2px 0;
   background-color: #fff;
+  line-height: 1.5;
   .select{
     padding: 5px 10px;
     color: #000;

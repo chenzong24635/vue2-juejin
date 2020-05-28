@@ -90,7 +90,6 @@ export default {
             return item
           }  
         })
-        console.log(arr);
         return arr
       }
     }
@@ -102,7 +101,6 @@ export default {
     }
   },
   created(){
-    console.log(this.lists);
   },
   methods: {
     changeShow (obj, type) { //鼠标移入移出时，分享图标显示隐藏
@@ -166,6 +164,7 @@ export default {
   }
   .dot{
     .delimiter('·');
+    .flex();
   }
   .slash{
     .delimiter()

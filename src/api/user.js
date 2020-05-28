@@ -16,9 +16,8 @@ const author = (ids) => {
   })
 }
 
-// 用户专栏
-//https://timeline-merger-ms.juejin.im/v1/get_entry_by_self
-const authorSection = (ownerId,after,size = 20) => {
+// 动态
+const activities = (ownerId,after,size = 20) => {
   return request({
     method: 'POST',
     url: 'https://web-api.juejin.im/query',
@@ -38,25 +37,54 @@ const authorSection = (ownerId,after,size = 20) => {
     }
   })
 }
-// const authorSection = (targetUid, before, order = 'createdAt', type = 'post', limit = 20) => {
-//   return request({
-//     method: 'GET',
-//     url: '/v1/get_entry_by_self',
-//     params: {
-//       uid: '',
-//       device_id: '',
-//       token: '',
-//       src: 'web',
-//       targetUid,
-//       before,
-//       order
-//       type,
-//       limit,
-//     }
-//   })
-// }
+
+// 专栏
+const posts = (targetUid, order = 'createdAt', type = 'post', limit = 20) => {
+  return request({
+    method: 'GET',
+    url: '/v1/get_entry_by_self',
+    params: {
+      targetUid,
+      order,
+      type,
+      limit,
+      src: 'web',
+    }
+  })
+}
+// 沸点 
+const pins = (uid, before, limit = 20) => {
+  return request({
+    method: 'GET',
+    url: '/v1/getUserList',
+    params: {
+      uid,
+      before,
+      limit,
+      device_id: '',
+      token:'',
+      src: 'web',
+    }
+  })
+}
+// 分享 
+const shares = (uid) => {
+  return request({
+    method: 'GET',
+    url: '/v1/get_entry_by_self',
+    params: {
+      sub_location: uid + "-shares",
+      location: 'user',
+      suid: '7nZneiRfaJAQyUVvNnzB',
+      src: 'juejin.im',
+    }
+  })
+}
 
 export default {
   author,
-  authorSection
+  activities,
+  posts,
+  pins,
+  shares,
 }

@@ -2,25 +2,25 @@
   <section v-if="articleInfo" class="aside-box">
     <p class="aside-title">关于作者</p>
     <div class="info" >
-      <img class="info-avatar" :src="articleInfo.user.avatarLarge" alt="">
+      <img class="info-avatar" :src="articleInfo.user ? articleInfo.user.avatarLarge : ''" alt="">
       <div class="info-box">
         <div class="info-box-top">
-          <p class="username">{{articleInfo.user.username}}</p>
-          <user-level :level="3" />
+          <p class="username">{{articleInfo.user ? articleInfo.user.username : ''}}</p>
+          <user-level :level="articleInfo.user.level" />
         </div>
         <div class="info-box-bottom ov1">
-          {{articleInfo.user.jobTitle}}
+          {{articleInfo.user ? articleInfo.user.jobTitle : ''}}
         </div>
       </div>
     </div>
     <div class="counts">
       <div class="count">
         <svg-icon name="praise" :size="25"></svg-icon>
-        <span>获得点赞 {{articleInfo.user.totalCollectionsCount}}</span>
+        <span>获得点赞 {{articleInfo.user ? articleInfo.user.totalCollectionsCount : ''}}</span>
       </div>
       <div class="count">
         <svg-icon name="eye" :size="25"></svg-icon>
-        <span>文章被阅读 {{articleInfo.user.totalCollectionsCount}}</span>
+        <span>文章被阅读 {{articleInfo.user ? articleInfo.user.totalCollectionsCount : ''}}</span>
       </div>
     </div>
   </section>
@@ -31,13 +31,15 @@ export default {
   props: {
     articleInfo: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   data () {
     return {}
   },
-  created () {},
+  created () {
+    console.log(this.articleInfo);
+  },
   methods: {}
 }
 </script>
@@ -48,9 +50,9 @@ export default {
     padding: 10px;
 
   &-avatar{
-    margin-right: 1rem;
-    width: 3.333rem;
-    height: 3.333rem;
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
   }
   &-box{
@@ -70,9 +72,6 @@ export default {
       span{
         margin-right: 10px;
       }
-    }
-    &-btn{
-      .btn-primary(#6cbd45);
     }
   }
 }

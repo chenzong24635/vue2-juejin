@@ -83,7 +83,7 @@ export default {
 .article-suspended-panel{
   position: fixed;
   top: 200px;
-  left: 120px;
+  margin-left: -70px;
 
   .btn-list{
     font-size: 12px;

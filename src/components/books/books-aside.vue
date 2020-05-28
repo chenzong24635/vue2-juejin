@@ -7,17 +7,17 @@
       </div>
       <div class="qr">
         <p class="title">关注公众号 领取优惠码</p>
-        <img class="img" src="../../../assets/image/wechat-qr.f1926e7.png" alt="">
+        <img class="img" src="../../assets/image/wechat-qr.f1926e7.png" alt="">
       </div>
     </section>
     <section class="box help">
       <router-link class="help-line" to="/book/59e414a5518825541b03ce66">
-        <img class="img" src="../../../assets/image/author.c5d975e.png" alt="">
+        <img class="img" src="../../assets/image/author.c5d975e.png" alt="">
         <p class="title">成为作者</p>
       </router-link>
       <!-- <p class="help-line"></p> -->
       <router-link to="/feedback">
-        <img class="img" src="../../../assets/image/feedback.1230fb5.png" alt="">
+        <img class="img" src="../../assets/image/feedback.1230fb5.png" alt="">
         <p class="title">建议反馈</p>
       </router-link>
     </section>

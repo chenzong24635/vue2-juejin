@@ -49,6 +49,7 @@ export default {
   methods: {
     // 控制目录吸顶
     catalogSticky() {
+      console.log('s');
       let scrollTop = document.scrollingElement.scrollTop
       if (scrollTop >= this.catalogOffsetTop && this.isSticky == false) {
         this.isSticky = true
@@ -59,6 +60,7 @@ export default {
     },
     // 生成目录树数据
     createCatalog() {
+      console.log('created');
       let catalog = []
       function Item(id, item, level){
         this.id = id
@@ -131,7 +133,6 @@ export default {
 
 <style lang='less' scoped>
 .catalog{
-  padding-right: 10px;
   margin-top: 20px;
   transition: all .2s;
 
@@ -207,7 +208,7 @@ export default {
       padding: 4px 0 4px 21px;
       color: inherit;
       text-decoration: none;
-
+      .ov1;
       &:hover{
         background: #ebedef;
       }

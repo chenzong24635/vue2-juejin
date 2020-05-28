@@ -8,7 +8,7 @@
     />
     <div class="container books">
       <books-list :lists="lists" />
-      <books-right />
+      <books-aside />
     </div>
     <copy-right />
   </div>
@@ -17,7 +17,7 @@
 import copyRight from '@/components/common/copy-right'
 import headerSub from '@/components/header/header-sub'
 import booksList from '@/components/books/list'
-import booksRight from '@/components/books/books-right'
+import booksAside from '@/components/books/books-aside'
 import booksAPI from '@/api/books'
 import scroll from '@/mixins/scroll'
 export default {
@@ -25,7 +25,7 @@ export default {
   components: {
     headerSub,
     booksList,
-    booksRight,
+    booksAside,
     copyRight
   },
   props: ["id"],
@@ -66,7 +66,7 @@ export default {
             name: "全部",
             score: "0",
             createdAt: "2018-08-21T15:11:46.000Z",
-            alias: "",
+            alias: "all",
           },
           ...d
         ];

@@ -4,16 +4,18 @@
     <ul class="aside-lists">
       <li class="aside-list" v-for="item in newLists" :key="item.objectId">
         <router-link :to="'/pin/' + item.objectId" target="_blank">
-          <div class="list-top">
-            <p class="list-title">{{item.content}}</p>
-            <img v-if="item.pictures.length" class="list-img" :src="item.pictures[0]" alt="">
+          <div class="list-left">
+            <p class="list-left-title">{{item.content}}</p>
+            <div class="list-left-msg">
+              <span>{{item.likedCount}}</span>
+              <span>赞</span>
+              <span>·</span>
+              <span>{{item.commentCount}}</span>
+              <span>评论</span>
+            </div>
           </div>
-          <div class="list-bottom">
-            <span>{{item.likedCount}}</span>
-            <span>赞</span>
-            <span>·</span>
-            <span>{{item.commentCount}}</span>
-            <span>评论</span>
+          <div class="list-right">
+            <img v-if="item.pictures.length" class="list-right-img" :src="item.pictures[0]" alt="">
           </div>
         </router-link>
       </li>
@@ -57,32 +59,36 @@ export default {
   &-lists{
     padding: 0 1.5rem;
   }
-  &-list{
+  &-list {
     .line(bottom);
-    padding: 1rem 0;
+    padding: 5px 0;
+    a{.flex(space-between);}
   }
   .list{
-    &-top{
-      .flex();
+    
+    &-left{
+      &-title{
+        flex: 1;
+        padding-right: 1rem;
+        font-size: 13px;
+        .ov();
+      }
+      &-msg{
+        .flex();
+        margin-top: 30px;
+        &>span{
+          color: @color;
+          padding: 0 2px;
+        }
+      }
     }
-    &-title{
-      flex: 1;
-      padding-right: 1rem;
-      font-size: 13px;
-      .ov();
-    }
-    &-img{
+    &-right{
       width: 35%;
-      max-width: 80px;
-      height: 80px;
-      border-radius: 0.5rem;
-      object-fit: cover;
-    }
-    &-bottom{
-      .flex();
-      &>span{
-        color: @color;
-        padding: 0 2px;
+      &-img{
+        max-width: 80px;
+        height: 80px;
+        border-radius: 0.5rem;
+        object-fit: cover;
       }
     }
   }
