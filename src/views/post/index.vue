@@ -17,7 +17,7 @@
           <c-button type="success cutout" >关注</c-button>
         </div>
         <h1 class="title" >{{articleInfo.title}}</h1>
-        <div class="content" v-if="articleContent" v-html="articleContent.content"></div>
+        <div class="html-content" v-if="articleContent" v-html="articleContent.content"></div>
         <focus-more :tags="articleInfo.tags || []" />
       </div>
       <div class="recommend-entry-lists">
@@ -219,53 +219,7 @@ export default {
     }
   }
 }
-/deep/ img{
-  max-width: 100%;
-}
-/deep/ .content{
-  word-break: break-word;
-  line-height: 1.75;
-  font-weight: 400;
-  font-size: 15px;
-  margin-bottom: 30px;
-  a{
-    color: #0269c8;
-    border-bottom: 1px solid #d1e9ff;
-  }
-  .heading{
-    padding-top: 35px;
-    padding: 12px 0;
-    font-size: 24px;
-    border-bottom: 1px solid #ececec;
-  }
-  pre{
-    position: relative;
-    line-height: 1.75;
-    padding: 18px 15px 12px;
-    overflow-x: auto;
-    color: #333;
-    background: #f8f8f8;
-    code{
-      font-family: Menlo,Monaco,Consolas,Courier New,monospace;
-      font-size: 12px;
-      
-      .hljs{
-        &-keyword{
-          font-weight: 700;
-        }
-        &-title{
-          color: #458;
-        }
-        &-comment{
-          color: #998;
-        }
-        &-string{
-          color: #d14
-        }
-      }
-    }
-  }
-}
+
 .recommend-entry-lists{
   .line(@dir:top,@width: 30px);
   .title{

@@ -1,3 +1,9 @@
+# flex布局中，保持内容不超出容器的解决办法
+* 设置min-width:0
+* flex: 1;width:0;
+* flex: 1;overflow: hidden;
+
+
 # svg封装
 [vue中封装svg-icon组件并使用](https://www.cnblogs.com/lhjfly/p/10756650.html)
 

@@ -10,8 +10,8 @@
   color: @mainColor
 }
 
-.flex(@jc: flex-start, @ai: flex-start, @dir: row,@wrap: nowrap){
-  display: flex;
+.flex(@jc: flex-start, @ai: flex-start, @dir: row,@wrap: nowrap,@display: flex){
+  display: @display;
   flex-direction: @dir;
   justify-content: @jc;
   align-items: @ai;

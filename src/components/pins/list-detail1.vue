@@ -3,7 +3,10 @@
   <div class="box">
     <div class="box-top">
       <div class="user">
-        <img :src="list.actors[0].avatarLarge" :alt="list.actors[0].username" class="user-avatar">
+        <router-link target="_blank" :to="'/user/'+list.actors[0].id">
+          <img :src="list.actors[0].avatarLarge" class="user-avatar">
+        </router-link>
+        
         <div class="user-message">
           <p class="user-name">{{list.actors[0].username}}</p>
           <p class="user-meta">

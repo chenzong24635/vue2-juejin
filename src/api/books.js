@@ -23,6 +23,24 @@ const lists = (alias = '', pageNum = 1) => {
   })
 }
 
+//购买人
+const bookBuyers = (id, pageNum = 1, pageSize=20) => {
+  return request({
+    method: 'GET',
+    url: '/v1/getListBuy',
+    params: {
+      uid: '',
+      client_id: '',
+      token: '',
+      src: 'web',
+      pageNum,
+      pageSize,
+      id,
+    }
+  })
+}
+
+
 //小册头部信息,介绍
 const bookDesc = (id) => {
   return request({
@@ -55,6 +73,7 @@ const bookSection = (id) => {
 export default{
   navList,
   lists,
+  bookBuyers,
   bookDesc,
   bookSection
 }

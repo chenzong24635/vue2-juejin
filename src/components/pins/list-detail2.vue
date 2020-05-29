@@ -3,8 +3,8 @@
   <div class="box">
     <div class="box-top">
       <div class="user">
-        <router-link target="_blank" :to="'/user/'+list.user.objectId">
-          <img :src="list.user.avatarLarge" :alt="list.user.username" class="user-avatar">
+        <router-link target="_blank" :to="'/user/'+( list.user.id || list.user.objectId)">
+          <img :src="list.user.avatarLarge"  class="user-avatar">
         </router-link>
         <div class="user-message">
           <p class="user-name">{{list.user.username}}</p>

@@ -26,7 +26,12 @@
           </div>
         </div>
         <div class="author-right">
-          <svg-icon name="github" :size="24"></svg-icon>
+          <a target="_blank" v-if="authorInfo.community && authorInfo.community.github" :href="'https://github.com/'+authorInfo.community.github.username">
+            <svg-icon name="github" :size="24"></svg-icon>
+          </a>
+          <a target="_blank" v-if="authorInfo.blogAddress " :href="authorInfo.blogAddress">
+            <svg-icon name="zhihu" :size="24"></svg-icon>
+          </a>
           <c-button type="success cutout" :size="20">关注</c-button>
         </div>
       </div>
@@ -431,7 +436,9 @@ export default {
     }
   }
   &-right{
-    .flex(@dir:column,@ai: flex-end);
+    .flex(@dir:column,@ai:flex-end,@jc: flex-end);
+    align-self: stretch;
+    margin-left: 10px;
     button{
       margin-top: 25px;
     }

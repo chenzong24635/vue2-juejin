@@ -60,7 +60,7 @@ button{
   padding: 8px 16px;
   font-size: 13px;
   &:hover{
-    opacity: .6;
+    opacity: .8;
   }
 }
 .type(@color: #fff, @bgc: #fff){
@@ -82,7 +82,5 @@ button{
 .btn-success{
   .type(@bgc: #37c700);
 }
-// button[data-size]:before{
-//   background: #000;
-// }
+
 </style>

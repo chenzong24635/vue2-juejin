@@ -6,7 +6,7 @@
       <div class="info-box">
         <div class="info-box-top">
           <p class="username">{{articleInfo.user ? articleInfo.user.username : ''}}</p>
-          <user-level :level="articleInfo.user.level" />
+          <user-level :level="articleInfo.user ? articleInfo.user.level : 0" />
         </div>
         <div class="info-box-bottom ov1">
           {{articleInfo.user ? articleInfo.user.jobTitle : ''}}

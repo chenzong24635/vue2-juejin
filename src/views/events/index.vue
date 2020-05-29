@@ -146,30 +146,38 @@ export default {
       this.lists = [];
     },
     async getCityList() {
-      let {s, d} = await eventAPI.cityList(0);
-      console.log(s,d);
-      if(s === 1) {
-        this.cityList = d;
-      } 
+      try {
+        let {s, d} = await eventAPI.cityList(0);
+        if(s === 1) {
+          this.cityList = d;
+        } 
+      } catch (e) {
+        console.log(e);
+      }
     },
     async getBanner() {
-      let {s, d} = await eventAPI.banner();
-      if(s === 1) {
-        this.banners = d;
+      try {
+        let {s, d} = await eventAPI.banner();
+        if(s === 1) {
+          this.banners = d;
+        }
+      } catch (e) {
+        console.log(e);
       }
-      console.log(s,d);
-
     },
     async getLists() {
       if(this.isLoading) return
       this.isLoading = true
       let id = this.id ==='all' ? '' : this.id
-      let {s, d} = await eventAPI.eventList(1, id, this.pageNum++);
-      if(s === 1){
-        this.lists = this.lists.concat(d);
-        this.isLoading = false
+      try {
+        let {s, d} = await eventAPI.eventList(1, id, this.pageNum++);
+        if(s === 1){
+          this.lists = this.lists.concat(d);
+          this.isLoading = false
+        }
+      } catch (e) {
+        console.log(e);
       }
-      console.log(s,d);
     }
   }
 }

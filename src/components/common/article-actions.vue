@@ -4,10 +4,14 @@
       <svg-icon name="praise1"></svg-icon>
       <span>{{ likeCount || '赞'}}</span>
     </div>
-    <div class="action">
+    <picture>
+      <source media="(min-width: )" srcset="">
+      <img src="" alt="">
+    </picture>
+    <router-link target="_blank" :to="'/pin/'+id" class="action">
       <svg-icon name="message2"></svg-icon>
       <span>{{ commentCount || '评论'}}</span>
-    </div>
+    </router-link>
     <div class="action">
       <svg-icon name="upload"></svg-icon>
       <span>分享</span>
@@ -17,7 +21,7 @@
 <script>
 export default {
   name: '',
-  props: ['likeCount', 'commentCount'],
+  props: ['likeCount', 'commentCount', 'id'],
   /* props: {
     likeCount: {
       type: Number,

@@ -8,7 +8,7 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'less',
-      patterns: [path.resolve(__dirname, 'src/assets/css/main.less')]
+      patterns: [path.resolve(__dirname, 'src/assets/css/*.less')]
     }
   },
   devServer: {
@@ -85,19 +85,23 @@ module.exports = {
         target: 'https://xiaoce-timeline-api-ms.juejin.im',
         changeOrigin: true,
       },
-      'v1/get': { /* book */
+      '/v1/get': { /* book */
         target: 'https://xiaoce-cache-api-ms.juejin.im',
         changeOrigin: true,
       },
-      'v1/getListSection': { /* book 目录 */
+      '/v1/getListSection': { /* book 目录 */
         target: 'https://xiaoce-cache-api-ms.juejin.im',
         changeOrigin: true,
       },
-      '/v1/getCityList': { /* event-city */
+      '/v1/getListBuy': { /* book buyer */
+        target: 'https://xiaoce-cache-api-ms.juejin.im',
+        changeOrigin: true,
+      },
+      '/v2/getCityList': { /* event-city */
         target: 'https://event-storage-api-ms.juejin.im',
         changeOrigin: true,
       },
-      '/v1/getEventList': { /* event-list */
+      '/v2/getEventList': { /* event-list */
         target: 'https://event-storage-api-ms.juejin.im',
         changeOrigin: true,
       },
@@ -107,6 +111,18 @@ module.exports = {
       },
       '/v1/pinList/topic': { /* pins list2 */
         target: 'https://short-msg-ms.juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/getByID': { /* pin 赞数 */
+        target: 'https://short-msg-ms.juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/comments': { /* pin 评论 */
+        target: 'https://hot-topic-comment-wrapper-ms.juejin.im',
+        changeOrigin: true,
+      },
+      '/v1/reply': { /* pin 评论的恢复 */
+        target: ' https://hot-topic-comment-wrapper-ms.juejin.im',
         changeOrigin: true,
       },
 

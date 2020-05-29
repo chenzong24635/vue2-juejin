@@ -41,8 +41,48 @@ const hotLists = () => {
   })
 }
 
+// 沸点评论
+const pinComments = (id, pageNum = 1, pageSize = 20) => {
+  return request({
+    method: 'GET',
+    url: `/v1/comments/${id}`,
+    params: {
+      pageNum,
+      pageSize
+    } 
+  })
+}
+const pinActions = (msgId) => {
+  return request({
+    method: 'GET',
+    url: '/v1/getByID',
+    params: {
+      uid: '',
+      device_id: '',
+      token: '',
+      src: 'web',
+      msgId
+    } 
+  })
+}
+
+// 沸点评论的回复
+const pinReply  = (id, pageNum = 1, pageSize = 10) => {
+  return request({
+    method: 'GET',
+    url: `/v1/reply/${id}`,
+    params: {
+      pageNum,
+      pageSize
+    } 
+  })
+}
+
 export default{
   lists1,
   lists2,
-  hotLists
+  hotLists,
+  pinComments,
+  pinActions,
+  pinReply,
 }
