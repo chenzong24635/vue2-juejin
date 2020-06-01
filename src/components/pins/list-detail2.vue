@@ -10,9 +10,8 @@
           <p class="user-name">{{list.user.username}}</p>
           <p class="user-meta">
             <span >{{list.user.jobTitle}}</span>
-            <span>@</span>
-            <span >{{list.user.company}}</span>
-            <span>{{list.user.createdAt}}</span>
+            <span v-if="list.user.company">@ {{list.user.company}}</span>
+            <span>· {{list.user.createdAt | dateDis}}</span>
           </p>
         </div>
       </div>

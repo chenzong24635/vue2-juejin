@@ -1,6 +1,6 @@
 <template>
   <aside class="aside">
-    <h3 class="aside-title">推荐沸点</h3>
+    <h3 class="aside-title">{{title}}</h3>
     <ul class="aside-lists">
       <li class="aside-list" v-for="item in newLists" :key="item.objectId">
         <router-link :to="'/pin/' + item.objectId" target="_blank">
@@ -26,6 +26,10 @@
 export default {
   name: '',
   props: {
+    title: {
+      type: String,
+      required: true
+    },
     lists: {
       type: Array,
       required: true

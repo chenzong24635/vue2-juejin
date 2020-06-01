@@ -116,14 +116,14 @@ export default {
       writeBoxShow: false
     }
   },
-  watch:{
-    "$route":function(to, from){
-      console.log(to, from);
-      // if (to.name === from.name && to.params.id !== from.params.id) {
-      //   //do something 
-      // }
-    }
-  },
+  // watch:{
+  //   "$route":function(to, from){
+  //     // console.log(to, from);
+  //     // if (to.name === from.name && to.params.id !== from.params.id) {
+  //     //   //do something 
+  //     // }
+  //   }
+  // },
   computed: {
     ...mapState([
       'isLogin'

@@ -3,12 +3,15 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'less',
-      patterns: [path.resolve(__dirname, 'src/assets/css/*.less')]
+      patterns: [
+        path.resolve(__dirname, 'src/assets/css/main.less'),
+        path.resolve(__dirname, 'src/assets/css/common.less'),
+      ]
     }
   },
   devServer: {
@@ -17,10 +20,14 @@ module.exports = {
         target: 'https://github.com',
         changeOrigin: true,
       },
-      '/auth/type/phoneNumber': {/* auth login */
-        target: 'https://juejin.im',
-        changeOrigin: true,
-      },
+      // '/api/user/login': {/* auth login1 */
+      //   target: 'http://juejin.ncgame.cc',
+      //   changeOrigin: true,
+      // },
+      // '/auth/type/phoneNumber': {/* auth login */
+      //   target: 'https://juejin.im',
+      //   changeOrigin: true,
+      // },
       '/v1/topicList': {/* topics */
         target: 'https://short-msg-ms.juejin.im',
         changeOrigin: true,
@@ -113,7 +120,7 @@ module.exports = {
         target: 'https://short-msg-ms.juejin.im',
         changeOrigin: true,
       },
-      '/v1/getByID': { /* pin 赞数 */
+      '/v1/getByID': { /* pin 内容 */
         target: 'https://short-msg-ms.juejin.im',
         changeOrigin: true,
       },
@@ -127,7 +134,8 @@ module.exports = {
       },
 
     }
-  },  
+  },
+  productionSourceMap: false,
   chainWebpack(config) {
     config.plugins.delete('preload')
     config.plugins.delete('prefetch')

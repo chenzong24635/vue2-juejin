@@ -12,7 +12,7 @@
       <pin-list :lists="lists" :type="routeName" />
     </div>
     <div class="right-side">
-      <right-side :lists="hotLists" />
+      <right-side :lists="hotLists" title="推荐沸点" />
       <router-link  class="guide" to="">
         <svg-icon name="guide-icon.6c1b9a0" :size="30"></svg-icon>
         <span>如何玩转沸点</span>
@@ -42,6 +42,7 @@ export default {
       apiParmas: null,
       leftRouteParams,
       hasNextPage: true,
+      isLoading: false,
       endCursor: '',
       lists: [],
       hotLists: [],
@@ -57,7 +58,6 @@ export default {
   watch:{
     "$route":function(to,from){
       if (to.name === from.name && to.params.id !== from.params.id) {
-        console.log(to.params.id , from.params.id);
         this.reset()
         this.getApiParmas()
         this.getLists()
@@ -69,12 +69,12 @@ export default {
     this.getApiParmas()
     this.getHotLists()
     this.getLists()
-    console.log(this.apiParmas)
   },
   methods: {
     reset() {
       this.lists = [];
       this.hasNextPage= true;
+      this.isLoading= false;
       this.endCursor= '';
     },
     getApiParmas() {
@@ -98,10 +98,10 @@ export default {
       }catch(e){
         this.apiParmas = this.leftRouteParams[0].apiData
       }
-      console.log('this.apiParmas',this.apiParmas);
     },
     async getLists() {
-      
+      if(this.isLoading) return
+      this.isLoading = true
       switch(this.routeName) {
         case 'recommended':
           this.apiParmas.variables.after = this.endCursor;
@@ -121,61 +121,78 @@ export default {
     },
     async getListsRecommended() { // 推荐
       let apiParmas = this.apiParmas;
-      let { data } = await pinsAPI.lists1(apiParmas);
-      console.log(data);
-      let res = data.recommendedActivityFeed.items;
-      if(this.hasNextPage && res.edges){
-        let lists = res.edges.map(item=>item.node)
-        this.lists = this.lists.concat(lists);
-        this.hasNextPage = res.pageInfo.hasNextPage;
-        this.endCursor = res.pageInfo.endCursor;
+      try {
+        let { data } = await pinsAPI.lists1(apiParmas);
+        let res = data.recommendedActivityFeed.items;
+        if(this.hasNextPage && res.edges){
+          let lists = res.edges.map(item=>item.node)
+          this.lists = this.lists.concat(lists);
+          this.hasNextPage = res.pageInfo.hasNextPage;
+          this.endCursor = res.pageInfo.endCursor;
+        }
+        this.isLoading = false
+      } catch (e) {
+        this.isLoading = false
       }
-      console.log(this.lists );
+
     },
     async getListsHot() { // 热门
       let apiParmas = this.apiParmas;
-      let { data } = await pinsAPI.lists1(apiParmas);
-      console.log(data);
-      let res = data.popularPinList.items;
-      if(this.hasNextPage && res.edges){
-        let lists = res.edges.map(item=>item.node)
-        this.lists = this.lists.concat(lists);
-        this.hasNextPage = res.pageInfo.hasNextPage;
-        this.endCursor = res.pageInfo.endCursor;
+      try{
+        let { data } = await pinsAPI.lists1(apiParmas);
+        let res = data.popularPinList.items;
+        if(this.hasNextPage && res.edges){
+          let lists = res.edges.map(item=>item.node)
+          this.lists = this.lists.concat(lists);
+          this.hasNextPage = res.pageInfo.hasNextPage;
+          this.endCursor = res.pageInfo.endCursor;
+        }
+        this.isLoading = false
+      } catch (e) {
+        this.isLoading = false
       }
-      console.log(this.lists );
     },
     async getListsFollowing() { // 关注
-      if(!this.isLogin){
-        return
-      }
+      if(!this.isLogin)return
       let apiParmas = this.apiParmas
-      apiParmas.variables.since = new Date().toISOString();
-      let { data } = await pinsAPI.lists1(apiParmas);
-      console.log(data);
-      let res = data.followingActivityFeed.items;
-      if(this.hasNextPage && res.edges){
-        this.lists = this.lists.concat(res.edges);
-        this.hasNextPage = res.pageInfo.hasNextPage;
-        this.endCursor = res.pageInfo.endCursor;
+      try{
+        apiParmas.variables.since = new Date().toISOString();
+        let { data } = await pinsAPI.lists1(apiParmas);
+        let res = data.followingActivityFeed.items;
+        if(this.hasNextPage && res.edges){
+          this.lists = this.lists.concat(res.edges);
+          this.hasNextPage = res.pageInfo.hasNextPage;
+          this.endCursor = res.pageInfo.endCursor;
+        }
+        this.isLoading = false
+      } catch (e) {
+        this.isLoading = false
       }
     },
     async getLists2() { // 开源推荐等
       let apiParmas = this.apiParmas;
-      let {s, d} = await pinsAPI.lists2(apiParmas)
-      if (s === 1) {
-        if(d.total <= this.lists.length){
-          this.lists = this.lists.concat(d.list)
-        }else{
-          this.lists = d.list
+      try{
+        let {s, d} = await pinsAPI.lists2(apiParmas)
+        if (s === 1) {
+          if(d.total <= this.lists.length){
+            this.lists = this.lists.concat(d.list)
+          }else{
+            this.lists = d.list
+          }
         }
-        console.log(this.lists);
+        this.isLoading = false
+      } catch (e) {
+        this.isLoading = false
       }
     },
     async getHotLists() { // 推荐沸点
-      let {s, d} = await pinsAPI.hotLists()
-      if (s === 1) {
-        this.hotLists = d.list
+      try {
+        let {s, d} = await pinsAPI.hotLists()
+        if (s === 1) {
+          this.hotLists = d.list
+        }
+      } catch (e) {
+        console.log(e);
       }
     }
   }
@@ -217,9 +234,13 @@ export default {
     }
   }
 }
+.left-nav{
+  position: sticky;
+  top: 6rem;
+}
 .right-side{
   position: sticky;
-  top: 0;
+  top: 6rem;
   right: 0;
   width: 248px;
   .guide{

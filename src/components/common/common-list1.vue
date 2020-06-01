@@ -24,22 +24,21 @@
               </router-link>
             </p>
           </div>
-          <router-link :to="'/post/'+list.id" class="list-title">{{list.title}}</router-link>
+          <router-link
+            target="_blank"
+            :to="'/post'+list.originalUrl.replace(/https:\/\/juejin.im\/post/i,'')" 
+            class="list-title">{{list.title}}</router-link>
           <ul class="list-icons" >
             <li class="list-icon">
               <div class="icon-box">
                 <img src="https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg" alt="">
-                <!-- <svg-icon name="praise" :size="14"></svg-icon> -->
-                <span class="icon-num">{{list.collectionCount}}</span>
+                <span class="icon-num">{{list.likeCount}}</span>
               </div>
-              <div class="icon-box">
-                <!-- <svg-icon name="message1" :size="14"></svg-icon> -->
+              <router-link :to="'/post'+list.originalUrl.replace(/https:\/\/juejin.im\/post/i,'')+'#comment'"  class="icon-box">
                 <img src="https://b-gold-cdn.xitu.io/v3/static/img/comment.4d5744f.svg" alt="">
                 <span class="icon-num">{{list.commentsCount}}</span>
-              </div>
-
+              </router-link>
               <div @click="share(list)" v-show="list.uploadIconShow" class="icon-box icon-upload" title="分享">
-                <!-- <svg-icon name="upload" :size="14"></svg-icon> -->
                 <img src="https://b-gold-cdn.xitu.io/v3/static/img/share.1d55e69.svg" alt="">
                 <div @click="shareWb(list)" v-show="list.uploadBoxShow" class="share">
                   <svg-icon name="weibo" :size="20"></svg-icon>
@@ -179,6 +178,11 @@ export default {
         padding: 0 .6rem;
         height: 2rem;
         cursor: pointer;
+        &:hover{
+          color: inherit;
+          background-color: #f7f8fa;
+          // opacity: .8;
+        }
         // margin-right: 2rem;
       }
       .icon-box+.icon-box{

@@ -75,11 +75,11 @@ export default {
       articleInfo: {},
       relatedEntryLists: [], // 侧边相关文章
       recommendEntryLists: [], // 底部相关文章推荐
-      isLike: false
+      isLike: false,
+      isLoading: false,
     }
   },
   async created () {
-    console.log(this.$utils);
     await this.getArticleContent()
     await this.getArticleInfo()
     await this.getRelatedEntry()
@@ -132,6 +132,8 @@ export default {
       this.getRecommendEntry()
     },
     async getRecommendEntry() { // 相关推荐
+      if(this.isLoading) return
+      this.isLoading = true
       let tagIds = ''
       try{
         tagIds = this.articleInfo.tags.map(item => item.id).join('|')
@@ -140,18 +142,21 @@ export default {
       }
       let last = this.recommendEntryLists.slice(-1)[0] //获取列表最后一个的 rankIndex
       let before = last ? last.rankIndex : ''
-      console.log(tagIds);
-      // return 
-      let {s, d} = await postAPI.recommendEntry({
-        uid: '',
-        device_id:'', 
-        token: '',
-        src: 'web',
-        tagIds,
-        before
-      })
-      if(s === 1) {
-        this.recommendEntryLists = this.recommendEntryLists.concat(d.entrylist)
+      try {
+        let {s, d} = await postAPI.recommendEntry({
+          uid: '',
+          device_id:'', 
+          token: '',
+          src: 'web',
+          tagIds,
+          before
+        })
+        if(s === 1) {
+          this.recommendEntryLists = this.recommendEntryLists.concat(d.entrylist)
+        }
+        this.isLoading = false
+      } catch (e) {
+        this.isLoading = false
       }
     },
   }

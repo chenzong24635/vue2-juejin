@@ -1,14 +1,13 @@
 // 登录注册
 import request from './index'
 
-//
-/* url: 'https://juejin.im/auth/type/phoneNumber',
-    method: "POST",
-    body: {
-      password: ctx.request.body.password,
-      phoneNumber: ctx.request.body.phoneNumber
-    } */
-export const loginAuth = (phoneNumber, password) => {
+const loginAuth = (phoneNumber, password) => {
+  // let data = `phoneNumber=${phoneNumber}&password=${password}`
+  // return request.post('/auth/type/phoneNumber',data, {
+  //   headers: {
+  //     'Content-Type': 'application/x-www-form-urlencoded'
+  //   }
+  // })
   return request({
     method: 'POST',
     url: '/auth/type/phoneNumber',
@@ -18,7 +17,21 @@ export const loginAuth = (phoneNumber, password) => {
     }
   })
 }
-// https://juejin.im/auth/type/phoneNumber
+const login = (
+  username,
+  password,
+  loginType='tel',
+) => {
+  console.log('login')
+  let data = `user=${username}&psd=${password}&src=android&login_type=${loginType}&client_id=''&device_id=''&state=state&token=''`
+  return request.post('/auth-center/v1/login',data, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  }).then(res => res.data)
+}
 
-// LOGIN
-// c.REGISTER_WITH_PHONE;
+export default{
+  loginAuth,
+  login
+}

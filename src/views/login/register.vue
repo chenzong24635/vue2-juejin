@@ -14,7 +14,7 @@
           <input type="password" placeholder="请输入密码（不少于6位）">
         </div>
         <div class="form-list">
-          <button class="btn-primary">注册</button>
+          <c-button type="primary" :size="20">注册</c-button>
         </div>
         <div class="form-list ">
           <p @click="toLogin" style="text-align:center;" class="cp main-color" >已有账号登录</p>
@@ -57,6 +57,8 @@ export default {
 }
 </script>
 <style scoped lang="less">
+a{display: inline-block;}
+
 .auth{
   &-modal{
     .flex();
@@ -96,6 +98,9 @@ export default {
     color: #767676;
     input{
       color: #333
+    }
+    button{
+      width: 100%;
     }
   }
 

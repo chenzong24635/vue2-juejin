@@ -11,7 +11,7 @@
           <input type="password" v-model="password" placeholder="请输入密码">
         </div>
         <div class="form-list">
-          <button @click="login" class="btn-primary">登录</button>
+          <c-button @click.native="login" type="primary" :size="20">登录</c-button>
         </div>
         <div class="form-list form-prompt">
           <p>
@@ -45,7 +45,7 @@
   </div>
 </template>
 <script>
-import {loginAuth} from '@/api/auth'
+import authAPI from '@/api/auth'
 export default {
   name: 'login',
   components: {},
@@ -77,15 +77,18 @@ export default {
     thirdAuth() {
       this.thirdAuthShow = true;
     },
-    login() {
-      loginAuth(this.phoneNumber, this.password).then(res => {
+    async login() {
+      let res = await authAPI.loginAuth(this.phoneNumber, this.password)
+      console.log(res);
+      /* authAPI.loginAuth(this.phoneNumber, this.password).then(res => {
         console.log(res);
-      })
+      }) */
     }
   }
 }
 </script>
 <style scoped lang="less">
+a{display: inline-block;}
 .auth{
   &-modal{
     .flex();
@@ -125,6 +128,9 @@ export default {
     color: #767676;
     input{
       color: #333
+    }
+    button{
+      width: 100%;
     }
   }
 

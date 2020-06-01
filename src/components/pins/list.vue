@@ -12,7 +12,7 @@
           <article-actions 
             :likeCount="item.likeCount"
             :commentCount="item.commentCount"
-            :id="item.id"
+            :id="item.id || item.objectId"
           /> 
         </template>
         <template  v-else>
@@ -20,7 +20,7 @@
           <article-actions 
             :likeCount="item.likeCount"
             :commentCount="item.commentCount"
-            :id="item.id"
+            :id="item.id || item.objectId"
           /> 
         </template>
       </li>

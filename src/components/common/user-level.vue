@@ -1,5 +1,5 @@
 <template>
-  <div class="level">
+  <div v-if="level" class="level">
     Lv{{level}}
   </div>
 </template>

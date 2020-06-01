@@ -52,7 +52,7 @@ const pinComments = (id, pageNum = 1, pageSize = 20) => {
     } 
   })
 }
-const pinActions = (msgId) => {
+const pinDetail = (msgId) => {
   return request({
     method: 'GET',
     url: '/v1/getByID',
@@ -83,6 +83,6 @@ export default{
   lists2,
   hotLists,
   pinComments,
-  pinActions,
+  pinDetail,
   pinReply,
 }

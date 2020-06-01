@@ -96,7 +96,8 @@ export default {
       pageSize: 20,
       total: 0,
       lists: [],
-      subscribe: {}
+      subscribe: {},
+      isLoading: false,
     }
   },
   async mounted () {
@@ -107,13 +108,19 @@ export default {
   },
   methods: {
     async getLists() {
-      let {s, d} = await tagAPI.tags(this.tagid, this.page, this.pageSize, this.sort)
-      if (s === 1) {
-        this.lists = this.lists.concat(d.entrylist);
-        this.page ++;
-        this.total = d.total;
+      if(this.isLoading) return
+      this.isLoading = true
+      try {
+        let {s, d} = await tagAPI.tags(this.tagid, this.page, this.pageSize, this.sort)
+        if (s === 1) {
+          this.lists = this.lists.concat(d.entrylist);
+          this.page ++;
+          this.total = d.total;
+        }
+        this.isLoading = false
+      } catch (e) {
+        this.isLoading = false
       }
-      console.log(d,this.lists);
     },
     async getTagDetail() {
       let {s, d} = await tagAPI.tagDetail(encodeURIComponent(this.title))

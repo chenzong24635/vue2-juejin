@@ -14,7 +14,7 @@
         <input type="password" placeholder="请输入密码（不少于6位）">
       </div>
       <div class="form-list">
-        <button class="btn-primary">立即注册</button>
+        <c-button type="primary">立即注册</c-button>
       </div>
       <div class="form-list form-txt">
         <span>注册登录即表示同意</span><br/>
@@ -44,11 +44,15 @@ export default {
   width: 26.5rem;
   max-width: 100%;
   font-size: 1.167rem;
+  a{display: inline-block;}
   .title{margin-bottom: 10px;}
   &-txt{line-height: 1.5;}
   &-list{
     margin: 1.2rem 0;
     color: #767676;
+    button{
+      width: 100%;
+    }
     input{
       color: #333
     }

@@ -4,10 +4,6 @@
       <svg-icon name="praise1"></svg-icon>
       <span>{{ likeCount || '赞'}}</span>
     </div>
-    <picture>
-      <source media="(min-width: )" srcset="">
-      <img src="" alt="">
-    </picture>
     <router-link target="_blank" :to="'/pin/'+id" class="action">
       <svg-icon name="message2"></svg-icon>
       <span>{{ commentCount || '评论'}}</span>

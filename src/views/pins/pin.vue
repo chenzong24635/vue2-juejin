@@ -1,15 +1,20 @@
 <template>
   <div class="container">
-    <!-- pin
-    {{id}} -->
-    <comment-list :lists="comments" />
+    <main class="main">
+      <comment-list :lists="comments" />
+    </main>
+    <aside class="aside">
+      <right-side :lists="[]" title="相关推荐" />
+    </aside>
   </div>
 </template>
 <script>
+import rightSide from '@/components/pins/aside'
+
 import pinAPI from '@/api/pins.js'
 export default {
   name: '',
-  components: {},
+  components: {rightSide},
   props: ['id'],
   data () {
     return {
@@ -19,17 +24,24 @@ export default {
     }
   },
   async created () {
-    console.log();
     await this.getLists()
-    // await this.getActions()
-    // if(this.comments.length){
-    //   this.comments.forEach(async (item, index)  => {
-    //     console.log(item,index);
-    //     await this.getReply(item.id)
-    //   })
-    // }
+    await this.getPinDetail()
   },
   methods: {
+    // 内容
+    async getPinDetail() {
+      try {
+        let res = await pinAPI.pinDetail(this.id)
+        console.log(res);
+        // let {s ,d} = await pinAPI.pinActions
+        // if(s === 1) {
+        //   this.comments = d.comments
+        //   this.count = d.count
+        // }
+      } catch (e) {
+        console.log(e)
+      }
+    },
     //评论
     async getLists() {
       try {
@@ -42,22 +54,8 @@ export default {
         console.log(e)
       }
     },
-    async getActions() {
-      try {
-        let res = await pinAPI.pinActions(this.id)
-        console.log(res);
-        // let {s ,d} = await pinAPI.pinActions
-        // if(s === 1) {
-        //   this.comments = d.comments
-        //   this.count = d.count
-        // }
-      } catch (e) {
-        console.log(e)
-      }
-    },
     //评论的回复
     async getReply(id) {
-      console.log(id);
       try {
         let {s ,d} = await pinAPI.pinReply(id)
         console.log(s,d);
@@ -70,7 +68,16 @@ export default {
 </script>
 <style scoped lang="less">
 .container{
-  max-width: 640px;
+  .flex(space-between);
+  margin-top: 1rem;
+}
+.main{
+  width: 640px;
   background-color: #fff;
+}
+.aside{
+  position: sticky;
+  top: 6rem;
+  width: 300px;
 }
 </style>

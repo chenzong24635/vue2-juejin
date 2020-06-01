@@ -11,9 +11,8 @@
           <p class="user-name">{{list.actors[0].username}}</p>
           <p class="user-meta">
             <span >{{list.actors[0].jobTitle}}</span>
-            <span>@</span>
-            <span >{{list.actors[0].company}}</span>
-            <span>{{list.targets[0].createdAt}}</span>
+            <span v-if="list.actors[0].company">@ {{list.actors[0].company}}</span>
+            <span>· {{list.targets[0].createdAt | dateDis}}</span>
           </p>
         </div>
       </div>

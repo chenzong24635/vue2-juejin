@@ -133,8 +133,8 @@ export default {
             this.lists = this.lists.concat(result.edges);
             this.hasNextPage = result.pageInfo.hasNextPage;
             this.endCursor = result.pageInfo.endCursor;
-            this.isLoading = false
           }
+          this.isLoading = false
         })
         .catch((e) => {
           this.isLoading = false
