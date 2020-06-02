@@ -137,7 +137,6 @@ export default {
     await this.getCityList();
     await this.getBanner();
     await this.getLists();
-    console.log(this.id)
   },
   methods: {
     reset() {

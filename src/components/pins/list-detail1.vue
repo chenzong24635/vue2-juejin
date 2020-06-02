@@ -16,7 +16,7 @@
           </p>
         </div>
       </div>
-      <c-button type="success cutout">关注</c-button>
+      <c-button @click.native="foucs" type="success cutout">关注</c-button>
     </div>
     <div class="box-content">
       <div v-html="list.targets[0].content"></div>
@@ -31,13 +31,10 @@
         <router-link :to="'/topic/' +list.targets[0].topic.id" target="_blank">{{list.targets[0].topic.title}}</router-link>
       </div>
     </div>
-    <!-- <article-actions 
-      :likeCount="list.likeCount"
-      :commentCount="list.commentCount"
-    /> -->
   </div>
 </template>
 <script>
+import {mapActions} from 'vuex'
 export default {
   name: '',
   props: {
@@ -45,21 +42,14 @@ export default {
       type: Object,
     },
   },
-  filters: {
-    linkIcon(val){
-      // <svg-icon name="pin-url-link.3f843e8"></svg-icon>
-      let reg = /^http[s]:\/\//gi
-      console.log(reg.test(val));
-      return val
+  methods: {
+    ...mapActions([
+      'showLoginModel'
+    ]),
+    foucs() {
+      this.showLoginModel()
     }
-  },
-  data () {
-    return {
-    }
-  },
-  created () {
-  },
-  methods: {}
+  }
 }
 </script>
 <style scoped lang="less">

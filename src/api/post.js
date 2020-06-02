@@ -29,11 +29,20 @@ const user = () => {
 }
 
 
-// 相关文章
+// 相关文章--侧边
 const relatedEntry = (params) => {
   return request({
     method: 'GET',
     url: '/v1/get_related_entry',
+    params
+  })
+}
+
+//评论
+const comments = (params) => {
+  return request({
+    method: 'GET',
+    url: `/v1/comments/entry/${params.entryId}`,
     params
   })
 }
@@ -51,5 +60,6 @@ export default{
   article,
   user,
   relatedEntry,
+  comments,
   recommendEntry,
 }

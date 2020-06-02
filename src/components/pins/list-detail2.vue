@@ -15,7 +15,7 @@
           </p>
         </div>
       </div>
-      <div class="box-focus">关注</div>
+      <c-button @click.native="foucs" type="success cutout">关注</c-button>
     </div>
     <div class="box-content">
       <div v-html="list.content"></div>
@@ -28,13 +28,10 @@
         <router-link :to="'/topic/' +list.topic.objectId" target="_blank">{{list.topic.title}}</router-link>
       </div>
     </div>
-    <!-- <article-actions 
-      :likeCount="list.likeCount"
-      :commentCount="list.commentCount"
-    /> -->
   </div>
 </template>
 <script>
+import {mapActions} from 'vuex'
 export default {
   name: '',
   props: {
@@ -42,13 +39,14 @@ export default {
       type: Object,
     },
   },
-  data () {
-    return {
+  methods: {
+    ...mapActions([
+      'showLoginModel'
+    ]),
+    foucs() {
+      this.showLoginModel()
     }
-  },
-  created () {
-  },
-  methods: {}
+  }
 }
 </script>
 <style scoped lang="less">

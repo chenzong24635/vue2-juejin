@@ -16,13 +16,15 @@
         </p>
         <div class="list-floowed">
           <span class="list-floowed-y" v-show="item.followed">已关注</span>
-          <span class="list-floowed-n" v-show="!item.followed">+ 关注</span>
+          <span @click="foucs" class="list-floowed-n" v-show="!item.followed">+ 关注</span>
         </div>
       </div>
     </li>
   </ul>
 </template>
 <script>
+import {mapActions} from 'vuex'
+
 export default {
   name: '',
   components: {},
@@ -36,11 +38,14 @@ export default {
       default: 2
     }
   },
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
+  methods: {
+    ...mapActions([
+      'showLoginModel'
+    ]),
+    foucs() {
+      this.showLoginModel()
+    },
+  }
 }
 </script>
 <style scoped lang="less">

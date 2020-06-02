@@ -1,8 +1,8 @@
-<template>
+<template functional>
   <section class="aside-box">
     <p class="aside-title">相关文章</p>
     <ul class="aside-lists">
-      <li class="list" v-for="list in lists" :key="list.objectId">
+      <li class="list" v-for="list in props.lists" :key="list.objectId">
         <router-link target="_blank" :to="'/post/'+ list.originalUrl.replace(/https:\/\/juejin.im\/post\//i,'')">
           <p class="list-title">{{list.title}}</p>
           <div class="list-actions">
@@ -20,22 +20,6 @@
     </ul>
   </section>
 </template>
-<script>
-export default {
-  name: '',
-  props: {
-    lists: {
-      type: Array,
-      required: true
-    }
-  },
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
-}
-</script>
 <style scoped lang="less">
 .aside-lists{
   padding: 0 15px;

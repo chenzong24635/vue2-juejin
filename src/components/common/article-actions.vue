@@ -1,12 +1,12 @@
 <template>
   <div class="actions">
-    <div class="action">
+    <div  @click="praise" class="action">
       <svg-icon name="praise1"></svg-icon>
       <span>{{ likeCount || '赞'}}</span>
     </div>
-    <router-link target="_blank" :to="'/pin/'+id" class="action">
+    <router-link target="_blank" :to="'/pin/'+ id" class="action">
       <svg-icon name="message2"></svg-icon>
-      <span>{{ commentCount || '评论'}}</span>
+      <span>{{  commentCount || '评论'}}</span>
     </router-link>
     <div class="action">
       <svg-icon name="upload"></svg-icon>
@@ -15,24 +15,17 @@
   </div>
 </template>
 <script>
+import {mapActions} from 'vuex'
 export default {
-  name: '',
-  props: ['likeCount', 'commentCount', 'id'],
-  /* props: {
-    likeCount: {
-      type: Number,
-      required: true
-    },
-    commentCount: {
-      type: Number,
-      required: true
-    },
-  }, */
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
+  props: ['likeCount','id','commentCount'],
+  methods: {
+    ...mapActions([
+      'showLoginModel'
+    ]),
+    praise() {
+      this.showLoginModel()
+    }
+  }
 }
 </script>
 <style scoped lang="less">

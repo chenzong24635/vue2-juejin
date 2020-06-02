@@ -235,7 +235,6 @@ export default {
   },
   created () {
     this.getAuthor()
-    console.log(this.id,this.title);
     // 根据路由切换tab
     this.tabs.some((item, index) => {
       if(item.selects) {
@@ -325,7 +324,6 @@ export default {
         7: 'getCollections',
         8: 'getTags',
       }
-      console.log(this.tabIndex,listsObj[this.tabIndex]);
       this[listsObj[this.tabIndex]]()
     },
     async getAuthor() { // 用户信息
@@ -352,7 +350,6 @@ export default {
       }catch(e){
         console.log(e);
       }
-      console.log(this.lists);
     },
     async getPosts() { //专栏
       try{

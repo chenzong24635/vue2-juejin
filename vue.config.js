@@ -56,6 +56,10 @@ module.exports = {
         target: 'https://lccro-api-ms.juejin.im',
         changeOrigin: true,
       },
+      '/v1/comments/entry': { /* post 关于作者 */
+        target: 'https://comment-wrapper-ms.juejin.im',
+        changeOrigin: true,
+      },
       '/v1/get_entry_by_self': { /* user 专栏 */
         target: 'https://timeline-merger-ms.juejin.im',
         changeOrigin: true,

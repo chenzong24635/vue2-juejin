@@ -24,8 +24,8 @@ export default {
     }
   },
   async created () {
-    await this.getLists()
     await this.getPinDetail()
+    await this.getLists()
   },
   methods: {
     // 内容
@@ -69,7 +69,7 @@ export default {
 <style scoped lang="less">
 .container{
   .flex(space-between);
-  margin-top: 1rem;
+  margin: 1rem auto 2rem;
 }
 .main{
   width: 640px;

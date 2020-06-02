@@ -78,11 +78,6 @@ export default {
     homeRightRegister,
     homeRightHottags
   },
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
 }
 </script>
 <style scoped lang="less">

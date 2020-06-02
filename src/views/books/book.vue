@@ -98,7 +98,6 @@ export default {
     this.getBookDesc()
     this.getBookBuyers()
     this.getBookSection()
-    console.log(this.bookDesc?.userData?.avatarLarge);
   },
   filters: {
     read(val) {

@@ -34,9 +34,6 @@ export default {
       type: Boolean
     }
   },
-  data () {
-    return {}
-  },
   created () {},
   methods: {
     closeModal() {

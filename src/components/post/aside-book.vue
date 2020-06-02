@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <section class="aside-box">
     <a href="https://juejin.im/app" target="_blank" class="qr">
       <img class="qr-img" src="../../assets/image/juejin-welcome.png" alt="">
@@ -9,17 +9,6 @@
     </a>
   </section>
 </template>
-<script>
-export default {
-  name: '',
-  components: {},
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
-}
-</script>
 <style scoped lang="less">
 .qr{
   background-color: #fff;

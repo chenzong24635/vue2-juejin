@@ -1,18 +1,8 @@
-<template>
-  <div v-if="level" class="level">
-    Lv{{level}}
+<template functional>
+  <div v-if="props.level" class="level">
+    Lv{{props.level}}
   </div>
 </template>
-<script>
-export default {
-  props: ['level'],
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
-}
-</script>
 <style scoped lang="less">
 .level{
   display: inline-block;

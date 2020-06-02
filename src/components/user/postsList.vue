@@ -57,9 +57,6 @@ export default {
       ]
     }
   },
-  created () {
-    console.log(this.lists);
-  },
   methods: {
     typeChange(item, index) {
       this.typeIndex = index

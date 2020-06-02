@@ -1,8 +1,8 @@
-<template>
+<template functional>
   <div class="actions1">
     <div class="action1">
       <div class="action1-left">
-        {{date | dateDis}}
+        {{props.date | dateDis}}
       </div>
       <div class="action1-right">
         <div class="praise">
@@ -16,22 +16,7 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: '',
-  props: {
-    date: {
-      type: String,
-      required: true
-    }
-  },
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
-}
-</script>
+
 <style scoped lang="less">
 .actions1{
   width: 100%;
@@ -45,6 +30,7 @@ export default {
     .flex(flex-end,center);
     .reply{
       margin-left: 30px;
+      font-size: 12px;
       span{
         margin-left: 5px;
       }

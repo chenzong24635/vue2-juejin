@@ -1,7 +1,7 @@
 <template>
   <header class="header" >
-    <login-box :show="loginFormShow" @toReg="showHide2" @closeModal="showHide1"></login-box>
-    <register-box :show="registerFormShow" @toLogin="showHide1" @closeModal="showHide2" ></register-box>
+    <login-box></login-box>
+    <!-- <register-box :show="registerFormShow" @toLogin="showHide1" @closeModal="showHide2" ></register-box> -->
     <div id="header-base">
       <div class="container">
         <router-link to="/timeline/recommended" class="logo">
@@ -16,10 +16,19 @@
           </ul>
           <ul class="navs-right">
             <li class="navs-right-item" style="flex:1">
-              <form class="search">
-                <input class="search-ipt" type="text" placeholder="搜索掘金">
-                  <svg-icon  class="search-icon" name="search" color="#71777c" />
-              </form>
+              <div :class="['search',iptFoucs?'active':'']" >
+                <input 
+                  @click="iptFoucs = true" 
+                  @blur="iptFoucs = false" 
+                  @keyup.enter="search" 
+                  v-model="searchVal"
+                  class="search-ipt" 
+                  type="text" 
+                  placeholder="搜索掘金"
+                >
+                <svg-icon @click="search" v-show="!iptFoucs" class="search-icon" name="search" color="#71777c" />
+                <svg-icon @click="search" v-show="iptFoucs" class="search-icon" name="search-focus" color="#71777c" />
+              </div>
             </li>
             <li v-if="isLogin" class="navs-right-item">
               <div  class="add-group">
@@ -64,9 +73,11 @@
               </div>
             </li>
             <li v-if="!isLogin" class="navs-right-item navs-right-login">
-              <span @click="showHide1(true)">登录</span>
+              <!-- <span @click="showHide1(true)">登录</span> -->
+              <span @click="setLoginModel('login')">登录</span>
               <span>·</span>
-              <span @click="showHide2(true)">注册</span>
+              <span @click="setLoginModel('register')">注册</span>
+              <!-- <span @click="showHide2(true)">注册</span> -->
             </li>
           </ul>
         </nav>
@@ -77,14 +88,14 @@
 <script>
 
 import LoginBox from '@/views/login/login'
-import RegisterBox from '@/views/login/register'
+// import RegisterBox from '@/views/login/register'
 
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 
 export default {
   components: {
     LoginBox,
-    RegisterBox
+    // RegisterBox
   },
   data () {
     return {
@@ -110,28 +121,37 @@ export default {
           title: '活动',
         },
       ],
+      iptFoucs: false,
       moreListShow: false,
       registerFormShow: false,
       loginFormShow: false,
-      writeBoxShow: false
+      writeBoxShow: false,
+      searchVal: ''
     }
   },
-  // watch:{
-  //   "$route":function(to, from){
-  //     // console.log(to, from);
-  //     // if (to.name === from.name && to.params.id !== from.params.id) {
-  //     //   //do something 
-  //     // }
-  //   }
-  // },
   computed: {
     ...mapState([
       'isLogin'
     ])
   },
   methods: {
+    ...mapMutations([
+      'setLoginModel'
+    ]),
+    search() {
+      console.log();
+      let route = this.$route
+      let type = 'all'
+      // let query = ''
+      if(!this.searchVal.trim().length)return
+      if(route.name==='search') {
+        type = route.params.type
+      }
+      this.$router.push(`/search/${type}/${this.searchVal}`)
+      console.log(this.searchVal);
+    },
     showWriteBox() { //未登录 点击写文章显示 box
-      this.writeBoxShow = true;
+      this.writeBoxShow = !this.writeBoxShow;
     },
     addBtnMore() {
       this.moreListShow = !this.moreListShow;
@@ -222,8 +242,11 @@ export default {
   .border();
   border-radius: 2px;
   background-color: rgba(227,231,236,.2);
-  &:hover,&:focus{
+  &.active{
     border-color: @activeColor;
+  }
+  &-icon{
+    cursor: pointer;
   }
   &-ipt{
     border: none;
@@ -267,7 +290,8 @@ export default {
       background-color: @mainColor1;
     }
     &-icon{
-      color: #fff
+      color: #fff;
+      
     }
     &-list{
       position: absolute;

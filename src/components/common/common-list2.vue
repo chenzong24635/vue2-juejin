@@ -10,13 +10,13 @@
         <div class="list-cnt">
           <div class="list-flags">
             <p class="flag dot zl">专栏</p>
-            <p class="flag dot">{{list.user.username}}</p>
-            <p class="flag dot">{{list.createdAt |dateDis}}</p>
+            <p class="flag dot">{{list.entity.username}}</p>
+            <p class="flag dot">{{ list.entity.createdAt | dateDis}}</p>
             <p class="dot">
               <router-link 
                 :to="'/tag/'+ encodeURIComponent(tag.title)" 
                 class="slash" 
-                v-for="tag in list.tags" 
+                v-for="tag in list.entity.tags" 
                 :key="tag.id"
                 target="_blank"
               >
@@ -24,16 +24,18 @@
               </router-link>
             </p>
           </div>
-          <div @click="toPost(list.entity.originalUrl)" class="list-title">{{list.title}}</div>
+          <div @click="toPost(list.entity.originalUrl)" class="list-title">
+            {{list.entity.title}}
+          </div>
           <ul class="list-icons" >
             <li class="list-icon">
               <div class="icon-box" @click="showLoginModel">
                 <img src="https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg" alt="">
-                <span class="icon-num">{{list.likeCount}}</span>
+                <span class="icon-num">{{list.entity.likeCount}}</span>
               </div>
               <div @click="toPost(list.entity.originalUrl,'#comments')" class="icon-box">
                 <img src="https://b-gold-cdn.xitu.io/v3/static/img/comment.4d5744f.svg" alt="">
-                <span class="icon-num">{{list.commentsCount}}</span>
+                <span class="icon-num">{{list.entity.commentsCount}}</span>
               </div>
               <div @click="share(list)" v-show="list.uploadIconShow" class="icon-box icon-upload" title="分享">
                 <img src="https://b-gold-cdn.xitu.io/v3/static/img/share.1d55e69.svg" alt="">

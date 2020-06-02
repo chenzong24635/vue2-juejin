@@ -53,7 +53,6 @@ export default {
   },
   computed: {
     listsNew(){
-      // console.log(this.lists);
       //点赞文章
       let lists = this.lists.map(item => item.node).filter(item=>item.action === 'LIKE_ARTICLE')
       return lists

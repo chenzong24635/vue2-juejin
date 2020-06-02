@@ -26,7 +26,11 @@ export default {
     lists: {
       type: Array,
       required: true
-    }
+    },
+    id: {
+      type: String,
+      // required: true
+    },
   },
   data () {
     return {
@@ -46,9 +50,6 @@ export default {
       })
       return lists
     }
-  },
-  created() {
-    
   },
   methods: {
     async replyMore(obj, objIndex){
@@ -71,7 +72,6 @@ export default {
         if(d.count <= obj.topComment.length) {
           obj.isOver = true
         }
-        console.log(obj,this.listsNew);
       } catch (e) {
         console.log(e);
       }
@@ -98,6 +98,7 @@ export default {
   }
   .reply-more{
     .line(@dir:top,@c:#f1f1f1);
+    font-size: 12px;
     margin-left: 30px;
     padding: 10px 0;
     color: #406599;

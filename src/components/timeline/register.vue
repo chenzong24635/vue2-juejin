@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <section class="">
     <!-- 未登录首页-右侧的注册组件 -->
     <form class="auth-form form">
@@ -25,17 +25,7 @@
     </form>
   </section>
 </template>
-<script>
-export default {
-  name: '',
-  components: {},
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
-}
-</script>
+
 <style scoped lang="less">
 
 .form{

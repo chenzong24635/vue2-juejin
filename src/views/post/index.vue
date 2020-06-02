@@ -3,22 +3,29 @@
     <div class="detail container-left" >
       <div class="detail-box">
         <div class="info">
-          <img class="info-avatar" :src="articleInfo.user ? articleInfo.user.avatarLarge : ''" alt="">
+          <router-link target="_blank" :to="'/user/' + (articleInfo.user && articleInfo.user.objectId)">
+            <img class="info-avatar" :src="articleInfo.user && articleInfo.user.avatarLarge" alt="">
+          </router-link>
           <div class="info-box">
-            <div class="info-box-top">
-              <p class="username">{{articleInfo.user ? articleInfo.user.username : ''}}</p>
+            <router-link target="_blank" class="info-box-top" :to="'/user/' + (articleInfo.user && articleInfo.user.objectId)">
+              <p class="username">{{articleInfo.user && articleInfo.user.username}}</p>
               <user-level :level="3" />
-            </div>
+            </router-link>
             <div class="info-box-bottom">
               <span>{{articleInfo.createdAt | dateFilter}}</span>
               <span>阅读 {{articleInfo.viewsCount}}</span>
             </div>
           </div>
-          <c-button type="success cutout" >关注</c-button>
+          <c-button type="success cutout"  @click.native="showLoginModel">关注</c-button>
         </div>
         <h1 class="title" >{{articleInfo.title}}</h1>
         <div class="html-content" v-if="articleContent" v-html="articleContent.content"></div>
         <focus-more :tags="articleInfo.tags || []" />
+      </div>
+      <div  id="comments">
+        <p>评论</p>
+        <comment-list :lists="comments" :id="articleContent.entryId" />
+        <div @click="getComments" class="more">查看更多&nbsp;&gt;</div>
       </div>
       <div class="recommend-entry-lists">
         <p class="title">相关推荐</p>
@@ -49,7 +56,9 @@ import leftActions from '@/components/post/left-actions.vue'
 import commonList1 from '@/components/common/common-list1'
 
 import postAPI from '@/api/post'
+// import pinAPI from '@/api/pins'
 import scroll from '@/mixins/scroll'
+import {mapActions} from 'vuex'
 
 export default {
   name: '',
@@ -77,16 +86,27 @@ export default {
       recommendEntryLists: [], // 底部相关文章推荐
       isLike: false,
       isLoading: false,
+      pageNu: 1,
+      comments: []
     }
   },
   async created () {
     await this.getArticleContent()
+    await this.getComments()
+    if (location.hash === '#comment') {
+      this.$refs.panel.scrollIntoComment()
+    }
     await this.getArticleInfo()
     await this.getRelatedEntry()
     await this.getRecommendEntry()
+    
   },
   methods: {
+    ...mapActions([
+      'showLoginModel'
+    ]),
     setGood() {
+      
       console.log('点赞');
     },
     async getArticleContent() { // 文章主要内容
@@ -113,6 +133,31 @@ export default {
       })
       if(s === 1) {
         this.articleInfo = d
+      }
+    },
+    async getComments() { //评价
+      let createdAt = ''
+      let len = this.comments.length
+      try {
+        createdAt = this.comments[len-1].createdAt
+      } catch (e) {
+        createdAt = ''
+        console.log(e)
+      }
+      if(len >= this.count) return
+      try {
+        let {s ,d} = await postAPI.comments({
+          entryId: this.articleContent.entryId, 
+          createdAt,
+          pageSize: 10,
+          rankType: 'new'
+        })
+        if(s === 1) {
+          this.comments = this.comments.concat(d.comments)
+          this.count = d.count
+        }
+      } catch (e) {
+        console.log(e)
       }
     },
     async getRelatedEntry() { // 相关文章
@@ -224,7 +269,21 @@ export default {
     }
   }
 }
-
+#comments{
+  color: #8a9aa9;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  padding: 1.67rem 0 5px;
+  .more{
+    padding: 10px 0;
+    font-size: 13px;
+    text-align: center;
+    color: #406599;
+    cursor: pointer;
+    user-select: none;
+  }
+}
 .recommend-entry-lists{
   .line(@dir:top,@width: 30px);
   .title{

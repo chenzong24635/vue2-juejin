@@ -7,18 +7,26 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isLogin: false,
-    homeApiData: {},
-    path: ''
+    loginModel: ''
   },
   mutations: {
-    setHomeApiData(state, obj) {
-      let {path, homeApiData} = obj;
-      state.path = path;
-      console.log(obj,state.path);
-      state.homeApiData = homeApiData;
-    }
+    //显示隐藏 登录注册框
+    setLoginModel(state, val) {
+      state.loginModel = val
+    },
   },
   actions: {
+    //点赞，评论操作时判断是否登录，否显示登录框
+    showLoginModel({state}){
+      return new Promise((resolve) => {
+        if(!state.isLogin) {
+          state.loginModel = 'login'
+          return resolve(false)
+        }
+        return resolve(true)
+      })
+      
+    }
   },
   modules: {
   },

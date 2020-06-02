@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <div class="copy-right">
     <!-- 底部 -->
     <span >©2020 掘金</span>
@@ -9,17 +9,6 @@
     京公网安备11010802026719号</a>
   </div>
 </template>
-<script>
-export default {
-  name: '',
-  components: {},
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
-}
-</script>
 <style scoped lang="less">
 .copy-right{
   text-align: center;

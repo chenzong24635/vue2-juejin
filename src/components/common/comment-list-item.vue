@@ -43,18 +43,12 @@ export default {
       required: true
     }
   },
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {
-    
-  }
 }
 </script>
 <style scoped lang="less">
 .comment{
   .flex();
+  font-size: 13px;
   padding: 5px 10px;
   .avatar{
     width: 32px;
@@ -85,6 +79,7 @@ export default {
         white-space: pre-wrap;
         color: #505050;
         overflow: hidden;
+        text-align: left;
         a{
           color: #406599;
           margin-left: 4px;

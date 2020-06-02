@@ -2,12 +2,14 @@
   <section v-if="articleInfo" class="aside-box">
     <p class="aside-title">关于作者</p>
     <div class="info" >
-      <img class="info-avatar" :src="articleInfo.user ? articleInfo.user.avatarLarge : ''" alt="">
+      <router-link target="_blank" :to="'/user/' + (articleInfo.user && articleInfo.user.objectId)">
+        <img class="info-avatar" :src="articleInfo.user ? articleInfo.user.avatarLarge : ''" alt="">
+      </router-link>  
       <div class="info-box">
-        <div class="info-box-top">
+        <router-link class="info-box-top" target="_blank" :to="'/user/' + (articleInfo.user && articleInfo.user.objectId)">
           <p class="username">{{articleInfo.user ? articleInfo.user.username : ''}}</p>
           <user-level :level="articleInfo.user ? articleInfo.user.level : 0" />
-        </div>
+        </router-link>
         <div class="info-box-bottom ov1">
           {{articleInfo.user ? articleInfo.user.jobTitle : ''}}
         </div>
@@ -20,7 +22,7 @@
       </div>
       <div class="count">
         <svg-icon name="eye" :size="25"></svg-icon>
-        <span>文章被阅读 {{articleInfo.user ? articleInfo.user.totalCollectionsCount : ''}}</span>
+        <span>文章被阅读 {{articleInfo.user ? articleInfo.user.followersCount : ''}}</span>
       </div>
     </div>
   </section>
@@ -34,13 +36,6 @@ export default {
       required: true,
     },
   },
-  data () {
-    return {}
-  },
-  created () {
-    console.log(this.articleInfo);
-  },
-  methods: {}
 }
 </script>
 <style scoped lang="less">

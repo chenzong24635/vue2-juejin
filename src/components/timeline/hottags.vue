@@ -17,7 +17,6 @@
 <script>
 export default {
   name: '',
-  components: {},
   data () {
     return {
       tags: [
@@ -56,8 +55,6 @@ export default {
       ],
     }
   },
-  created () {},
-  methods: {}
 }
 </script>
 <style scoped lang="less">

@@ -39,10 +39,7 @@ export default {
   },
   watch: {
     '$route': function(to ,from){
-      console.log(to ,from);
       if(to.name === from.name && to.params.id!==from.params.id){
-        console.log(to.params.id,this.id);
-        // this.id = to.params.id
         this.reset()
         this.getLists()
       }
@@ -78,7 +75,6 @@ export default {
       if(s === 1){
         this.lists = this.lists.concat(d);
       }
-      console.log(s,d);
       /* console.log(type);
       
       if(type){

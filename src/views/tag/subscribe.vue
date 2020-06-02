@@ -53,7 +53,6 @@ export default {
     }
   },
   created () {
-    console.log(this.id);
     this.getLists();
   },
   methods: {
@@ -66,14 +65,12 @@ export default {
       }
       this.reset();
       this.getLists();
-      console.log(this.sort);
     },
     async search() {
       this.reset()
       console.log(this.searchVal.trim().length);
       if(!this.searchVal.trim().length){
         //搜索内容为空时
-        console.log('kong');
         this.getLists();
         return
       }

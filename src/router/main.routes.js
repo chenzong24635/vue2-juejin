@@ -103,6 +103,12 @@ export default [
     component: () => import('@/views/books/index.vue'),
   },
   {
+    path: '/search/:type/:query',
+    name: 'search',
+    props: true,
+    component: () => import('@/views/search/index.vue'),
+  },
+  {
     path: '/feedback',
     name: 'feedback',
     component: () => import('@/views/feedback/index.vue'),

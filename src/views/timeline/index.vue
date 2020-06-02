@@ -31,7 +31,6 @@
 
 import headerSub from '@/components/header/header-sub'
 import homeRight from '@/components/timeline/right'
-import commonList1 from '@/components/common/common-list1'
 import homeHeaderParams from '@/components/timeline/homeHeaderParams'
 import scroll from '@/mixins/scroll'
 
@@ -46,7 +45,6 @@ export default {
   components: {
     headerSub,
     homeRight,
-    commonList1
   },
   props: ['id'],
   mixins: [scroll],

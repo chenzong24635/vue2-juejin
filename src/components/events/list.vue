@@ -45,11 +45,6 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
-      
-    }
-  },
   filters: {
     date: function(val) {
       val = new Date(val)
@@ -69,12 +64,6 @@ export default {
       })
     }
   },
-  updated () {
-    console.log(this.listsNew);
-  },
-  methods: {
-
-  }
 }
 </script>
 <style scoped lang="less">

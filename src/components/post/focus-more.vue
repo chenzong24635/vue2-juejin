@@ -1,9 +1,9 @@
-<template>
+<template functional>
   <div class="focus">
     <p class="title">关注下面的标签，发现更多相似文章</p>
-    <ul>
-      <li v-for="tag in tags" :key="tag.id">
-        <router-link target="_blank" class="tag" :to="'/tag/' + tag.id">
+    <ul class="focus-tags">
+      <li v-for="tag in props.tags" :key="tag.id">
+        <router-link target="_blank" class="tag" :to="'/tag/' + tag.title">
           <img class="tag-icon" :src="tag.icon" :alt="tag.title">
           <span class="tag-title">{{tag.title}}</span>
         </router-link>
@@ -11,27 +11,17 @@
     </ul>
   </div>
 </template>
-<script>
-export default {
-  name: '',
-  props: {
-    tags: {
-      type: Array,
-      required: true
-    },
-  },
-  data () {
-    return {}
-  },
-  created () {
-    console.log(this.tags);
-  },
-  methods: {}
-}
-</script>
+
 <style scoped lang="less">
 .focus{
   margin-bottom: 20px;
+  &-tags{
+    .flex(@wrap: wrap);
+    li{
+      margin-right: 10px;
+      a{display: inline;}
+    }
+  }
   .title{
     margin-bottom: 2rem;
     padding: 0 0 0 2rem;

@@ -1,11 +1,12 @@
 <template>
   <div class="article-suspended-panel">
     <ul class="btn-list">
-      <li class="panel-btn panel-btn-count" :class="[isLike ? 'panel-like-btn--active' : 'panel-like-btn']" @click="$emit('setgood-handler')" :data-count="likeCount">
+      <li class="panel-btn panel-btn-count" :class="[isLike ? 'panel-like-btn--active' : 'panel-like-btn']" @click="prasie" :data-count="likeCount">
       </li>
       <li class="panel-btn panel-comment-btn panel-btn-count" @click="scrollIntoComment" :data-count="commentCount">
+        <router-link style="height:100%" :to=" '#comment'"></router-link>
       </li>
-      <li class="panel-btn panel-collect-btn">
+      <li class="panel-btn panel-collect-btn" @click="collect">
       </li>
       <li class="panel-share-title">分享</li>
       <li class="panel-btn panel-weibo-btn" @click="weiboShare">
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {  mapActions } from 'vuex'
 export default {
   props: {
     likeCount: {
@@ -35,11 +36,11 @@ export default {
       default: false
     }
   },
-  computed: {
-    ...mapState([
-      'isTopbarBlock'
-    ])
-  },
+  // computed: {
+  //   ...mapState([
+  //     'isTopbarBlock'
+  //   ])
+  // },
   data() {
     return {
     }
@@ -47,11 +48,24 @@ export default {
   created() {
   },
   methods: {
+    ...mapActions([
+      'showLoginModel'
+    ]),
+    prasie() {
+      this.showLoginModel().then(res=>{
+        res && this.$emit('setgood-handler')
+      })
+    },
+    collect() {
+      this.showLoginModel()/* .then(res=>{
+        res && this.$emit('setgood-handler')
+      }) */
+    },
     // 跳转到评论区
     scrollIntoComment() {
-      let offsetTop = document.querySelector('.detail-block .comment-area').offsetTop
+      let offsetTop = document.querySelector('#comments').offsetTop
       window.scrollTo({
-        top: offsetTop + (this.isTopbarBlock ? -80 : 0)
+        top: offsetTop
       })
     },
     // qq分享

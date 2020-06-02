@@ -44,7 +44,6 @@ export default {
       awardModalShow: false
     }
   },
-  created () {},
   methods: {
     showAward(bool) {
       this.awardModalShow = bool;

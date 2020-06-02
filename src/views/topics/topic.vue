@@ -58,6 +58,7 @@ import pinList from '@/components/pins/list.vue'
 import scroll from '@/mixins/scroll'
 import topic from '@/api/topic.js'
 
+
 export default {
   name: '',
   components: {pinList},
@@ -101,7 +102,6 @@ export default {
       this.sortType = this.sorts[index].sort;
       this.reset();
       this.getLists();
-      console.log(this.sortIndex,this.sortType);
     },
     reset() {
       this.page = 0

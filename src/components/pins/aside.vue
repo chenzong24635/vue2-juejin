@@ -35,16 +35,11 @@ export default {
       required: true
     }
   },
-  data () {
-    return {}
-  },
   computed: {
     newLists() { //只显示前三个
       return this.lists.slice(0, 3)
     }
   },
-  created () {},
-  methods: {}
 }
 </script>
 <style scoped lang="less">

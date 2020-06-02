@@ -2,7 +2,7 @@
   <div class="">
     <article-nothing v-if="type === 'following' && !isLogin" title="你关注人的动态会出现在这里">
       <template>
-        <c-button type="primary cutout">登录</c-button>
+        <c-button @click.native="login" type="primary cutout">登录</c-button>
       </template>
     </article-nothing>
     <ul>
@@ -10,8 +10,8 @@
         <template v-if="type === 'recommended' || type === 'following'">
           <list-detail1  :list="item" v-bind="$attrs" />
           <article-actions 
-            :likeCount="item.likeCount"
-            :commentCount="item.commentCount"
+            :likeCount="item.targets[0].likeCount"
+            :commentCount="item.targets[0].commentCount"
             :id="item.id || item.objectId"
           /> 
         </template>
@@ -30,7 +30,7 @@
 <script>
 import listDetail1 from './list-detail1.vue'
 import listDetail2 from './list-detail2.vue'
-import {mapState} from 'vuex'
+import {mapState,mapActions} from 'vuex'
 
 export default {
   name: '',
@@ -52,7 +52,7 @@ export default {
   computed: {
     ...mapState([
       'isLogin'
-    ])
+    ]),
   },
   data () {
     return {}
@@ -60,7 +60,14 @@ export default {
   created () {
     console.log(this.$attrs);
   },
-  methods: {}
+  methods: {
+    ...mapActions([
+      'showLoginModel'
+    ]),
+    login() {
+      this.showLoginModel()
+    }
+  }
 }
 </script>
 <style scoped lang="less">

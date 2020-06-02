@@ -36,6 +36,7 @@ export default {
     this.isLogin && this.getTopicListFollowed();
   },
   methods: {
+
     async getTopicList() {
       let {s, d} = await topicList();
       console.log(s, d);
