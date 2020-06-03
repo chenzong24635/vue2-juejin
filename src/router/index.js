@@ -13,7 +13,14 @@ const routes = [
     component: () => import('@/views/test.vue')
   },
   ...main,
-  ...tag
+  ...tag,
+  {
+    path: '*',
+    component: () => import('@/views/404.vue'),
+    meta: {
+      title: '找不到页面'
+    }
+  },
 ]
 
 const router = new VueRouter({
@@ -22,5 +29,10 @@ const router = new VueRouter({
   routes,
   scrollBehavior: () => ({ y: 0 }),
 })
-// router.beforeEach()
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    document.title = to.meta.title + '-掘金'
+  }
+  next()
+})
 export default router

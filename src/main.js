@@ -5,18 +5,13 @@ import store from './store'
 import './icons'
 import globalComponent from '@/components/globalComponent.js'
 import utils from '@/libs/util.js'
+import filters from '@/filters'
+// import VueScroller from 'vue-scroller'
 
-Vue.filter('dateDis', function (value) {
-  return utils.dateDis(value)
-})
-
-import VueScroller from 'vue-scroller'
-Vue.use(VueScroller).use(globalComponent)
+Vue.use(globalComponent).use(filters)
 Vue.config.productionTip = false
-
-Vue.prototype.$eventBus = new Vue();
 Vue.prototype.$utils = utils;
-// import './components/globalComponent'
+// Vue.prototype.$eventBus = new Vue();
 
 new Vue({
   router,

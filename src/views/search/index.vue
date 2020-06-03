@@ -32,6 +32,9 @@
         :hasNextPage="hasNextPage"
       >
       </common-list2>
+      <div class="nodata" v-if="!lists.length">
+        列表为空
+      </div>
     </div>
   </div>
 </template>
@@ -155,6 +158,16 @@ export default {
 }
 </script>
 <style scoped lang="less">
+.nodata{
+  flex: 1;
+  padding: 30px;
+  margin: 0;
+  text-align: center;
+  background-color: #fff;
+}
+.nodata,.home-lists{
+  width: 700px;
+}
 .container{
   margin-top: 6rem;
   margin-bottom: 3rem;
@@ -188,10 +201,8 @@ export default {
   // .sub+
 }
 .home-box{
-  .flex();
+  // .flex();
   background-color: @bgColor;
 }
-.home-lists{
-  width: 700px;
-}
+
 </style>

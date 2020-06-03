@@ -54,19 +54,19 @@ export default [
     path: '/book/:id',
     name: 'book',
     props: true,
+    component: () => import('@/views/books/book.vue'),
     meta: {
       title: '小册'
     },
-    component: () => import('@/views/books/book.vue')
   },
   {
     path: '/events/:id',
     name: 'events',
     props: true,
+    component: () => import('@/views/events/index.vue'),
     meta: {
       title: '活动'
     },
-    component: () => import('@/views/events/index.vue')
   },
   {
     path: '/events',
@@ -76,37 +76,37 @@ export default [
     path: '/pin/:id?',
     name: 'pin',
     props: true,
+    component: () => import('@/views/pins/pin.vue'),
     meta: {
       title: '沸点'
     },
-    component: () => import('@/views/pins/pin.vue')
   },
   {
     path: '/topic/:id?',
     name: 'topic',
     props: true,
+    component: () => import('@/views/topics/topic.vue'),
     meta: {
       title: '话题'
     },
-    component: () => import('@/views/topics/topic.vue')
   },
   {
     path: '/user/:id/:title?',
     name: 'user',
     props: true,
     component: () => import('@/views/user/index.vue'),
-  },
-  {
-    path: '/book/:id',
-    name: 'user',
-    props: true,
-    component: () => import('@/views/books/index.vue'),
+    meta: {
+      title: ''
+    },
   },
   {
     path: '/search/:type/:query',
     name: 'search',
     props: true,
     component: () => import('@/views/search/index.vue'),
+    meta: {
+      title: '搜索'
+    },
   },
   {
     path: '/feedback',
@@ -118,7 +118,8 @@ export default [
     name: 'resetPwd',
     redirect: '/resetPwd/email',
     meta: {
-      hideHeader: true
+      hideHeader: true,
+      title: '重置密码'
     },
     component: () => import('@/views/login/reset-password.vue'),
     children: [

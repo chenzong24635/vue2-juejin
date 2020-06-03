@@ -22,6 +22,7 @@
             >{{item.title}}</li>
           </ul>
         </nav>
+        <activity-skeleton v-if="isLoading && hasNextPage" />
       </common-list1>
       <home-right />
     </div>

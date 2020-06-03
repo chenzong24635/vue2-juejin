@@ -9,6 +9,7 @@
       />
     </div>
     <div class="middle-box">
+      <activity-skeleton v-if="isLoading && hasNextPage && routeName!=='following'" />
       <pin-list :lists="lists" :type="routeName" />
     </div>
     <div class="right-side">
@@ -38,6 +39,7 @@ export default {
   },
   data() {
     return {
+      
       routeName: '',
       apiParmas: null,
       leftRouteParams,
@@ -74,7 +76,7 @@ export default {
     reset() {
       this.lists = [];
       this.hasNextPage= true;
-      this.isLoading= false;
+      this.isLoading = false;
       this.endCursor= '';
     },
     getApiParmas() {

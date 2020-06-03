@@ -1,5 +1,5 @@
 <template>
-  <button :class="newType" :style="{fontSize: size /1.2 + 'px',padding: `${size/2}px ${size*1.2}px`}" >
+  <button :class="newType" :style="{borderRadius: radius,fontSize: size /1.2 + 'px',padding: `${size/2}px ${size*1.2}px`}" >
     <slot></slot>
   </button>
 </template>
@@ -13,6 +13,9 @@ export default {
     },
     size: {
       type: Number,
+    },
+    radius: {
+      type: String,
     }
   },
   computed: {
@@ -61,6 +64,9 @@ button{
   font-size: 13px;
   &:hover{
     opacity: .8;
+    a{
+      color: inherit;
+    }
   }
 }
 .type(@color: #fff, @bgc: #fff){
