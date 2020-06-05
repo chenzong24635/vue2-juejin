@@ -1,22 +1,19 @@
 <template>
   <!-- 评论列表 -->
-  <ul class="comments" v-if="listsNew.length">
-    <li
-      v-for="(item,index) in listsNew"
-      :key="item.id"
-    >
+  <div v-if="listsNew.length">
+    <ul class="comments" v-for="(item,index) in listsNew"
+        :key="item.id">
       <comment-list-item
-        :list="item"
-      />
-      <comment-list v-if="item.topComment" :lists="item.topComment" />
-      <div 
+          :list="item"
+          :id="id"
+        />
+        <li 
         v-if="!item.isOver" 
         class="reply-more" @click="replyMore(item, index)">
         加载更多
-      </div>
-
-    </li>
-  </ul>
+      </li>
+    </ul>
+  </div>
 </template>
 <script>
 import pinAPI from '@/api/pins.js'
@@ -31,10 +28,6 @@ export default {
       type: String,
       // required: true
     },
-  },
-  data () {
-    return {
-    }
   },
   computed: {
     listsNew() {
@@ -55,7 +48,7 @@ export default {
     async replyMore(obj, objIndex){
       if(obj.isOver || !obj.pageNum)return
       try {
-        let {s, d} = await pinAPI.pinReply(obj.id, obj.pageNum)
+        let {s, d} = await pinAPI.pinReply(this.id, obj.id, obj.pageNum)
         if(s !== 1)return
         if(obj.pageNum === 1) {
           this.listsNew.forEach(item => {
@@ -84,7 +77,6 @@ export default {
   // padding-right: 10px;
   padding: 0 20px;
   .comments {
-    padding: 0;
     li{
       background-color: #fafbfc;
     }
@@ -93,13 +85,12 @@ export default {
     .line(top);
   }
   li{
-    padding: 10px 0;
+    // padding: 10px 0;
     margin-left: 30px;
   }
   .reply-more{
-    .line(@dir:top,@c:#f1f1f1);
     font-size: 12px;
-    margin-left: 30px;
+    margin-left: 80px;
     padding: 10px 0;
     color: #406599;
     text-align: center;

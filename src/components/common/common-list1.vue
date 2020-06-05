@@ -24,14 +24,14 @@
               </router-link>
             </p>
           </div>
-          <div @click="toPost(list.entity.originalUrl)" class="list-title">{{list.title}}</div>
+          <div @click="toPost(list.originalUrl)" class="list-title">{{list.title}}</div>
           <ul class="list-icons" >
             <li class="list-icon">
               <div class="icon-box" @click="showLoginModel">
                 <img src="https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg" alt="">
                 <span class="icon-num">{{list.likeCount}}</span>
               </div>
-              <div @click="toPost(list.entity.originalUrl,'#comments')" class="icon-box">
+              <div @click="toPost(list.originalUrl,'#comments')" class="icon-box">
                 <img src="https://b-gold-cdn.xitu.io/v3/static/img/comment.4d5744f.svg" alt="">
                 <span class="icon-num">{{list.commentsCount}}</span>
               </div>
@@ -58,7 +58,16 @@
 <script>
 import commonList from '@/mixins/commonList.js'
 export default {
-  mixins: [commonList]
+  mixins: [commonList],
+  mounted(){
+    console.log('mounted');
+  },
+  beforeDestroy() {
+    console.log('beforeDestroy');
+  },
+  destroyed() {
+    console.log('destroyed');
+  },
 }
 </script>
 <style scoped lang="less">

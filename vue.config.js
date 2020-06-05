@@ -262,8 +262,8 @@ module.exports = {
         changeOrigin: true,
       },
       '/v1/reply': {
-        /* pin 评论的恢复 */
-        target: ' https://hot-topic-comment-wrapper-ms.juejin.im',
+        /* pin 评论的回复 */
+        target: 'https://hot-topic-comment-wrapper-ms.juejin.im',
         changeOrigin: true,
       },
 

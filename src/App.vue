@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <header-base v-if="!$route.meta.hideHeader"></header-base>
-    <suspension-icon></suspension-icon>
+    <!-- <keep-alive> -->
+      <header-base v-if="!$route.meta.hideHeader"></header-base>
+      <suspension-icon></suspension-icon>
+    <!-- </keep-alive> -->
     <router-view/>
   </div>
 </template>

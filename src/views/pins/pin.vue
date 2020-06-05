@@ -10,17 +10,20 @@
 </template>
 <script>
 import rightSide from '@/components/pins/aside'
+import scroll from '@/mixins/scroll'
 
 import pinAPI from '@/api/pins.js'
 export default {
   name: '',
   components: {rightSide},
   props: ['id'],
+  mixins: [scroll],
   data () {
     return {
       comments: [],
       count: 0,
-      pageNum: 1
+      pageNum: 1,
+      isLoading: false,
     }
   },
   async created () {
@@ -44,11 +47,16 @@ export default {
     },
     //评论
     async getLists() {
+      if(this.count && (this.comments >=this.count))return
+      if(this.isLoading)return
       try {
+        this.isLoading = true
         let {s ,d} = await pinAPI.pinComments(this.id, this.pageNum)
         if(s === 1) {
-          this.comments = d.comments
+          this.comments = this.comments.concat(d.comments)
           this.count = d.count
+          this.pageNum++
+          this.isLoading = false
         }
       } catch (e) {
         console.log(e)

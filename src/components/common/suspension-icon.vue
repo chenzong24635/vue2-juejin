@@ -25,7 +25,7 @@ export default {
     backTop() {
       window.scrollTo({ 
         top: 0, 
-        behavior: "smooth"
+        // behavior: "smooth"
       });
     },
     handleScroll() {

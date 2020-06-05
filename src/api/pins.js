@@ -67,16 +67,27 @@ const pinDetail = (msgId) => {
 }
 
 // 沸点评论的回复
-const pinReply  = (id, pageNum = 1, pageSize = 10) => {
+// https://comment-wrapper-ms.juejin.im?pageNum=1&pageSize=10
+const pinReply  = (targetId, id, pageNum = 1, pageSize = 10) => {
   return request({
     method: 'GET',
-    url: `/v1/reply/${id}`,
+    url: `/v1/comments/entry/${targetId}/comment/${id}`,
     params: {
       pageNum,
       pageSize
     } 
   })
 }
+// const pinReply  = (id, pageNum = 1, pageSize = 10) => {
+//   return request({
+//     method: 'GET',
+//     url: `/v1/reply/${id}`,
+//     params: {
+//       pageNum,
+//       pageSize
+//     } 
+//   })
+// }
 
 export default{
   lists1,

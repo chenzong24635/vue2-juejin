@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import test1 from '../views/test1.vue'
 
 Vue.use(VueRouter)
 
@@ -10,7 +11,12 @@ const routes = [
   {
     name: 'test',
     path: '/test',
-    component: () => import('@/views/test.vue')
+    component: () => ({
+      component: import('../views/test.vue'),
+        loading: test1,
+        delay: 10000
+    })
+    // component: () => import('@/views/test.vue')
   },
   ...main,
   ...tag,

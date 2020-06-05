@@ -134,6 +134,15 @@ export default {
       'isLogin'
     ])
   },
+  mounted(){
+    console.log('mounted');
+  },
+  beforeDestroy() {
+    console.log('beforeDestroy');
+  },
+  destroyed() {
+    console.log('destroyed');
+  },
   methods: {
     ...mapMutations([
       'setLoginModel'
