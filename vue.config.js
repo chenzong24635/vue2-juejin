@@ -1,10 +1,9 @@
 const path = require('path');
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-    .BundleAnalyzerPlugin
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
 
 function resolve(dir) {
-  return path.join(__dirname, dir)
+  return path.resolve(__dirname, dir)
 }
 
 const isProduction = process.env.NODE_ENV === 'production'
@@ -55,7 +54,7 @@ module.exports = {
   //     'axios': 'axios',
   //   },
   // },
-  configureWebpack: config => {
+  configureWebpack(config) {
     if (isProduction) {
       // externals里的模块不打包
       Object.assign(config, {
@@ -72,15 +71,36 @@ module.exports = {
           minRatio: 0.8
         })
       )
-      if (process.env.npm_config_report) {
-        // 打包后模块大小分析//npm run build --report
-        config.plugins.push(new BundleAnalyzerPlugin())
-      }
+      // if (process.env.npm_config_report) {
+      //   // 打包后模块大小分析//npm run build --report
+      //   config.plugins.push(new BundleAnalyzerPlugin())
+      // }
     } else {
       // 为开发环境修改配置...
+      console.log(config.resolve);
+      // config.resolve = {
+      //   extensions: ['.js', '.vue', '.json',".css"],
+      //   alias: {
+      //     'vue$': 'vue/dist/vue.esm.js',
+      //     '@': resolve('src'),
+      //   }
+      // }
     }
   },
   chainWebpack(config) {
+    if (isProduction) {
+      if (process.env.npm_config_report) {
+        config
+            .plugin('webpack-bundle-analyzer')
+            .use(BundleAnalyzerPlugin)
+            .end();
+        config.plugins.delete('prefetch')
+      }
+    } else {
+    }
+    
+    config.resolve.alias.set('vue$','vue/dist/vue.esm.js')
+
     // 对vue-cli内部的 webpack 配置进行更细粒度的修改
     config.optimization.minimizer('terser').tap((args) => {
         // 去除生产环境console

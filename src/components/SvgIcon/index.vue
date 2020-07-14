@@ -19,7 +19,7 @@ export default {
     },
     color: {
       type: String,
-      default: 'currentColor'
+      default: 'transparent'
     },
     size: {
       type: Number,
@@ -27,6 +27,7 @@ export default {
     },
     className: {
       type: String,
+      default: ''
     }
   },
   computed: {
@@ -34,11 +35,7 @@ export default {
       return `#icon-${this.name}`
     },
     svgClass() {
-      if (this.className) {
-        return 'svg-icon ' + this.className
-      } else {
-        return 'svg-icon'
-      }
+      return 'svg-icon ' +   this.className
     }
   }
 }

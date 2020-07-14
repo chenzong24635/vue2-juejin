@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import test1 from '../views/test1.vue'
 
 Vue.use(VueRouter)
 
@@ -11,12 +10,7 @@ const routes = [
   {
     name: 'test',
     path: '/test',
-    component: () => ({
-      component: import('../views/test.vue'),
-        loading: test1,
-        delay: 10000
-    })
-    // component: () => import('@/views/test.vue')
+    component: () => import('../views/A.vue'),
   },
   ...main,
   ...tag,
@@ -30,7 +24,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes,
   scrollBehavior: () => ({ y: 0 }),
