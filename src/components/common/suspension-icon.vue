@@ -2,7 +2,7 @@
   <div class="suspension">
     <!-- 右下角 悬挂组件 -->
     <button @click="backTop" v-show="showTopBtn" class="suspension-btn suspension-top" title="回到顶部">
-      <svg-icon name="arrowup" :size="30"></svg-icon>
+      <svg-icon name="arrowup" :size="30" color="#909090"></svg-icon>
     </button>
     <button class="suspension-btn suspension-msg" title="建议反馈">
       <svg-icon name="message" color="#007fff" :size="16"></svg-icon>
