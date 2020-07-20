@@ -11,7 +11,8 @@
           <div class="list-flags">
             <p class="flag dot zl">专栏</p>
             <p class="flag dot">{{list.user.username}}</p>
-            <p class="flag dot">{{list.createdAt |dateDis}}</p>
+            <p class="flag dot">{{list.createdAt }}</p>
+            <!-- <p class="flag dot">{{list.createdAt |dateDis}}</p> -->
             <p class="dot">
               <router-link 
                 :to="'/tag/'+ encodeURIComponent(tag.title)" 
@@ -59,15 +60,6 @@
 import commonList from '@/mixins/commonList.js'
 export default {
   mixins: [commonList],
-  mounted(){
-    console.log('mounted');
-  },
-  beforeDestroy() {
-    console.log('beforeDestroy');
-  },
-  destroyed() {
-    console.log('destroyed');
-  },
 }
 </script>
 <style scoped lang="less">

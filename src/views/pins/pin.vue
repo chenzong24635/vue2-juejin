@@ -13,65 +13,68 @@ import rightSide from '@/components/pins/aside'
 import scroll from '@/mixins/scroll'
 
 import pinAPI from '@/api/pins.js'
+import { reactive, toRefs } from 'vue'
 export default {
-  name: '',
   components: {rightSide},
   props: ['id'],
   mixins: [scroll],
-  data () {
-    return {
+  setup(props) {
+    let state = reactive({
       comments: [],
       count: 0,
       pageNum: 1,
       isLoading: false,
-    }
-  },
-  async created () {
-    await this.getPinDetail()
-    await this.getLists()
-  },
-  methods: {
+    })
+
     // 内容
-    async getPinDetail() {
+    let getPinDetail = async() => {
       try {
-        let res = await pinAPI.pinDetail(this.id)
+        let res = await pinAPI.pinDetail(props.id)
         console.log(res);
         // let {s ,d} = await pinAPI.pinActions
         // if(s === 1) {
-        //   this.comments = d.comments
-        //   this.count = d.count
+        //   state.comments = d.comments
+        //   state.count = d.count
         // }
       } catch (e) {
         console.log(e)
       }
-    },
+    }
     //评论
-    async getLists() {
-      if(this.count && (this.comments >=this.count))return
-      if(this.isLoading)return
+    let getLists = async() => {
+      if(state.count && (state.comments >=state.count))return
+      if(state.isLoading)return
       try {
-        this.isLoading = true
-        let {s ,d} = await pinAPI.pinComments(this.id, this.pageNum)
+        state.isLoading = true
+        let {s ,d} = await pinAPI.pinComments(props.id, state.pageNum)
         if(s === 1) {
-          this.comments = this.comments.concat(d.comments)
-          this.count = d.count
-          this.pageNum++
-          this.isLoading = false
+          state.comments = state.comments.concat(d.comments)
+          state.count = d.count
+          state.pageNum++
+          state.isLoading = false
         }
       } catch (e) {
         console.log(e)
       }
-    },
+    }
     //评论的回复
-    async getReply(id) {
+    let getReply = async(id) => {
       try {
         let {s ,d} = await pinAPI.pinReply(id)
         console.log(s,d);
       } catch (e) {
         console.log(e)
       }
-    },
-  }
+    }
+    (async ()=>{
+      await getPinDetail()
+      await getLists()
+    })()
+
+    return {
+      ...toRefs(state)
+    }
+  },
 }
 </script>
 <style scoped lang="less">

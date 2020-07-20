@@ -1,7 +1,4 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-
-Vue.use(VueRouter)
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 import main from './main.routes'
 import tag from './tag.routes'
@@ -14,18 +11,17 @@ const routes = [
   },
   ...main,
   ...tag,
-  {
-    path: '*',
-    component: () => import('@/views/404.vue'),
-    meta: {
-      title: '找不到页面'
-    }
-  },
+  // {
+  //   path: '*',
+  //   component: () => import('@/views/404.vue'),
+  //   meta: {
+  //     title: '找不到页面'
+  //   }
+  // },
 ]
 
-const router = new VueRouter({
-  // mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHashHistory(process.env.BASE_URL),
   routes,
   scrollBehavior: () => ({ y: 0 }),
 })

@@ -1,9 +1,9 @@
-<template functional>
+<template >
   <div class="">
     <ul class="lists">
       <li 
         class="list" 
-        v-for="item in props.lists"
+        v-for="item in lists"
         :key="item.id"
       >
         <router-link target="_blank" :to="'/book/' + item.id" class="list-a">
@@ -30,6 +30,11 @@
     </ul>
   </div>
 </template>
+<script>
+export default {
+  props: ['lists']
+}
+</script>
 <style scoped lang="less">
 .lists{
   width: 700px;

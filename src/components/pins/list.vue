@@ -2,7 +2,7 @@
   <div class="">
     <article-nothing v-if="type === 'following' && !isLogin" title="你关注人的动态会出现在这里">
       <template>
-        <c-button @click.native="login" type="primary cutout">登录</c-button>
+        <c-button @click="login" type="primary cutout">登录</c-button>
       </template>
     </article-nothing>
     <ul>

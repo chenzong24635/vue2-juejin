@@ -16,19 +16,6 @@
     </header-sub>
 
     <div class="panel">
-      <!-- <swiper class="swiper" ref="mySwiper" :options="swiperOptions">
-        <swiper-slide v-for="item in banners" :key="item._id">
-          <a class="swiper-a" :href="item.eventUrl">
-            <img class="swiper-img" :src="item.screenshot" alt="">
-          </a>
-        </swiper-slide>
-        <div v-if="banners.length>1" class="swiper-button-prev" slot="button-prev"></div>
-        <div v-if="banners.length>1" class="swiper-button-next" slot="button-next"></div>
-        <div v-if="banners.length>1" class="swiper-pagination" slot="pagination"></div>
-      </swiper> -->
-      <!-- <div class="date">
-        日历
-      </div> -->
     </div>
     <div>
       <events-list  
@@ -42,143 +29,128 @@
   </div>
 </template>
 <script>
-// import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper'
-// import 'swiper/css/swiper.css'
 import eventAPI from '@/api/events'
 import headerSub from '@/components/header/header-sub'
 import eventsList from '@/components/events/list'
 import copyRight from '@/components/common/copy-right'
 import scroll from '@/mixins/scroll'
+import { reactive, computed, toRefs } from 'vue'
 
 
 export default {
   components: {
-    // Swiper,
-    // SwiperSlide,
     headerSub,
     eventsList,
     copyRight
   },
-  directives: {
-    // swiper: directive
-  },
   props: ['id'],
   mixins: [scroll],
-  data() {
-    return {
-      banners: [1,2,3],
-      swiperOptions: {
-        pagination: {
-          el: '.swiper-pagination'
-        },
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
-        }
+  setup(props) {
+    let defaultCity = [
+      {
+        cityName: "热门活动",
+        cityAlias: "all",
+        weight: 0
       },
+      {
+        cityName: "北京",
+        cityAlias: "beijing",
+        weight: 0
+      },
+      {
+        cityName: "上海",
+        cityAlias: "shanghai",
+        weight: 0
+      },
+      {
+        cityName: "广州",
+        cityAlias: "guangzhou",
+        weight: 0
+      },
+      {
+        cityName: "深圳",
+        cityAlias: "shenzhen",
+        weight: 0
+      },
+      {
+        cityName: "杭州",
+        cityAlias: "hangzhou",
+        weight: 0
+      }
+    ]
+    let state = reactive({
       cityList: [],
-      defaultCity: [
-        {
-          cityName: "热门活动",
-          cityAlias: "all",
-          weight: 0
-        },
-        {
-          cityName: "北京",
-          cityAlias: "beijing",
-          weight: 0
-        },
-        {
-          cityName: "上海",
-          cityAlias: "shanghai",
-          weight: 0
-        },
-        {
-          cityName: "广州",
-          cityAlias: "guangzhou",
-          weight: 0
-        },
-        {
-          cityName: "深圳",
-          cityAlias: "shenzhen",
-          weight: 0
-        },
-        {
-          cityName: "杭州",
-          cityAlias: "hangzhou",
-          weight: 0
-        }
-      ],
+      allCity: computed(()=>[...state.defaultCity,...state.cityList]),
       lists: [],
       pageNum: 1,
       isLoading: false,
+    })
+
+    // methods
+    let reset = () => {
+      // state.alias = '';
+      state.pageNum = 1;
+      state.lists = [];
+    }
+    let getCityList = async() => {
+      try {
+        let {s, d} = await eventAPI.cityList(0);
+        if(s === 1) {
+          state.cityList = d;
+        } 
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    // let getBanner = async() => {
+    //   try {
+    //     let {s, d} = await eventAPI.banner();
+    //     if(s === 1) {
+    //       this.banners = d;
+    //     }
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
+
+    let getLists = async() => {
+      if(state.isLoading) return
+      state.isLoading = true
+      let id = props.id ==='all' ? '' : props.id
+      try {
+        let {s, d} = await eventAPI.eventList(1, id, state.pageNum++);
+        if(s === 1){
+          state.lists = state.lists.concat(d);
+          state.isLoading = false
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    (async()=>{
+      await getCityList();
+      // await getBanner();
+      await getLists();
+    })()
+
+    return {
+      ...toRefs(state),
+      reset,
+      getCityList,
+      getLists,
     }
   },
   watch: {
     '$route': function(to ,from){
-      console.log(to ,from);
       if(to.name === from.name && to.params.id!==from.params.id){
-        console.log(to.params.id,this.id);
         // this.id = to.params.id
         this.reset()
         this.getLists()
       }
     }
   },
-  computed: {
-    swiper() {
-      return this.$refs.mySwiper.$swiper
-    },
-    allCity() {
-      return [...this.defaultCity,...this.cityList]
-    }
-  },
-  async mounted() {
-    await this.getCityList();
-    await this.getBanner();
-    await this.getLists();
-  },
-  methods: {
-    reset() {
-      // this.alias = '';
-      this.pageNum = 1;
-      this.lists = [];
-    },
-    async getCityList() {
-      try {
-        let {s, d} = await eventAPI.cityList(0);
-        if(s === 1) {
-          this.cityList = d;
-        } 
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async getBanner() {
-      try {
-        let {s, d} = await eventAPI.banner();
-        if(s === 1) {
-          this.banners = d;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async getLists() {
-      if(this.isLoading) return
-      this.isLoading = true
-      let id = this.id ==='all' ? '' : this.id
-      try {
-        let {s, d} = await eventAPI.eventList(1, id, this.pageNum++);
-        if(s === 1){
-          this.lists = this.lists.concat(d);
-          this.isLoading = false
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }
 }
 </script>
 <style lang="css">

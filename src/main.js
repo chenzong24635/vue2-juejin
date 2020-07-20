@@ -1,29 +1,16 @@
-import Vue from 'vue'
+import { createApp,createComponent } from 'vue';
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import './icons'
+import icons from './icons/index.js'
 import componentsInstall from '@/libs/componentsInstall.js'
-import utils from '@/libs/util.js'
-import filters from '@/filters'
+
+// import filters from '@/filters'
 // import '@/components/loading/index.js'
-import loading from '@/components/loading/directive.js'
-// import VueScroller from 'vue-scroller'
-import { init, bind } from '@/libs/custom-life-cycle/pageVisibleHidden'
 
-import Alert from '@/components/common/alert/alert.js'
-Vue.prototype.$Alert = Alert
+// import utils from '@/libs/util.js'
+// import Alert from '@/components/common/alert/alert.js'
+// Vue.prototype.$Alert = Alert
+// Vue.prototype.$utils = utils;
 
-Vue.use(componentsInstall).use(filters).use(loading)
-Vue.config.productionTip = false
-Vue.prototype.$utils = utils;
-// Vue.prototype.$eventBus = new Vue();
-
-init()
-const vm = new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
-
-bind(vm)
+createApp(App).use(router).use(store).use(componentsInstall).use(icons).mount('#app')

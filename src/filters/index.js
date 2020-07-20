@@ -1,6 +1,5 @@
-
-const filters = {
-  dateDis: date => {
+export default filters = {
+  $_dateDis(date) {
     let stime = new Date(date + '').getTime()
     // console.log(date,stime);
     let etime = Date.now()
@@ -22,14 +21,8 @@ const filters = {
       return minutes + '分钟前'
     }
     return '刚刚'
-  }
-}
-
-//批量注册全局filter
-export default {
-  install(Vue) {
-    Object.keys(filters).forEach(item => {
-      Vue.filter(item, filters[item])
-    })
+  },
+  $_toLocaleDateString(date){
+    return new Date(date).toLocaleDateString()
   }
 }

@@ -20,6 +20,9 @@ import booksList from '@/components/books/list'
 import booksAside from '@/components/books/books-aside'
 import booksAPI from '@/api/books'
 import scroll from '@/mixins/scroll'
+
+import {reactive, toRefs} from 'vue'
+
 export default {
   name: '',
   components: {
@@ -30,34 +33,21 @@ export default {
   },
   props: ["id"],
   mixins: [scroll],
-  data () {
-    return {
+  setup(props) {
+    let state = reactive({
       navLists: [],
       lists: [],
       pageNum: 1
+    })
+
+    let reset = () => {
+      state.pageNum = 1;
+      state.lists = [];
     }
-  },
-  watch: {
-    '$route': function(to ,from){
-      if(to.name === from.name && to.params.id!==from.params.id){
-        this.reset()
-        this.getLists()
-      }
-    }
-  },
-  created () {
-    this.getNavLists();
-    this.getLists(this.id);
-  },
-  methods: {
-    reset() {
-      this.pageNum = 1;
-      this.lists = [];
-    },
-    async getNavLists() {
+    let getNavLists = async () => {
       let {s, d} = await booksAPI.navList();
       if(s === 1){
-        this.navLists = [
+        state.navLists = [
           {
             id: "0",
             name: "全部",
@@ -68,12 +58,12 @@ export default {
           ...d
         ];
       }
-    },
-    async getLists() {
-      let id = this.id ==='all' ? '' : this.id
-      let {s, d} = await booksAPI.lists(id, this.pageNum++);
+    }
+    let getLists = async () => {
+      let id = props.id ==='all' ? '' : props.id
+      let {s, d} = await booksAPI.lists(id, state.pageNum++);
       if(s === 1){
-        this.lists = this.lists.concat(d);
+        state.lists = state.lists.concat(d);
       }
       /* console.log(type);
       
@@ -88,7 +78,26 @@ export default {
         this.lists = this.lists.concat(d);
       }*/
     } 
-  }
+    (() =>{
+      getNavLists()
+      getLists(props.id)
+    })()
+
+    return {
+      ...toRefs(state),
+      reset,
+      getLists
+    }
+  },
+  watch: {
+    '$route': function(to ,from){
+      if(to.name === from.name && to.params.id!==from.params.id){
+        this.reset()
+        this.getLists()
+      }
+    }
+  },
+
 }
 </script>
 <style scoped lang="less">

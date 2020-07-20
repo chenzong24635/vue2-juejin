@@ -1,7 +1,6 @@
 <template>
   <header class="header" >
     <login-box></login-box>
-    <!-- <register-box :show="registerFormShow" @toLogin="showHide1" @closeModal="showHide2" ></register-box> -->
     <div id="header-base">
       <div class="container">
         <router-link to="/timeline/recommended" class="logo">
@@ -11,7 +10,7 @@
           <ul class="navs-left">
             <li v-for="(item,index) in baseHeader" :key="index">
               <!-- :class="{routerLinkActive: }" -->
-              <router-link :to="item.path" >{{item.title}}</router-link>
+              <p :class="{'router-link-active': item.active}" @click="routeClick(item)">{{item.title}}</p>
             </li>
           </ul>
           <ul class="navs-right">
@@ -103,22 +102,27 @@ export default {
         {
           path: '/timeline',
           title: '首页',
+          active: false,
         },
         {
           path: '/pins',
           title: '沸点',
+          active: false,
         },
         {
           path: '/topics',
           title: '话题',
+          active: false,
         },
         {
           path: '/books',
           title: '小册',
+          active: false,
         },
         {
           path: '/events',
           title: '活动',
+          active: false,
         },
       ],
       iptFoucs: false,
@@ -134,19 +138,20 @@ export default {
       'isLogin'
     ])
   },
-  mounted(){
-    console.log('mounted');
-  },
-  beforeDestroy() {
-    console.log('beforeDestroy');
-  },
-  destroyed() {
-    console.log('destroyed');
-  },
   methods: {
     ...mapMutations([
       'setLoginModel'
     ]),
+    routeClick(item){
+      console.log(item);
+      this.$router.push({
+        path: item.path
+      })
+      this.baseHeader.forEach(item => {
+        item.active = false
+      })
+      item.active = true
+    },
     search() {
       console.log();
       let route = this.$route

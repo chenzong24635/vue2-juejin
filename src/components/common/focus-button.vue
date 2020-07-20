@@ -1,5 +1,5 @@
 <template>
-  <c-button type="success cutout" @click.native.stop="focus">关注</c-button>
+  <c-button type="success cutout" @click.stop="focus">关注</c-button>
 </template>
 <script>
 import {mapActions} from 'vuex'

@@ -44,7 +44,7 @@ export default {
     this.catalogOffsetTop = document.querySelector('.catalog').offsetTop
     window.addEventListener('scroll', this.catalogSticky)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('scroll', this.catalogSticky)
   },
   methods: {

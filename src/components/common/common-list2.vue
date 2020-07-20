@@ -11,7 +11,8 @@
           <div class="list-flags">
             <p class="flag dot zl">专栏</p>
             <p class="flag dot">{{list.entity.username}}</p>
-            <p class="flag dot">{{ list.entity.createdAt | dateDis}}</p>
+            <p class="flag dot">{{ list.entity.createdAt}}</p>
+            <!-- <p class="flag dot">{{ list.entity.createdAt | dateDis}}</p> -->
             <p class="dot">
               <router-link 
                 :to="'/tag/'+ encodeURIComponent(tag.title)" 

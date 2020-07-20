@@ -1,9 +1,7 @@
 <template>
   <div id="app">
-    <!-- <keep-alive> -->
       <header-base v-if="!$route.meta.hideHeader"></header-base>
       <suspension-icon></suspension-icon>
-    <!-- </keep-alive> -->
     <router-view/>
   </div>
 </template>
@@ -16,9 +14,6 @@ export default{
     headerBase,
     suspensionIcon
   },
-  created(){
-    console.log(1);
-  }
 }
 </script>
 <style lang="less">

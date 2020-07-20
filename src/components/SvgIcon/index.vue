@@ -2,7 +2,6 @@
     <svg 
       :class="svgClass" 
       aria-hidden="true" 
-      v-on="$listeners" 
       :style="{'font-size': size + 'px','fill': color}"
     >
       <use :xlink:href="iconName" />

@@ -1,4 +1,4 @@
-<template functional>
+<template >
   <div class="activity-skeleton shadow">
     <div class="skeleton-row"></div>
     <div class="skeleton-row"></div>

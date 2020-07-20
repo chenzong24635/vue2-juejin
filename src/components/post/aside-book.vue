@@ -1,4 +1,4 @@
-<template functional>
+<template >
   <section class="aside-box">
     <a href="https://juejin.im/app" target="_blank" class="qr">
       <img class="qr-img" src="../../assets/image/juejin-welcome.png" alt="">

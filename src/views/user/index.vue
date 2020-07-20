@@ -112,7 +112,8 @@
         </div>
         <div class="item">
           <p class="item-title">加入于</p>
-          <p class="item-count">{{authorInfo.createdAt | date}}</p>
+          <p class="item-count">{{authorInfo.createdAt }}</p>
+          <!-- <p class="item-count">{{authorInfo.createdAt | date}}</p> -->
         </div>
       </section>
     </aside>

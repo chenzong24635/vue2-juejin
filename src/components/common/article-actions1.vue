@@ -1,8 +1,9 @@
-<template functional>
+<template >
   <div class="actions1">
     <div class="action1">
       <div class="action1-left">
-        {{props.date | dateDis}}
+        {{date}}
+        <!-- {{date | dateDis}} -->
       </div>
       <div class="action1-right">
         <div class="praise">
@@ -16,7 +17,11 @@
     </div>
   </div>
 </template>
-
+<script>
+export default {
+  props: ['date']
+}
+</script>
 <style scoped lang="less">
 .actions1{
   width: 100%;

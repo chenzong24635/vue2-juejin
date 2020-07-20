@@ -1,4 +1,4 @@
-<template functional>
+<template >
   <div class="copy-right">
     <!-- 底部 -->
     <span >©2020 掘金</span>

@@ -1,4 +1,4 @@
-<template functional>
+<template >
   <article-nothing title="这里什么都没有" />
 </template>
 

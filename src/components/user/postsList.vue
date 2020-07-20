@@ -22,7 +22,8 @@
         <img :src="item.user.avatarLarge" alt="" class="post-avatar">
         <p class="post-user">
           <span>{{item.user.username}}</span>
-          <span>{{item.createdAt | dateDis}}</span>
+          <span>{{item.createdAt}}</span>
+          <!-- <span>{{item.createdAt | dateDis}}</span> -->
         </p>
       </div>
       <router-link target="_blank" class="post-img" :to="item.originalUrl.replace(/https:\/\/juejin.im/,'')">

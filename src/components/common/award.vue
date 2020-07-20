@@ -37,7 +37,7 @@ export default {
   created () {},
   methods: {
     closeModal() {
-      this.$emit('closeModal', false);
+      this.$emit('close-modal', false);
     },
     receive() {
       

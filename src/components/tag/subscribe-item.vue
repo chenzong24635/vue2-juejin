@@ -1,4 +1,4 @@
-<template functional>
+<template >
   <ul class="subscribes">
     <li class="subscribe" v-for="item in props.lists" :key="item.id">
       <div class="subscribe-box">

@@ -18,7 +18,8 @@
             <p class="user-username">{{item.targets[0].user ? item.targets[0].user.username : ''}}</p>
             <p>
               <span>{{item.targets[0].user ? item.targets[0].user.jobTitle : ''}}</span>
-              <span> {{item.didAt | dateDis}}</span>
+              <span> {{item.didAt }}</span>
+              <!-- <span> {{item.didAt | dateDis}}</span> -->
             </p>
           </div>
           <c-button type="success cutout">关注</c-button>

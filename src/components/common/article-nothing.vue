@@ -1,10 +1,15 @@
-<template functional>
+<template >
   <div class="nothing " >
     <svg-icon name="order" :size="60" color="#e6e6e6"></svg-icon>
-    <p>{{props.title}}</p>
+    <p>{{title}}</p>
     <slot></slot>
   </div>
 </template>
+<script>
+export default {
+  props: ['title']
+}
+</script>
 <style scoped lang="less">
 .nothing{
   padding: 80px 20px;

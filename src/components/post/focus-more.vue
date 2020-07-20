@@ -1,4 +1,4 @@
-<template functional>
+<template >
   <div class="focus">
     <p class="title">关注下面的标签，发现更多相似文章</p>
     <ul class="focus-tags">

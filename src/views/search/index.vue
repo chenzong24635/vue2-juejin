@@ -45,6 +45,8 @@ import scroll from '@/mixins/scroll'
 
 import timelineAPI from '@/api/timeline'
 import {mapState} from 'vuex'
+import { reactive, toRefs } from 'vue'
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
@@ -52,31 +54,32 @@ export default {
     userList
   },
   mixins: [scroll],
-  data() {
-    return {
+  props: ['query','type'],
+  setup(props) {
+    let subNavs = [
+      {
+        title: "综合",
+        type: "all"
+      },
+      {
+        title: "文章",
+        type: "article"
+      },
+      {
+        title: "标签",
+        type: "tag"
+      },
+      {
+        title: "用户",
+        type: "user"
+      },
+    ]
+    let state = reactive({
       isLoading: false,
       hasNextPage: true,
       endCursor: '',
       lists: [],
       subIndex: 0,
-      subNavs: [
-        {
-          title: "综合",
-          type: "all"
-        },
-        {
-          title: "文章",
-          type: "article"
-        },
-        {
-          title: "标签",
-          type: "tag"
-        },
-        {
-          title: "用户",
-          type: "user"
-        },
-      ],
       apiParmas: {
         operationName: "",
         query: "",
@@ -93,9 +96,51 @@ export default {
           }
         }
       },
+    })
+
+    let $_router = useRouter()
+    console.log($_router);
+    let reset = () => {
+      state.lists = [];
+      state.hasNextPage= true;
+      state.endCursor= '';
+    }
+    let subChange = (item, index) => {
+      state.subIndex = index;
+      $_router.replace({ name: 'search', params: { query: props.query, type: item.type}})
+      reset()
+    }
+    let getLists = () => {
+      state.apiParmas.variables.after = state.endCursor;
+      state.apiParmas.variables.type = props.type.toUpperCase();
+      state.apiParmas.variables.query = props.query;
+      if(state.isLoading || !state.hasNextPage) return
+      state.isLoading = true
+      timelineAPI.lists(state.apiParmas)
+        .then(res => {
+          if(state.hasNextPage && res.data){
+            let result = res.data.search;
+            state.lists = state.lists.concat(result.edges);
+            state.hasNextPage = result.pageInfo.hasNextPage;
+            state.endCursor = result.pageInfo.endCursor;
+          }
+          state.isLoading = false
+        })
+        .catch((e) => {
+          state.isLoading = false
+        })
+    }
+
+    getLists()
+
+    return {
+      subNavs,
+      ...toRefs(state),
+      reset,
+      subChange,
+      getLists,
     }
   },
-  props: ['query','type'],
   computed: {
     ...mapState([
       'isLogin',
@@ -103,7 +148,6 @@ export default {
   },
   watch: {
     '$route': function(to ,from){
-      console.log(to,from);
       if(to.name === from.name && to.fullPath!==from.fullPath){
         console.log('cahnge');
         this.reset()
@@ -111,50 +155,6 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log(this.query,this.type);
-    this.getLists()
-  },
-  methods: {
-    subChange(item, index) {
-      this.subIndex = index;
-      // this.typeNew = item.type;
-      console.log(this.typeNew, item.type);
-      console.log(item,index,{ query: this.query, type: item.type});
-      this.$router.replace({ name: 'search', params: { query: this.query, type: item.type}})
-      this.reset()
-      // this.getLists()
-    },
-    reset() {
-      this.lists = [];
-      this.hasNextPage= true;
-      this.endCursor= '';
-    },
-    getLists(){
-      this.apiParmas.variables.after = this.endCursor;
-      this.apiParmas.variables.type = this.type.toUpperCase();
-      this.apiParmas.variables.query = this.query;
-      console.table(this.apiParmas);
-      // return
-      if(this.isLoading || !this.hasNextPage) return
-      this.isLoading = true
-      timelineAPI.lists(this.apiParmas)
-        .then(res => {
-          if(this.hasNextPage && res.data){
-            let result = res.data.search;
-            this.lists = this.lists.concat(result.edges);
-            this.hasNextPage = result.pageInfo.hasNextPage;
-            this.endCursor = result.pageInfo.endCursor;
-          }
-          console.log(this.lists);
-          this.isLoading = false
-        })
-        .catch((e) => {
-          this.isLoading = false
-          console.log(e);
-        })
-    },
-  }
 }
 </script>
 <style scoped lang="less">

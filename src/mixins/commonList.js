@@ -52,13 +52,15 @@ export default {
     },
     changeShow (obj, type) { //鼠标移入移出时，分享图标显示隐藏
       if(type / 1 === 1){
-        this.$set(obj, 'uploadIconShow', true)
+        obj.uploadIconShow = true
+        // this.$set(obj, 'uploadIconShow', true)
       }else{
-        !obj.uploadBoxShow && this.$set(obj, 'uploadIconShow', false)
+        !obj.uploadBoxShow && (obj.uploadIconShow = false)
       }
     },
     share(obj) { //显示分享框
-      this.$set(obj, 'uploadBoxShow', !obj.uploadBoxShow)
+      obj.uploadIconShow = !obj.uploadBoxShow
+      // this.$set(obj, 'uploadBoxShow', !obj.uploadBoxShow)
     },
     shareWb(obj) { // 点击分享到微薄
       let title = obj.title + '-' + obj.user.username + '- 掘金专栏';

@@ -11,11 +11,12 @@
           <p class="user-meta">
             <span >{{list.user.jobTitle}}</span>
             <span v-if="list.user.company">@ {{list.user.company}}</span>
-            <span>· {{list.user.createdAt | dateDis}}</span>
+            <span>· {{list.user.createdAt }}</span>
+            <!-- <span>· {{list.user.createdAt | dateDis}}</span> -->
           </p>
         </div>
       </div>
-      <c-button @click.native="foucs" type="success cutout">关注</c-button>
+      <c-button @click="foucs" type="success cutout">关注</c-button>
     </div>
     <div class="box-content">
       <div v-html="list.content"></div>

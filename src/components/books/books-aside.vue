@@ -28,7 +28,7 @@
         <p class="award-btn cp" @click="showAward(true)">立即领取</p>
       </div>
     </section>
-    <c-award :awardModalShow ="awardModalShow" @closeModal="showAward">
+    <c-award :awardModalShow ="awardModalShow" @close-modal="showAward">
     </c-award>
   </div>
 </template>

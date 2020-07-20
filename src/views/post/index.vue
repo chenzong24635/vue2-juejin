@@ -12,11 +12,12 @@
               <user-level :level="3" />
             </router-link>
             <div class="info-box-bottom">
-              <span>{{articleInfo.createdAt | dateFilter}}</span>
+              <span>{{articleInfo.createdAt }}</span>
+              <!-- <span>{{articleInfo.createdAt | dateFilter}}</span> -->
               <span>阅读 {{articleInfo.viewsCount}}</span>
             </div>
           </div>
-          <c-button type="success cutout"  @click.native="showLoginModel">关注</c-button>
+          <c-button type="success cutout"  @click="showLoginModel">关注</c-button>
         </div>
         <h1 class="title" >{{articleInfo.title}}</h1>
         <div class="html-content" v-if="articleContent" v-html="articleContent.content"></div>
@@ -56,9 +57,10 @@ import leftActions from '@/components/post/left-actions.vue'
 import commonList1 from '@/components/common/common-list1'
 
 import postAPI from '@/api/post'
-// import pinAPI from '@/api/pins'
 import scroll from '@/mixins/scroll'
+// import {$_toLocaleDateString} from '@/filters'
 import {mapActions} from 'vuex'
+import { reactive, toRefs } from 'vue'
 
 export default {
   name: '',
@@ -73,13 +75,14 @@ export default {
   },
   mixins: [scroll],
   props: ['id'],
-  filters: {
-    dateFilter(val){
-      return new Date(val).toLocaleDateString()
-    }
-  },
-  data () {
-    return {
+  // filters: {
+  //   dateFilter(val){
+  //     return new Date(val).toLocaleDateString()
+  //   }
+  // },
+  setup(props) {
+    console.log(props.id);
+    let state = reactive({
       articleContent: {},
       articleInfo: {},
       relatedEntryLists: [], // 侧边相关文章
@@ -88,104 +91,101 @@ export default {
       isLoading: false,
       pageNu: 1,
       comments: []
-    }
-  },
-  async created () {
-    await this.getArticleContent()
-    await this.getComments()
-    if (location.hash === '#comment') {
-      this.$refs.panel.scrollIntoComment()
-    }
-    await this.getArticleInfo()
-    await this.getRelatedEntry()
-    await this.getRecommendEntry()
-    
-  },
-  methods: {
-    ...mapActions([
-      'showLoginModel'
-    ]),
-    setGood() {
-      
+    })
+
+    let setGood = () => {
       console.log('点赞');
-    },
-    async getArticleContent() { // 文章主要内容
-      let {s, d} = await postAPI.article({
-        uid: '',
-        device_id:'',
-        token: '',
-        src: 'web',
-        type: 'entryView',
-        postId: this.id
-      })
-      if(s === 1) {
-        this.articleContent = d
-      }
-    },
-    async getArticleInfo() { // 文章头部内容（作者，标题等）
-      let {s, d} = await postAPI.article({
-        uid: '',
-        device_id:'',
-        token: '',
-        src: 'web',
-        type: 'entry',
-        postId: this.id
-      })
-      if(s === 1) {
-        this.articleInfo = d
-      }
-    },
-    async getComments() { //评价
-      let createdAt = ''
-      let len = this.comments.length
+    }
+
+    let getArticleContent = async() => { // 文章主要内容
       try {
-        createdAt = this.comments[len-1].createdAt
+        let {s, d} = await postAPI.article({
+          uid: '',
+          device_id:'',
+          token: '',
+          src: 'web',
+          type: 'entryView',
+          postId: props.id
+        })
+        if(s === 1) {
+          state.articleContent = d
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    let getArticleInfo = async() => { // 文章头部内容（作者，标题等）
+      try {
+        let {s, d} = await postAPI.article({
+          uid: '',
+          device_id:'',
+          token: '',
+          src: 'web',
+          type: 'entry',
+          postId: props.id
+        })
+        if(s === 1) {
+          state.articleInfo = d
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    let getComments = async() => { //评价
+      let createdAt = ''
+      let len = state.comments.length
+      try {
+        createdAt = state.comments[len-1].createdAt
       } catch (e) {
         createdAt = ''
         console.log(e)
       }
-      if(len >= this.count) return
+      if(len >= state.count) return
       try {
         let {s ,d} = await postAPI.comments({
-          entryId: this.articleContent.entryId, 
+          entryId: state.articleContent.entryId, 
           createdAt,
           pageSize: 10,
           rankType: 'new'
         })
         if(s === 1) {
-          this.comments = this.comments.concat(d.comments)
-          this.count = d.count
+          state.comments = state.comments.concat(d.comments)
+          state.count = d.count
         }
       } catch (e) {
         console.log(e)
       }
-    },
-    async getRelatedEntry() { // 相关文章
-      let {s, d} = await postAPI.relatedEntry( {
-      uid: '',
-      device_id: '',
-      token: '',
-      src: 'web',
-      limit: 5,
-      entryId: this.articleInfo.objectId
-    })
-      if(s === 1) {
-        this.relatedEntryLists = d.entrylist
+    }
+    let getRelatedEntry = async() => { // 相关文章
+      try {
+        let {s, d} = await postAPI.relatedEntry({
+          uid: '',
+          device_id: '',
+          token: '',
+          src: 'web',
+          limit: 5,
+          entryId: state.articleInfo.objectId
+        })
+        if(s === 1) {
+          state.relatedEntryLists = d.entrylist
+        }
+      }catch(e) {
+        console.log(e);
       }
-    },
-    getLists(){
-      this.getRecommendEntry()
-    },
-    async getRecommendEntry() { // 相关推荐
-      if(this.isLoading) return
-      this.isLoading = true
+    }
+    let getLists = () => {
+      state.getRecommendEntry()
+    }
+    let getRecommendEntry = async() => { // 相关推荐
+      if(state.isLoading) return
+      state.isLoading = true
       let tagIds = ''
       try{
-        tagIds = this.articleInfo.tags.map(item => item.id).join('|')
+        tagIds = state.articleInfo.tags.map(item => item.id).join('|')
       }catch{
         tagIds = ''
       }
-      let last = this.recommendEntryLists.slice(-1)[0] //获取列表最后一个的 rankIndex
+      let last = state.recommendEntryLists.slice(-1)[0] //获取列表最后一个的 rankIndex
       let before = last ? last.rankIndex : ''
       try {
         let {s, d} = await postAPI.recommendEntry({
@@ -197,13 +197,41 @@ export default {
           before
         })
         if(s === 1) {
-          this.recommendEntryLists = this.recommendEntryLists.concat(d.entrylist)
+          state.recommendEntryLists = state.recommendEntryLists.concat(d.entrylist)
         }
-        this.isLoading = false
+        state.isLoading = false
       } catch (e) {
-        this.isLoading = false
+        state.isLoading = false
       }
-    },
+    }
+
+
+    (async()=>{
+      await getArticleContent()
+      await getComments()
+      if (location.hash.includes('#comment')) {
+        const panel = ref(null)
+        console.log(panel);
+        panel.scrollIntoComment()
+        // $refs.panel.scrollIntoComment()
+      }
+      await getArticleInfo()
+      await getRelatedEntry()
+      await getRecommendEntry()
+    })()
+
+    return {
+      ...toRefs(state),
+      setGood,
+      getComments,
+      getLists
+    }
+  },
+  methods: {
+    ...mapActions([
+      'showLoginModel'
+    ]),
+    
   }
 }
 </script>

@@ -59,7 +59,8 @@ export default {
         } else {
           obj.topComment = obj.topComment.concat(d.comments)
         }
-        this.$set(this.listsNew[objIndex],'pageNum', ++obj.pageNum)
+        this.listsNew[objIndex]['pageNum']++
+        // this.$set(this.listsNew[objIndex],'pageNum', ++obj.pageNum)
         // obj.pageNum += 1
         // 评论已加载完
         if(d.count <= obj.topComment.length) {

@@ -54,7 +54,8 @@
               <div class="section-cnt">
                 <div class="section-title">{{item.title}}</div>
                 <div class="section-read">
-                  <span class="time">时长：{{item.contentSize | read}}</span>
+                  <!-- <span class="time">时长：{{item.contentSize | read}}</span> -->
+                  <span class="time">时长：{{item.contentSize}}</span>
                   <span v-if="item.pv" class="pv">{{item.pv}}次学习</span>
                   <span v-if="item.commentCount" class="comment">{{item.commentCount}}条评论</span>
                 </div>
@@ -63,8 +64,7 @@
           </li>
         </ul>
       </div>
-      <div class="book-introduce html-content" v-html="bookDesc.summaryHtml">
-
+      <div  class="book-introduce html-content" v-html="bookDesc.summaryHtml">
       </div>
     </div>
     <!-- <div class="book-card">
@@ -77,28 +77,82 @@
 </template>
 <script>
 import bookAPI from '@/api/books.js'
+import { reactive, toRefs, computed } from 'vue';
+
+/**
+ * @params {Array} tabs - tab栏 
+ * 
+ */
+
 export default {
-  name: '',
-  components: {},
   props: ['id'],
-  data () {
-    return {
+  setup(props) {
+    let state = reactive({
       tabs: ['目录','介绍'],
       bookDesc: {},
       bookBuyers: [],
       bookSections: [],
+      buyers: computed(()=>state.bookBuyers.slice(0,16))
+    })
+
+    // methods
+    let tabChange = (index) => {
+      console.log(index);
+    }
+    
+    let getBookDesc = async() => {
+      try {
+        let {s,d} = await bookAPI.bookDesc(props.id)
+        if(s === 1) {
+          state.bookDesc = d
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    let getBookBuyers = async() => {
+      try {
+        let {s,d} = await bookAPI.bookBuyers(props.id)
+        if(s === 1) {
+          state.bookBuyers = d
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    let getBookSection = async() => {
+      try {
+        let {s,d} = await bookAPI.bookSection(props.id)
+        if(s === 1) {
+          state.bookSections = d
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    (() =>{
+      getBookDesc()
+      getBookBuyers()
+      getBookSection()
+    })()
+
+    return {
+      ...toRefs(state),
+      tabChange,
+      getBookDesc,
+      getBookBuyers,
+      getBookSection,
     }
   },
-  computed: {
-    buyers(){
-      return this.bookBuyers.slice(0,16)
-    }
-  },
-  created () {
-    this.getBookDesc()
-    this.getBookBuyers()
-    this.getBookSection()
-  },
+  // computed: {
+  //   buyers(){
+  //     return this.bookBuyers.slice(0,16)
+  //   }
+  // },
+
   filters: {
     read(val) {
       let size = 10 //每秒10字
@@ -115,41 +169,6 @@ export default {
       return str 
     }
   },
-  methods: {
-    tabChange(index) {
-      console.log(index);
-    },
-    async getBookDesc() {
-      try {
-        let {s,d} = await bookAPI.bookDesc(this.id)
-        if(s === 1) {
-          this.bookDesc = d
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async getBookBuyers() {
-      try {
-        let {s,d} = await bookAPI.bookBuyers(this.id)
-        if(s === 1) {
-          this.bookBuyers = d
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async getBookSection() {
-      try {
-        let {s,d} = await bookAPI.bookSection(this.id)
-        if(s === 1) {
-          this.bookSections = d
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  }
 }
 </script>
 <style scoped lang="less">

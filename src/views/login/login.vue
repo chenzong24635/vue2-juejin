@@ -27,7 +27,7 @@
             >
           </div>
           <div class="form-list">
-            <c-button @click.native="login" type="primary" :size="20">登录</c-button>
+            <c-button @click="login" type="primary" :size="20">登录</c-button>
           </div>
           <div class="form-list form-prompt">
             <p>
@@ -115,9 +115,10 @@ export default {
   methods: {
     close(e){
       //点击模态框 隐藏
-      if(e.target.parentNode &&(e.target.parentNode.className ==="auth")) {
-        this.setLoginModel('')
-      }
+      console.log(e);
+      // if(e.target.parentNode &&(e.target.parentNode.className ==="auth")) {
+      //   this.setLoginModel('')
+      // }
     },
     ...mapMutations([
       'setLoginModel'
@@ -144,6 +145,7 @@ a{display: inline-block;}
     bottom: 0;
     background-color: rgba(0,0,0,.3);
     z-index: 500;
+    display: none;
   }
   &-imgs{
     position: relative;

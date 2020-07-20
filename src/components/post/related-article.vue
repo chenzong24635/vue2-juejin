@@ -1,4 +1,4 @@
-<template functional>
+<template >
   <section class="aside-box">
     <p class="aside-title">相关文章</p>
     <ul class="aside-lists">

@@ -9,7 +9,8 @@
             <p class="list-title">{{item.title}}</p>
             <div class="list-date">
               <svg-icon name="calendar"></svg-icon>
-              <span>{{item.startTime | date}}</span>
+              <span>{{item.startTime}}</span>
+              <!-- <span>{{item.startTime | date}}</span> -->
             </div>
             <div class="list-address">
               <p class="list-address-city">

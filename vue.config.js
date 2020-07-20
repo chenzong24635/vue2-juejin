@@ -77,7 +77,7 @@ module.exports = {
       // }
     } else {
       // 为开发环境修改配置...
-      console.log(config.resolve);
+      // console.log(config.resolve);
       // config.resolve = {
       //   extensions: ['.js', '.vue', '.json',".css"],
       //   alias: {
@@ -99,7 +99,7 @@ module.exports = {
     } else {
     }
     
-    config.resolve.alias.set('vue$','vue/dist/vue.esm.js')
+    // config.resolve.alias.set('vue$','vue/dist/vue.esm.js')
 
     // 对vue-cli内部的 webpack 配置进行更细粒度的修改
     config.optimization.minimizer('terser').tap((args) => {
