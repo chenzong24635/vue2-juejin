@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import {$_dateDis} from '@/filters/index.js'
+import {$_dateDis} from '@/filters'
 
 import commonList from '@/mixins/commonList.js'
 export default {

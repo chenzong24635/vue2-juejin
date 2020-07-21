@@ -46,46 +46,8 @@ module.exports = {
       ]
     }
   },
-  // configureWebpack: {
-  //   externals: {
-  //     'vue': 'Vue',
-  //     'vuex': 'Vuex',
-  //     'vue-router': 'VueRouter',
-  //     'axios': 'axios',
-  //   },
-  // },
-  configureWebpack(config) {
-    if (isProduction) {
-      // externals里的模块不打包
-      Object.assign(config, {
-        externals
-      })
-      // 开启gzip压缩
-      const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i
-      config.plugins.push(
-        new CompressionWebpackPlugin({
-          filename: '[path].gz[query]',
-          algorithm: 'gzip',
-          test: productionGzipExtensions,
-          threshold: 10240,
-          minRatio: 0.8
-        })
-      )
-      // if (process.env.npm_config_report) {
-      //   // 打包后模块大小分析//npm run build --report
-      //   config.plugins.push(new BundleAnalyzerPlugin())
-      // }
-    } else {
-      // 为开发环境修改配置...
-      // console.log(config.resolve);
-      // config.resolve = {
-      //   extensions: ['.js', '.vue', '.json',".css"],
-      //   alias: {
-      //     'vue$': 'vue/dist/vue.esm.js',
-      //     '@': resolve('src'),
-      //   }
-      // }
-    }
+  configureWebpack: {
+    resolve: { extensions: [".ts", ".tsx", "vue", ".js", ".json"] },
   },
   chainWebpack(config) {
     if (isProduction) {
@@ -97,6 +59,7 @@ module.exports = {
         config.plugins.delete('prefetch')
       }
     } else {
+      
     }
     
     // config.resolve.alias.set('vue$','vue/dist/vue.esm.js')

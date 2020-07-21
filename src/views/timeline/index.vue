@@ -11,9 +11,9 @@
         <nav class>
           <ul class="subs">
             <li
+              v-for="(item, index) in subNavs"
               @click="subChange(item, index)"
               :class="['sub', index === subIndex ? 'active' : '']"
-              v-for="(item, index) in subNavs"
               :key="item.order"
             >{{item.title}}</li>
           </ul>
@@ -24,14 +24,39 @@
     </div>
   </div>
 </template>
-<script >
+<script lang="ts">
+interface objType{
+  [propertyName: string]: any
+}
+type objectType = objType | null
 
-import headerSub from '@/components/header/header-sub.vue'
-import homeRight from '@/components/timeline/right.vue'
-import homeHeaderParams from '@/components/timeline/homeHeaderParams.js'
 
-import timelineAPI from '@/api/timeline.js'
-import scroll from '@/mixins/scroll.js'
+interface subNavsType{
+  title: string,
+  order: string
+}
+interface stateType{
+  isLoading: boolean,
+  hasNextPage: boolean,
+  endCursor: string,
+  lists: any[],
+  order: string,
+  subIndex: number,
+  apiParmas: objectType
+}
+
+import headerSub from '@/components/header/header-sub'
+import homeRight from '@/components/timeline/right'
+import homeHeaderParams from '@/components/timeline/homeHeaderParams'
+
+import timelineAPI from '@/api/timeline'
+import scroll from '@/mixins/scroll'
+
+// import {name,t0,t1} from '@/types/timeline/index.ts'
+// console.log(t0);
+// console.log(t1);
+// console.log(name);
+
 import {mapState} from 'vuex'
 import {reactive, toRefs} from 'vue'
 // import { useRouter } from 'vue-router'
@@ -44,16 +69,17 @@ export default {
   props: ['id'],
   mixins: [scroll],
   setup(props) {
-    let state = reactive({
+    let state: stateType = reactive({
       isLoading: false,
       hasNextPage: true,
       endCursor: '',
       lists: [],
       order: 'POPULAR',
       subIndex: 0,
-      apiParmas: {},
+      apiParmas: null,
     })
-    let subNavs = [
+
+    let subNavs: subNavsType[] = Object.freeze([
       {
         title: "热门",
         order: "POPULAR"
@@ -66,13 +92,12 @@ export default {
         title: "热榜",
         order: "THREE_DAYS_HOTTEST"
       }
-    ]
-
+    ])
     // 方法
-    let getApiData = () => {
+    let getApiData = ():void => {
       let params = null
       try{
-        params = homeHeaderParams.filter(item => {
+        params = homeHeaderParams.filter((item: objType) => {
           return item.name === props.id
         })[0].apiData
       }catch(e){
@@ -81,25 +106,26 @@ export default {
       state.apiParmas = params
     }
 
-    let subChange = (item, index) => {
+    
+    let subChange = (item: subNavsType, index: number):void => {
       state.subIndex = index;
-      state.order = subNavs.filter(item1 => item1.title === item.title)[0].order;
+      state.order = subNavs.filter((item1: subNavsType) => item1.title === item.title)[0].order;
       reset()
       getLists()
     }
-    let reset = () => {
+    let reset = (): void => {
       state.lists = [];
-      state.hasNextPage= true;
-      state.endCursor= '';
+      state.hasNextPage = true;
+      state.endCursor = '';
     }
 
-    let getLists = () => {
+    let getLists = (): void => {
       state.apiParmas.variables.after = state.endCursor;
       state.apiParmas.variables.order = state.order;
       if(state.isLoading || !state.hasNextPage) return
       state.isLoading = true
       timelineAPI.lists(state.apiParmas)
-        .then(res => {
+        .then((res: objType) => {
           if(state.hasNextPage && res.data){
             let result = res.data.articleFeed.items;
             state.lists = state.lists.concat(result.edges);

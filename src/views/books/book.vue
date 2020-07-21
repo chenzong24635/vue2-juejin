@@ -76,7 +76,7 @@
   </main>
 </template>
 <script>
-import {$_read} from '@/filters/index.js'
+import {$_read} from '@/filters'
 import bookAPI from '@/api/books.js'
 import { reactive, toRefs, computed } from 'vue';
 

@@ -2,8 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import icons from './icons/index.js'
-import componentsInstall from '@/libs/componentsInstall.js'
+import icons from './icons/index'
+import componentsInstall from '@/libs/componentsInstall'
 
 // import filters from '@/filters'
 // import '@/components/loading/index.js'

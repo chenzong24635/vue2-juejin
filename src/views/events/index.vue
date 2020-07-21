@@ -80,7 +80,7 @@ export default {
     ]
     let state = reactive({
       cityList: [],
-      allCity: computed(()=>[...state.defaultCity,...state.cityList]),
+      allCity: computed(()=>[...defaultCity,...state.cityList]),
       lists: [],
       pageNum: 1,
       isLoading: false,
