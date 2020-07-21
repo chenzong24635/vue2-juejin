@@ -40,10 +40,10 @@ export default {
       pageNum: 1
     })
 
-    let reset = () => {
-      state.pageNum = 1;
-      state.lists = [];
-    }
+    // let reset = () => {
+    //   state.pageNum = 1;
+    //   state.lists = [];
+    // }
     let getNavLists = async () => {
       let {s, d} = await booksAPI.navList();
       if(s === 1){
@@ -65,18 +65,7 @@ export default {
       if(s === 1){
         state.lists = state.lists.concat(d);
       }
-      /* console.log(type);
       
-      if(type){
-        this.reset();
-        this.alias = type;
-      }else{
-        this.alias = ""
-      }
-      let {s, d} = await booksAPI.lists(this.alias, ++this.pageNum);
-      if(s === 1){
-        this.lists = this.lists.concat(d);
-      }*/
     } 
     (() =>{
       getNavLists()
@@ -85,19 +74,9 @@ export default {
 
     return {
       ...toRefs(state),
-      reset,
       getLists
     }
   },
-  watch: {
-    '$route': function(to ,from){
-      if(to.name === from.name && to.params.id!==from.params.id){
-        this.reset()
-        this.getLists()
-      }
-    }
-  },
-
 }
 </script>
 <style scoped lang="less">

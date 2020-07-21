@@ -60,7 +60,7 @@ import postAPI from '@/api/post'
 import scroll from '@/mixins/scroll'
 // import {$_toLocaleDateString} from '@/filters'
 import {mapActions} from 'vuex'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs,ref } from 'vue'
 
 export default {
   name: '',
@@ -211,8 +211,8 @@ export default {
       await getComments()
       if (location.hash.includes('#comment')) {
         const panel = ref(null)
-        console.log(panel);
-        panel.scrollIntoComment()
+        console.log(panel.value);
+        panel.value.scrollIntoComment()
         // $refs.panel.scrollIntoComment()
       }
       await getArticleInfo()

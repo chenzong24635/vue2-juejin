@@ -128,6 +128,7 @@ export default {
         })
         .catch((e) => {
           state.isLoading = false
+          console.log(e);
         })
     }
 

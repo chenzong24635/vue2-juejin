@@ -1,6 +1,5 @@
 <template>
   <div class>
-    <!-- home -->
     <header-sub
       :headerSubs="homeHeaderParams"
       mainRoute="timeline"
@@ -25,16 +24,15 @@
     </div>
   </div>
 </template>
-<script>
+<script >
 
-import headerSub from '@/components/header/header-sub'
-import homeRight from '@/components/timeline/right'
-import homeHeaderParams from '@/components/timeline/homeHeaderParams'
+import headerSub from '@/components/header/header-sub.vue'
+import homeRight from '@/components/timeline/right.vue'
+import homeHeaderParams from '@/components/timeline/homeHeaderParams.js'
 
-import timelineAPI from '@/api/timeline'
+import timelineAPI from '@/api/timeline.js'
+import scroll from '@/mixins/scroll.js'
 import {mapState} from 'vuex'
-
-import scroll from '@/mixins/scroll'
 import {reactive, toRefs} from 'vue'
 // import { useRouter } from 'vue-router'
 
@@ -46,7 +44,6 @@ export default {
   props: ['id'],
   mixins: [scroll],
   setup(props) {
-    console.log(props);
     let state = reactive({
       isLoading: false,
       hasNextPage: true,
@@ -56,7 +53,6 @@ export default {
       subIndex: 0,
       apiParmas: {},
     })
-
     let subNavs = [
       {
         title: "热门",
@@ -72,7 +68,6 @@ export default {
       }
     ]
 
-    
     // 方法
     let getApiData = () => {
       let params = null
@@ -88,18 +83,14 @@ export default {
 
     let subChange = (item, index) => {
       state.subIndex = index;
-      state.order = state.subNavs.filter(item1 => item1.title === item.title)[0].order;
-      reset(1)
+      state.order = subNavs.filter(item1 => item1.title === item.title)[0].order;
+      reset()
       getLists()
     }
-    let reset = (type) => {
+    let reset = () => {
       state.lists = [];
       state.hasNextPage= true;
       state.endCursor= '';
-      if(type === 2) {
-        state.subIndex = 0;
-        state.order = 'POPULAR'
-      }
     }
 
     let getLists = () => {
@@ -123,29 +114,26 @@ export default {
         })
     }
 
+    // computed()
+    // const count = computed(
+    //   [
+    //     ()=>state.subIndex,
+    //     ()=>state.order,
+    //   ],
+    //   (
+    //     [subIndex, order],
+    //     [presubIndex, preorder],
+    //   )=> {
+    //     console.log([subIndex, order],
+    //     [presubIndex, preorder],);
+    //   }
+    // )
+    // console.log(count);    
+
     (() =>{
       getApiData()
       getLists()
-    })
-
-
-    //路由
-    // let {ctx} = getCurrentInstance()
-    // const currentRoute = ctx.$router.currentRoute.value
-    // console.log(currentRoute);
-    // // // const router = useRouter()
-    // // // console.log(useRouter,router);
-    // watch(
-    //   currentRoute,
-    //   (to, from) => {
-    //     console.log(1111);
-    //     if(to.name === from.name && to.params.id!==from.params.id){
-    //       reset(2)
-    //       getApiData()
-    //       getLists()
-    //     }
-    //   }
-    // )
+    })()
 
     return {
       homeHeaderParams,
@@ -157,21 +145,11 @@ export default {
       getLists,
     }
   },
-  watch: {
-    '$route': function(to ,from){
-      if(to.name === from.name && to.params.id!==from.params.id){
-        this.reset(2)
-        this.getApiData()
-        this.getLists()
-      }
-    }
-  },
   computed: {
     ...mapState([
       'isLogin',
     ]),
   },
-  
 }
 </script>
 <style scoped lang="less">
@@ -193,7 +171,6 @@ export default {
       color: @activeColor;
     }
   }
-  // .sub+
 }
 .home-box {
   .flex();

@@ -2,7 +2,7 @@
   <div id="app">
       <header-base v-if="!$route.meta.hideHeader"></header-base>
       <suspension-icon></suspension-icon>
-    <router-view/>
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 <script>

@@ -11,8 +11,8 @@
           <div class="list-flags">
             <p class="flag dot zl">专栏</p>
             <p class="flag dot">{{list.user.username}}</p>
-            <p class="flag dot">{{list.createdAt }}</p>
-            <!-- <p class="flag dot">{{list.createdAt |dateDis}}</p> -->
+            <!-- <p class="flag dot">{{list.createdAt }}</p> -->
+            <p class="flag dot">{{$_dateDis(list.createdAt)}}</p>
             <p class="dot">
               <router-link 
                 :to="'/tag/'+ encodeURIComponent(tag.title)" 
@@ -57,9 +57,16 @@
   </div>
 </template>
 <script>
+import {$_dateDis} from '@/filters/index.js'
+
 import commonList from '@/mixins/commonList.js'
 export default {
   mixins: [commonList],
+  setup() {
+    return {
+      $_dateDis
+    }
+  }
 }
 </script>
 <style scoped lang="less">

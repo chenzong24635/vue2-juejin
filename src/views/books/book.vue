@@ -54,8 +54,8 @@
               <div class="section-cnt">
                 <div class="section-title">{{item.title}}</div>
                 <div class="section-read">
-                  <!-- <span class="time">时长：{{item.contentSize | read}}</span> -->
-                  <span class="time">时长：{{item.contentSize}}</span>
+    
+                  <span class="time">时长：{{$_read(item.contentSize)}}</span>
                   <span v-if="item.pv" class="pv">{{item.pv}}次学习</span>
                   <span v-if="item.commentCount" class="comment">{{item.commentCount}}条评论</span>
                 </div>
@@ -76,6 +76,7 @@
   </main>
 </template>
 <script>
+import {$_read} from '@/filters/index.js'
 import bookAPI from '@/api/books.js'
 import { reactive, toRefs, computed } from 'vue';
 
@@ -140,33 +141,12 @@ export default {
     })()
 
     return {
+      $_read,
       ...toRefs(state),
       tabChange,
       getBookDesc,
       getBookBuyers,
       getBookSection,
-    }
-  },
-  // computed: {
-  //   buyers(){
-  //     return this.bookBuyers.slice(0,16)
-  //   }
-  // },
-
-  filters: {
-    read(val) {
-      let size = 10 //每秒10字
-      let time = val / size
-      let m = ~~(time / 60)
-      let s = ~~(time % 60)
-      let str = ''
-      if(m) {
-        str += m + '分'
-      }
-      if(s){
-        str += s + '秒'
-      }
-      return str 
     }
   },
 }

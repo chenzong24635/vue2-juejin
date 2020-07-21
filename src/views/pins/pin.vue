@@ -58,14 +58,15 @@ export default {
       }
     }
     //评论的回复
-    let getReply = async(id) => {
-      try {
-        let {s ,d} = await pinAPI.pinReply(id)
-        console.log(s,d);
-      } catch (e) {
-        console.log(e)
-      }
-    }
+    // let getReply = async(id) => {
+    //   try {
+    //     let {s ,d} = await pinAPI.pinReply(id)
+    //     console.log(s,d);
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }
+
     (async ()=>{
       await getPinDetail()
       await getLists()
