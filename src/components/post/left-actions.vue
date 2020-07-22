@@ -1,7 +1,7 @@
 <template>
   <div class="article-suspended-panel">
     <ul class="btn-list">
-      <li class="panel-btn panel-btn-count" :class="[isLike ? 'panel-like-btn--active' : 'panel-like-btn']" @click="prasie" :data-count="likeCount">
+      <li class="panel-btn panel-btn-count" :class="[isLike ? 'panel-like-btn--active' : 'panel-like-btn']" @click="praise" :data-count="likeCount">
       </li>
       <li class="panel-btn panel-comment-btn panel-btn-count" @click="scrollIntoComment" :data-count="commentCount">
         <router-link style="height:100%" :to=" '#comment'"></router-link>
@@ -19,8 +19,7 @@
   </div>
 </template>
 
-<script>
-import {  mapActions } from 'vuex'
+<script lang="ts">
 export default {
   props: {
     likeCount: {
@@ -36,40 +35,20 @@ export default {
       default: false
     }
   },
-  // computed: {
-  //   ...mapState([
-  //     'isTopbarBlock'
-  //   ])
-  // },
-  data() {
-    return {
+  setup() {
+    let praise = ():void => {
     }
-  },
-  created() {
-  },
-  methods: {
-    ...mapActions([
-      'showLoginModel'
-    ]),
-    prasie() {
-      this.showLoginModel().then(res=>{
-        res && this.$emit('setgood-handler')
-      })
-    },
-    collect() {
-      this.showLoginModel()/* .then(res=>{
-        res && this.$emit('setgood-handler')
-      }) */
-    },
+    let collect = ():void => {
+    }
     // 跳转到评论区
-    scrollIntoComment() {
+    let scrollIntoComment = ():void => {
       let offsetTop = document.querySelector('#comments').offsetTop
       window.scrollTo({
         top: offsetTop
       })
-    },
+    }
     // qq分享
-    qqShare() {
+    let qqShare = ():void => {
       let info = this.$parent.articInfo
       if (info && info.originalUrl) {
         let title = `${info.title} - ${info.user.username} - 掘金专栏`
@@ -78,9 +57,9 @@ export default {
         let pic = encodeURIComponent(info.screenshot || 'https://user-gold-cdn.xitu.io/2019/11/29/16eb707805061e9e?w=1000&h=675&f=jpeg&s=99661')
         window.open(`https://connect.qq.com/widget/shareqq/index.html?title=${title}&url=${url}&summary=${summary}&pics=${pic}&site=掘金`, '_blank', 'noopener noreferrer')
       }
-    },
+    }
     // 微博分享
-    weiboShare() {
+    let weiboShare = ():void => {
       let info = this.$parent.articInfo
       if (info && info.originalUrl) {
         let title = `${info.title} - ${info.user.username} - 掘金专栏`
@@ -88,6 +67,13 @@ export default {
         let pic = encodeURIComponent(info.screenshot || 'https://user-gold-cdn.xitu.io/2019/11/29/16eb707805061e9e?w=1000&h=675&f=jpeg&s=99661')
         window.open(`https://service.weibo.com/share/share.php?title=${title}&url=${url}&pic=${pic}`, '_blank', 'noopener noreferrer')
       }
+    }
+    return {
+      praise,
+      collect,
+      scrollIntoComment,
+      qqShare,
+      weiboShare,
     }
   },
 }

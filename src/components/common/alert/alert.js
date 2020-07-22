@@ -1,5 +1,5 @@
 // alert.js
-import Notification from './notification.js';
+import Notification from './notification';
 
 let messageInstance;
 

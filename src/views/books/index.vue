@@ -13,7 +13,23 @@
     <copy-right />
   </div>
 </template>
-<script>
+<script lang="ts">
+// interface objType{
+//   [propertyName: string]: any
+// }
+// type objectType = objType | null
+
+interface propsType{
+  id: string | number
+}
+
+interface stateType{
+  navLists: any[],
+  lists: any[],
+  pageNum: number,
+  [propertyName: string]: any
+}
+
 import copyRight from '@/components/common/copy-right'
 import headerSub from '@/components/header/header-sub'
 import booksList from '@/components/books/list'
@@ -24,7 +40,6 @@ import scroll from '@/mixins/scroll'
 import {reactive, toRefs} from 'vue'
 
 export default {
-  name: '',
   components: {
     headerSub,
     booksList,
@@ -33,18 +48,14 @@ export default {
   },
   props: ["id"],
   mixins: [scroll],
-  setup(props) {
-    let state = reactive({
+  setup(props: propsType) {
+    let state: stateType = reactive({
       navLists: [],
       lists: [],
       pageNum: 1
     })
 
-    // let reset = () => {
-    //   state.pageNum = 1;
-    //   state.lists = [];
-    // }
-    let getNavLists = async () => {
+    let getNavLists = async ():void => {
       let {s, d} = await booksAPI.navList();
       if(s === 1){
         state.navLists = [
@@ -59,7 +70,7 @@ export default {
         ];
       }
     }
-    let getLists = async () => {
+    let getLists = async ():void => {
       let id = props.id ==='all' ? '' : props.id
       let {s, d} = await booksAPI.lists(id, state.pageNum++);
       if(s === 1){
@@ -69,7 +80,7 @@ export default {
     } 
     (() =>{
       getNavLists()
-      getLists(props.id)
+      getLists()
     })()
 
     return {

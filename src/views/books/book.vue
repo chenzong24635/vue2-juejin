@@ -75,20 +75,33 @@
     <!-- https://juejin.im/book/5c90640c5188252d7941f5bb/section/5c9065385188252da6320022 -->
   </main>
 </template>
-<script>
+<script lang="ts">
+interface objType{
+  [propertyName: string]: any
+}
+
+interface propsType{
+  id: string | number
+}
+
+interface stateType{
+  tabs: string[],
+  bookDesc: objType,
+  bookBuyers: any[],
+  bookSections: any[],
+  buyers: any[],
+  [propertyName: string]: any
+}
+
 import {$_read} from '@/filters'
-import bookAPI from '@/api/books.js'
+import bookAPI from '@/api/books'
 import { reactive, toRefs, computed } from 'vue';
 
-/**
- * @params {Array} tabs - tab栏 
- * 
- */
 
 export default {
   props: ['id'],
-  setup(props) {
-    let state = reactive({
+  setup(props: propsType) {
+    let state: stateType = reactive({
       tabs: ['目录','介绍'],
       bookDesc: {},
       bookBuyers: [],
@@ -97,11 +110,11 @@ export default {
     })
 
     // methods
-    let tabChange = (index) => {
+    let tabChange = (index: number) => {
       console.log(index);
     }
     
-    let getBookDesc = async() => {
+    let getBookDesc = async(): void => {
       try {
         let {s,d} = await bookAPI.bookDesc(props.id)
         if(s === 1) {
@@ -112,7 +125,7 @@ export default {
       }
     }
 
-    let getBookBuyers = async() => {
+    let getBookBuyers = async(): void => {
       try {
         let {s,d} = await bookAPI.bookBuyers(props.id)
         if(s === 1) {
@@ -123,7 +136,7 @@ export default {
       }
     }
 
-    let getBookSection = async() => {
+    let getBookSection = async(): void => {
       try {
         let {s,d} = await bookAPI.bookSection(props.id)
         if(s === 1) {

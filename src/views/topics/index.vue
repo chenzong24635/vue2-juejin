@@ -13,7 +13,7 @@
 </template>
 <script>
 import topicsList from '@/components/topics/list';
-import {topicList, topicListFollowed} from '@/api/topics.js';
+import {topicList, topicListFollowed} from '@/api/topics';
 import {mapState} from 'vuex';
 
 export default {

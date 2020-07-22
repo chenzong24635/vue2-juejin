@@ -1,5 +1,3 @@
-import {mapActions} from 'vuex'
-
 export default {
   name: 'homeList',
   components: {},
@@ -42,9 +40,6 @@ export default {
   created(){
   },
   methods: {
-    ...mapActions([
-      'showLoginModel'
-    ]),
     toPost(url,hash){
       let reUrl = '/post'+ url.replace(/https:\/\/juejin.im\/post/i,'') + (hash ? hash: '')
       let routeUrl = this.$router.resolve(reUrl)

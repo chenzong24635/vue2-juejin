@@ -2,8 +2,7 @@
   <div class="actions1">
     <div class="action1">
       <div class="action1-left">
-        {{date}}
-        <!-- {{date | dateDis}} -->
+        {{dateDis(date)}}
       </div>
       <div class="action1-right">
         <div class="praise">
@@ -18,8 +17,14 @@
   </div>
 </template>
 <script>
+import {dateDis} from '@/libs/util'
 export default {
-  props: ['date']
+  props: ['date'],
+  setup() {
+    return {
+      dateDis
+    }
+  }
 }
 </script>
 <style scoped lang="less">

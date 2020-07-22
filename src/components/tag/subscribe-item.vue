@@ -1,6 +1,6 @@
 <template >
   <ul class="subscribes">
-    <li class="subscribe" v-for="item in props.lists" :key="item.id">
+    <li class="subscribe" v-for="item in lists" :key="item.id">
       <div class="subscribe-box">
         <router-link target="_blank" :to="'/tag/' + encodeURIComponent(item.title)">
           <img class="subscribe-img" :src="item.icon" alt="">
@@ -17,7 +17,16 @@
     </li>
   </ul>
 </template>
-
+<script>
+export default {
+  props: {
+    lists: {
+      type: Array,
+      default: () => []
+    }
+  }
+}
+</script>
 <style scoped lang="less">
 .subscribes{
   .flex(@wrap: wrap);

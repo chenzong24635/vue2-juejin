@@ -15,15 +15,14 @@
   </div>
 </template>
 <script>
-import {mapActions} from 'vuex'
 export default {
   props: ['likeCount','id','commentCount'],
-  methods: {
-    ...mapActions([
-      'showLoginModel'
-    ]),
-    praise() {
-      this.showLoginModel()
+  setup() {
+    let praise = ()=>{
+      
+    }
+    return {
+      praise
     }
   }
 }

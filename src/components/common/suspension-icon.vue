@@ -10,37 +10,40 @@
   </div>
 </template>
 <script>
+import { reactive, toRefs, onMounted } from 'vue';
 export default {
   name: '',
-  components: {},
-  data () {
-    return {
+  setup () {
+    let state = reactive({
       showTopBtn: false
-    }
-  },
-  mounted () {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  methods: {
-    backTop() {
+    })
+    let backTop =() => {
       window.scrollTo({ 
         top: 0, 
         // behavior: "smooth"
       });
-    },
-    handleScroll() {
+    }
+    let handleScroll =() => {
       let rect = document.body.getBoundingClientRect();
       let scrollTop = - rect.top;
       let bodyHeight = rect.height;
       // console.log(scrollTop)
       //滚动 超过1/10时显示
       if (scrollTop > bodyHeight / 10 ) {
-        this.showTopBtn = true;
+        state.showTopBtn = true;
       } else {
-        this.showTopBtn = false;
+        state.showTopBtn = false;
       }
-    },
-  }
+    }
+    onMounted(()=>{
+      window.addEventListener("scroll", handleScroll);
+    })
+
+    return {
+      ...toRefs(state),
+      backTop
+    }
+  },
 }
 </script>
 <style scoped lang="less">

@@ -29,7 +29,6 @@
 </template>
 <script>
 export default {
-  name: '',
   props: {
     articleInfo: {
       type: Object,

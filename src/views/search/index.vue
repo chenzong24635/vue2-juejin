@@ -4,9 +4,9 @@
     <nav class="subs">
       <ul class="subs-box">
         <li 
-          @click="subChange(item, index)" 
-          :class="['sub', index === subIndex ? 'active' : '']" 
           v-for="(item, index) in subNavs" :key="item.order"
+          @click="subChange(item, index)" 
+          :class="['sub', item.type === type ? 'active' : '']" 
         >{{item.title}}</li>
       </ul>
     </nav>
@@ -32,19 +32,20 @@
         :hasNextPage="hasNextPage"
       >
       </common-list2>
+        <activity-skeleton width="700px" v-show="isLoading && hasNextPage" />
+
       <div class="nodata" v-if="!lists.length">
         列表为空
       </div>
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
 import tagList from '@/components/search/tag-list'
 import userList from '@/components/search/user-list'
 import scroll from '@/mixins/scroll'
 
 import timelineAPI from '@/api/timeline'
-import {mapState} from 'vuex'
 import { reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router';
 
@@ -56,7 +57,7 @@ export default {
   mixins: [scroll],
   props: ['query','type'],
   setup(props) {
-    let subNavs = [
+    let subNavs = Object.freeze([
       {
         title: "综合",
         type: "all"
@@ -73,13 +74,12 @@ export default {
         title: "用户",
         type: "user"
       },
-    ]
+    ])
     let state = reactive({
       isLoading: false,
       hasNextPage: true,
       endCursor: '',
       lists: [],
-      subIndex: 0,
       apiParmas: {
         operationName: "",
         query: "",
@@ -98,17 +98,9 @@ export default {
       },
     })
 
-    let $_router = useRouter()
-    console.log($_router);
-    let reset = () => {
-      state.lists = [];
-      state.hasNextPage= true;
-      state.endCursor= '';
-    }
-    let subChange = (item, index) => {
-      state.subIndex = index;
-      $_router.replace({ name: 'search', params: { query: props.query, type: item.type}})
-      reset()
+    let router = useRouter()
+    let subChange = (item) => {
+      router.replace({ name: 'search', params: { query: props.query, type: item.type}})
     }
     let getLists = () => {
       state.apiParmas.variables.after = state.endCursor;
@@ -137,23 +129,8 @@ export default {
     return {
       subNavs,
       ...toRefs(state),
-      reset,
       subChange,
       getLists,
-    }
-  },
-  computed: {
-    ...mapState([
-      'isLogin',
-    ]),
-  },
-  watch: {
-    '$route': function(to ,from){
-      if(to.name === from.name && to.fullPath!==from.fullPath){
-        console.log('cahnge');
-        this.reset()
-        this.getLists()
-      }
     }
   },
 }

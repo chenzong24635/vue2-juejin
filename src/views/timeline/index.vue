@@ -30,11 +30,6 @@ interface objType{
 }
 type objectType = objType | null
 
-
-interface subNavsType{
-  title: string,
-  order: string
-}
 interface stateType{
   isLoading: boolean,
   hasNextPage: boolean,
@@ -42,7 +37,13 @@ interface stateType{
   lists: any[],
   order: string,
   subIndex: number,
-  apiParmas: objectType
+  apiParmas: objectType,
+  [propertyName: string]: any
+}
+
+interface subNavsType{
+  title: string,
+  order: string
 }
 
 import headerSub from '@/components/header/header-sub'
@@ -57,7 +58,6 @@ import scroll from '@/mixins/scroll'
 // console.log(t1);
 // console.log(name);
 
-import {mapState} from 'vuex'
 import {reactive, toRefs} from 'vue'
 // import { useRouter } from 'vue-router'
 
@@ -68,7 +68,7 @@ export default {
   },
   props: ['id'],
   mixins: [scroll],
-  setup(props) {
+  setup(props:objType) {
     let state: stateType = reactive({
       isLoading: false,
       hasNextPage: true,
@@ -170,11 +170,6 @@ export default {
       getApiData,
       getLists,
     }
-  },
-  computed: {
-    ...mapState([
-      'isLogin',
-    ]),
   },
 }
 </script>

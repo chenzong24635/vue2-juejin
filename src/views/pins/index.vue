@@ -21,15 +21,40 @@
     </div>
   </div>
 </template>
-<script>
-import leftRouteParams from '@/components/pins/leftRouteParams.js'
+<script lang="ts">
+interface objType{
+  [propertyName: string]: any
+}
+
+interface propsType{
+  id: string | number
+}
+
+interface leftRouteParamsType {
+  name: string,
+  title: string,
+  apiData?: objType
+}
+
+interface stateType{
+  routeName: string,
+  apiParmas: objType | string,
+  hasNextPage: boolean,
+  isLoading: boolean,
+  endCursor: string,
+  lists: any[],
+  hotLists: any[],
+  [propertyName: string]: any
+}
+
+
+import leftRouteParams from '@/components/pins/leftRouteParams'
 import headerSub from '@/components/header/header-sub'
 import rightSide from '@/components/pins/aside'
 import pinList from '@/components/pins/list'
 
 import pinsAPI from '@/api/pins'
 import scroll from '@/mixins/scroll'
-import {mapState} from 'vuex'
 import { reactive, toRefs } from 'vue'
 
 export default {
@@ -40,11 +65,10 @@ export default {
   },
   props: ['id'],
   mixins: [scroll],
-  setup(props){
-    let state = reactive({
+  setup(props: propsType){
+    let state: stateType = reactive({
       routeName: '',
       apiParmas: null,
-      leftRouteParams,
       hasNextPage: true,
       isLoading: false,
       endCursor: '',
@@ -53,16 +77,16 @@ export default {
     })
 
     // methods 
-    let reset = () => {
+    let reset = (): void => {
       state.lists = [];
       state.hasNextPage= true;
       state.isLoading = false;
       state.endCursor= '';
     }
 
-    let getApiParmas = () => {
+    let getApiParmas = (): void => {
       try{
-        let route = state.leftRouteParams.filter(item => {
+        let route: leftRouteParamsType = leftRouteParams.filter((item: leftRouteParamsType) => {
           return item.name === props.id
         })[0]
         //推荐 返回的数据格式不同于其他，传给list-detail
@@ -77,11 +101,11 @@ export default {
           state.apiParmas =  route.name
         }
       }catch(e){
-        state.apiParmas = state.leftRouteParams[0].apiData
+        state.apiParmas = leftRouteParams[0].apiData
       }
     }
 
-    let getLists = async() => {
+    let getLists = async(): void => {
       if(state.isLoading) return
       state.isLoading = true
       switch(state.routeName) {
@@ -102,8 +126,8 @@ export default {
       }
     }
 
-    let getListsRecommended = async () => { // 推荐
-      let apiParmas = state.apiParmas;
+    let getListsRecommended = async (): void => { // 推荐
+      let apiParmas: objType | string = state.apiParmas;
       try {
         let { data } = await pinsAPI.lists1(apiParmas);
         let res = data.recommendedActivityFeed.items;
@@ -118,8 +142,8 @@ export default {
         state.isLoading = false
       }
     }
-    let getListsHot = async () => { // 热门
-      let apiParmas = state.apiParmas;
+    let getListsHot = async (): void => { // 热门
+      let apiParmas: objType | string = state.apiParmas;
       try{
         let { data } = await pinsAPI.lists1(apiParmas);
         let res = data.popularPinList.items;
@@ -134,9 +158,9 @@ export default {
         state.isLoading = false
       }
     }
-    let getListsFollowing = async () => { // 关注
+    let getListsFollowing = async (): void => { // 关注
       if(!state.isLogin)return
-      let apiParmas = state.apiParmas
+      let apiParmas: objType | string = state.apiParmas
       try{
         apiParmas.variables.since = new Date().toISOString();
         let { data } = await pinsAPI.lists1(apiParmas);
@@ -151,8 +175,8 @@ export default {
         state.isLoading = false
       }
     }
-    let getLists2 = async () => { // 开源推荐等
-      let apiParmas = state.apiParmas;
+    let getLists2 = async (): void => { // 开源推荐等
+      let apiParmas: objType | string = state.apiParmas;
       try{
         let {s, d} = await pinsAPI.lists2(apiParmas)
         if (s === 1) {
@@ -167,7 +191,7 @@ export default {
         state.isLoading = false
       }
     }
-    let getHotLists = async () => { // 推荐沸点
+    let getHotLists = async ():void => { // 推荐沸点
       try {
         let {s, d} = await pinsAPI.hotLists()
         if (s === 1) {
@@ -186,24 +210,11 @@ export default {
     })()
 
     return {
+      leftRouteParams,
       ...toRefs(state),
       reset,
       getApiParmas,
       getLists,
-    }
-  },
-  computed: {
-    ...mapState([
-      'isLogin',
-    ])
-  },
-  watch:{
-    "$route":function(to,from){
-      if (to.name === from.name && to.params.id !== from.params.id) {
-        this.reset()
-        this.getApiParmas()
-        this.getLists()
-      }
     }
   },
 }

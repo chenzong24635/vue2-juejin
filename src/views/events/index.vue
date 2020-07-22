@@ -28,7 +28,27 @@
     <copy-right />
   </div>
 </template>
-<script>
+<script lang="ts">
+interface propsType{
+  id: string | number
+}
+
+interface defaultCityType{
+  cityName: string,
+  cityAlias: string,
+  weight: number
+}
+
+interface stateType{
+  cityList: any[],
+  allCity: any[],
+  lists: any[],
+  pageNum: number,
+  isLoading: boolean,
+  [propertyName: string]: any
+
+}
+
 import eventAPI from '@/api/events'
 import headerSub from '@/components/header/header-sub'
 import eventsList from '@/components/events/list'
@@ -45,8 +65,8 @@ export default {
   },
   props: ['id'],
   mixins: [scroll],
-  setup(props) {
-    let defaultCity = [
+  setup(props: propsType) {
+    let defaultCity: defaultCityType[] = Object.freeze([
       {
         cityName: "热门活动",
         cityAlias: "all",
@@ -77,8 +97,8 @@ export default {
         cityAlias: "hangzhou",
         weight: 0
       }
-    ]
-    let state = reactive({
+    ])
+    let state: stateType = reactive({
       cityList: [],
       allCity: computed(()=>[...defaultCity,...state.cityList]),
       lists: [],
@@ -87,14 +107,9 @@ export default {
     })
 
     // methods
-    let reset = () => {
-      // state.alias = '';
-      state.pageNum = 1;
-      state.lists = [];
-    }
-    let getCityList = async() => {
+    let getCityList = async(): void => {
       try {
-        let {s, d} = await eventAPI.cityList(0);
+        let {s, d} = await eventAPI.cityList();
         if(s === 1) {
           state.cityList = d;
         } 
@@ -114,10 +129,10 @@ export default {
     //   }
     // }
 
-    let getLists = async() => {
+    let getLists = async(): void => {
       if(state.isLoading) return
       state.isLoading = true
-      let id = props.id ==='all' ? '' : props.id
+      let id: string | number = props.id ==='all' ? '' : props.id
       try {
         let {s, d} = await eventAPI.eventList(1, id, state.pageNum++);
         if(s === 1){
@@ -136,19 +151,10 @@ export default {
     })()
 
     return {
+      defaultCity,
       ...toRefs(state),
-      reset,
       getCityList,
       getLists,
-    }
-  },
-  watch: {
-    '$route': function(to ,from){
-      if(to.name === from.name && to.params.id!==from.params.id){
-        // this.id = to.params.id
-        this.reset()
-        this.getLists()
-      }
     }
   },
 }

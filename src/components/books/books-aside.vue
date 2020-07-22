@@ -32,23 +32,27 @@
     </c-award>
   </div>
 </template>
-<script>
-import cAward from '@/components/common/award'
+<script lang="ts">
+import cAward from '@/components/common/award.vue'
+import { reactive, toRefs } from 'vue'
 export default {
-  name: '',
   components: {
     cAward
   },
-  data () {
-    return {
+  setup () {
+    let state = reactive({
       awardModalShow: false
+    })
+
+    let showAward = (bool: boolean):void => {
+      state.awardModalShow = bool;
+    }
+
+    return {
+      showAward,
+      ...toRefs(state)
     }
   },
-  methods: {
-    showAward(bool) {
-      this.awardModalShow = bool;
-    }
-  }
 }
 </script>
 <style scoped lang="less">

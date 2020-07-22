@@ -47,7 +47,7 @@ module.exports = {
     }
   },
   configureWebpack: {
-    resolve: { extensions: [".ts", ".tsx", "vue", ".js", ".json"] },
+    resolve: { extensions: [".ts", ".tsx", ".vue", ".js", ".json"] },
   },
   chainWebpack(config) {
     if (isProduction) {
@@ -214,7 +214,7 @@ module.exports = {
         target: 'https://xiaoce-cache-api-ms.juejin.im',
         changeOrigin: true,
       },
-      '/v2/getCityList': {
+      '/v1/getCityList': {
         /* event-city */
         target: 'https://event-storage-api-ms.juejin.im',
         changeOrigin: true,

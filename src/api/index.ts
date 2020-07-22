@@ -1,6 +1,6 @@
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
-import {baseURL} from '@/libs/config.js';
+import {baseURL} from '@/libs/config';
 
 
 const server = axios.create({

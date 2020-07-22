@@ -2,16 +2,18 @@
   <section class="aside-box">
     <p class="aside-title">相关文章</p>
     <ul class="aside-lists">
-      <li class="list" v-for="list in props.lists" :key="list.objectId">
+      <li class="list" v-for="list in lists" :key="list.objectId">
         <router-link target="_blank" :to="'/post/'+ list.originalUrl.replace(/https:\/\/juejin.im\/post\//i,'')">
           <p class="list-title">{{list.title}}</p>
           <div class="list-actions">
             <p class="list-action">
-              <svg-icon name="zan.e9d7698"></svg-icon>
+              <!-- <svg-icon name="zan.e9d7698"></svg-icon> -->
+              <img src="https://b-gold-cdn.xitu.io/v3/static/img/zan.e9d7698.svg" >
               <span>{{list.collectionCount}}</span>
             </p>
             <p class="list-action">
-              <svg-icon name="comment.a7c8341"></svg-icon>
+              <!-- <svg-icon name="comment.a7c8341"></svg-icon> -->
+              <img src="https://b-gold-cdn.xitu.io/v3/static/img/comment.a7c8341.svg" >
               <span>{{list.commentsCount}}</span>
             </p>
           </div>
@@ -20,6 +22,16 @@
     </ul>
   </section>
 </template>
+<script>
+export default {
+  props: {
+    lists: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
+}
+</script>
 <style scoped lang="less">
 .aside-lists{
   padding: 0 15px;

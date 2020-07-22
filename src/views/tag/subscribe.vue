@@ -21,90 +21,113 @@
     <div class="root-view-bg"></div>
   </div>
 </template>
-<script>
+<script lang="ts">
+interface subNavsType {
+  sort: string;
+  title: string;
+}
+
+interface stateType {
+  sort: string,
+  subIndex: number,
+  lists: any[],
+  page: number,
+  pageSize: number,
+  isLoading: boolean,
+  searchVal: string | null | undefined,
+  [proeprty: string]: any
+}
+
 import subscribeItem from  '@/components/tag/subscribe-item.vue'
 import tagAPI from '@/api/tag'
 import scroll from '@/mixins/scroll'
+import { reactive, toRefs } from 'vue';
 
 export default {
   name: '',
   components: {subscribeItem},
   props: ['id'],
   mixins: [scroll],
-  data () {
-    return {
-      subNavs: [
-        {
-          sort: 'hot',
-          title: '最热'
-        },
-        {
-          sort: 'new',
-          title: '最新'
-        },
-      ],
+  setup () {
+    let subNavs: subNavsType[] = Object.freeze([
+      {
+        sort: 'hot',
+        title: '最热'
+      },
+      {
+        sort: 'new',
+        title: '最新'
+      },
+    ])
+    let state: stateType = reactive({
       sort: 'hot',
       subIndex: 0,
       lists: [],
       page: 1,
       pageSize: 40,
       isLoading: false,
-      searchVal: '4'
+      searchVal: ''
+    })
+
+    let reset = () => {
+      state.lists = []
+      state.page = 1
+      state.isLoading = false
+      state.hasNextPage = true
     }
-  },
-  created () {
-    this.getLists();
-  },
-  methods: {
-    subChange(item, index) {
-      this.subIndex = index;
+    let getLists = async() => {
+      if(state.isLoading) return
+      state.isLoading = true
       try{
-        this.sort = this.subNavs.filter(item1 => item1.title === item.title)[0].sort;
-      }catch{
-        this.sort = 'hot'
+        let {s, d} = await tagAPI.subscribe(state.sort, state.page, state.pageSize);
+        if(s === 1) {
+          state.lists = state.lists.concat(d.tags)
+          state.page++
+          state.isLoading = false
+        }
+      }catch(e){
+        console.log(e);
       }
-      this.reset();
-      this.getLists();
-    },
-    async search() {
-      this.reset()
-      console.log(this.searchVal.trim().length);
-      if(!this.searchVal.trim().length){
+    }
+
+    let subChange = (item: subNavsType, index: number) => {
+      state.subIndex = index;
+      try{
+        state.sort = subNavs.filter((item1: subNavsType) => item1.title === item.title)[0].sort;
+      }catch{
+        state.sort = 'hot'
+      }
+      reset();
+      getLists();
+    }
+
+    let search = async() => {
+      reset()
+      if(!state.searchVal.trim().length){
         //搜索内容为空时
-        this.getLists();
+        getLists();
         return
       }
       try{
-        let {s, d} = await tagAPI.subscribeSearch(this.sort, this.searchVal, this.page, this.pageSize);
+        let {s, d} = await tagAPI.subscribeSearch(state.sort, state.searchVal, state.page, state.pageSize);
         if(s === 1) {
-          this.lists = d.tags
-          this.hasNextPage = this.lists.length >= d.total
+          state.lists = d.tags
+          state.hasNextPage = state.lists.length >= d.total
         }
       }catch(e){
         console.log(e);
       }
-    },
-    async getLists() {
-      if(this.isLoading) return
-      this.isLoading = true
-      try{
-        let {s, d} = await tagAPI.subscribe(this.sort, this.page, this.pageSize);
-        if(s === 1) {
-          this.lists = this.lists.concat(d.tags)
-          this.page++
-          this.isLoading = false
-        }
-      }catch(e){
-        console.log(e);
-      }
-    },
-    reset() {
-      this.lists = []
-      this.page = 1
-      this.isLoading = false
-      this.hasNextPage = true
     }
-  }
+
+    getLists()
+
+    return {
+      subNavs,
+      ...toRefs(state),
+      subChange,
+      search
+    }
+  },
 }
 </script>
 <style scoped lang="less">

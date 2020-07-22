@@ -5,7 +5,7 @@ import request from './index'
 const cityList = () => {
   return request({
     method: 'GET',
-    url: '/v2/getCityList',
+    url: '/v1/getCityList',
     params: { 
       uid: '',
       client_id: '',

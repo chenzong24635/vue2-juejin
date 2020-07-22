@@ -15,8 +15,9 @@
     </ul>
   </div>
 </template>
-<script>
-import pinAPI from '@/api/pins.js'
+<script >
+import pinAPI from '@/api/pins'
+import { computed } from 'vue'
 export default {
   name: 'commentList',
   props: {
@@ -29,9 +30,9 @@ export default {
       // required: true
     },
   },
-  computed: {
-    listsNew() {
-      let lists = this.lists.map(item=>{
+  setup(props) {
+    let listsNew = computed(()=>{
+      let lists = props.lists.map(item=>{
         if(item.topComment && item.replyCount > item.topComment.length) {
           // 评论未加载完
           item.pageNum = 1
@@ -42,16 +43,14 @@ export default {
         return item
       })
       return lists
-    }
-  },
-  methods: {
-    async replyMore(obj, objIndex){
+    })
+    let replyMore = async (obj, objIndex) =>{
       if(obj.isOver || !obj.pageNum)return
       try {
-        let {s, d} = await pinAPI.pinReply(this.id, obj.id, obj.pageNum)
+        let {s, d} = await pinAPI.pinReply(props.id, obj.id, obj.pageNum)
         if(s !== 1)return
         if(obj.pageNum === 1) {
-          this.listsNew.forEach(item => {
+          listsNew.value.forEach(item => {
             if(item.id === obj.id) {
               item.topComment = d.comments
             }
@@ -59,9 +58,7 @@ export default {
         } else {
           obj.topComment = obj.topComment.concat(d.comments)
         }
-        this.listsNew[objIndex]['pageNum']++
-        // this.$set(this.listsNew[objIndex],'pageNum', ++obj.pageNum)
-        // obj.pageNum += 1
+        listsNew.value[objIndex]['pageNum']++
         // 评论已加载完
         if(d.count <= obj.topComment.length) {
           obj.isOver = true
@@ -69,6 +66,10 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    }
+    return {
+      listsNew,
+      replyMore
     }
   }
 }

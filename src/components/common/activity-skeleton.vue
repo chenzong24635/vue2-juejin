@@ -1,11 +1,21 @@
 <template >
-  <div class="activity-skeleton shadow">
+  <div :style="{width: width}" class="activity-skeleton shadow">
     <div class="skeleton-row"></div>
     <div class="skeleton-row"></div>
     <div class="skeleton-row"></div>
     <div class="skeleton-row"></div>
   </div>
 </template>
+<script>
+export default {
+  props: {
+    width: {
+      type: String,
+      default: '100%'
+    }
+  }
+}
+</script>
 <style scoped lang="less">
 .shadow {
     box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);

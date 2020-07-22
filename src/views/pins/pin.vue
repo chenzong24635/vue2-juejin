@@ -8,18 +8,33 @@
     </aside>
   </div>
 </template>
-<script>
+<script lang="ts">
+// interface objType{
+//   [propertyName: string]: any
+// }
+
+interface propsType{
+  id: string | number
+}
+interface stateType{
+  comments: any[],
+  count: number,
+  pageNum: number,
+  isLoading: boolean,
+  [propertyName: string]: any
+}
+
 import rightSide from '@/components/pins/aside'
 import scroll from '@/mixins/scroll'
 
-import pinAPI from '@/api/pins.js'
+import pinAPI from '@/api/pins'
 import { reactive, toRefs } from 'vue'
 export default {
   components: {rightSide},
   props: ['id'],
   mixins: [scroll],
-  setup(props) {
-    let state = reactive({
+  setup(props: propsType) {
+    let state: stateType = reactive({
       comments: [],
       count: 0,
       pageNum: 1,
@@ -27,21 +42,19 @@ export default {
     })
 
     // 内容
-    let getPinDetail = async() => {
+    let getPinDetail = async(): void => {
       try {
-        let res = await pinAPI.pinDetail(props.id)
-        console.log(res);
-        // let {s ,d} = await pinAPI.pinActions
-        // if(s === 1) {
-        //   state.comments = d.comments
-        //   state.count = d.count
-        // }
+        let {s ,d} =  await pinAPI.pinDetail(props.id)
+        if(s === 1) {
+          state.comments = d.comments
+          state.count = d.count
+        }
       } catch (e) {
         console.log(e)
       }
     }
     //评论
-    let getLists = async() => {
+    let getLists = async(): void => {
       if(state.count && (state.comments >=state.count))return
       if(state.isLoading)return
       try {

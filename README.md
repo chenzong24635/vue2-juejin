@@ -1,4 +1,17 @@
-## ts相关
+## ts类型不支持
+* 'object' is not defined 
+
+不支持object类型
+解决
+```js
+interface objType{
+  [property: string]: any
+}
+let  obj: objType = {
+  a:1,
+  b:'23'
+}
+```
 
 * 'ReadonlyArray' is not defined  
 使用 Object.freeze() 对静态数据冻结时,

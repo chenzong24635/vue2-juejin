@@ -6,24 +6,25 @@
   </div>
 </template>
 <script>
+import { reactive, toRefs } from 'vue';
 export default {
-  name: '',
-  components: {},
-  data () {
-    return {
+  setup () {
+    let state = reactive({
       modalShow: true
+    })
+    let showModal = () => {
+      state.modalShow = true;
+    }
+    let closeModal = () => {
+        console.log(111);
+        state.modalShow = false;
+      }
+    return {
+      ...toRefs(state),
+      showModal,
+      closeModal
     }
   },
-  created () {},
-  methods: {
-    showModal() {
-      this.modalShow = true;
-    },
-    closeModal() {
-      console.log(111);
-      this.modalShow = false;
-    }
-  }
 }
 </script>
 <style scoped lang="less">

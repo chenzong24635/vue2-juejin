@@ -13,22 +13,11 @@
 <script>
 export default {
   name: '',
-  components: {},
   props: {
     title: {
       type: String
     },
-    /* lists: {
-      type: Array,
-      required: true
-    }, */
-    // required
   },
-  data () {
-    return {}
-  },
-  created () {},
-  methods: {}
 }
 </script>
 <style scoped lang="less">

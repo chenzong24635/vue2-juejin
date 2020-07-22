@@ -1,17 +1,46 @@
 <template>
-  <!-- <div class="catalog" :class="[{'catalog-sticky': isSticky}, {'is-topbar-block': isTopbarBlock}]" @scroll.stop="()=>{}"> -> -->
-  <div class="catalog" :class="[{'catalog-sticky': isSticky}]" >
+  <div class="catalog" :class="[{'catalog-sticky': isSticky}]">
     <div v-show="catalogData.length" class="catalog-title">目录</div>
     <div class="catalog-body">
       <ul class="catalog-list">
-        <li class="catalog-item" :class="[c1.level, {'catalog-item-active' : c1.id === currentCatalogId }]" v-for="c1 in catalogData" :key="c1.id">
-          <a class="ellipsis" :href="'#'+c1.id" :title="c1.title" @click="currentCatalogId = c1.id">{{ c1.title }}</a>
+        <li
+          class="catalog-item"
+          :class="[c1.level, {'catalog-item-active' : c1.id === currentCatalogId }]"
+          v-for="c1 in catalogData"
+          :key="c1.id"
+        >
+          <router-link
+            class="ellipsis"
+            :to="'#'+c1.id"
+            :title="c1.title"
+            @click="currentCatalogId = c1.id"
+          >{{ c1.title }}</router-link>
           <ul v-if="c1.children.length">
-            <li class="catalog-item" :class="[c2.level, {'catalog-item-active' : c2.id === currentCatalogId }]" v-for="c2 in c1.children" :key="c2.id">
-              <a class="ellipsis" :href="'#'+c2.id" :title="c2.title" @click="currentCatalogId = c2.id">{{ c2.title }}</a>
+            <li
+              class="catalog-item"
+              :class="[c2.level, {'catalog-item-active' : c2.id === currentCatalogId }]"
+              v-for="c2 in c1.children"
+              :key="c2.id"
+            >
+              <router-link
+                class="ellipsis"
+                :to="'#'+c2.id"
+                :title="c2.title"
+                @click="currentCatalogId = c2.id"
+              >{{ c2.title }}</router-link>
               <ul v-if="c2.children.length">
-                <li class="catalog-item" :class="[c3.level, {'catalog-item-active' : c3.id === currentCatalogId }]" v-for="c3 in c2.children" :key="c3.id">
-                  <a class="ellipsis" :href="'#'+c3.id" :title="c3.title" @click="currentCatalogId = c3.id">{{ c3.title }}</a>
+                <li
+                  class="catalog-item"
+                  :class="[c3.level, {'catalog-item-active' : c3.id === currentCatalogId }]"
+                  v-for="c3 in c2.children"
+                  :key="c3.id"
+                >
+                  <router-link
+                    class="ellipsis"
+                    :to="'#'+c3.id"
+                    :title="c3.title"
+                    @click="currentCatalogId = c3.id"
+                  >{{ c3.title }}</router-link>
                 </li>
               </ul>
             </li>
@@ -23,45 +52,29 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex'
-
+import {debounce} from '@/libs/util'
+import { reactive, toRefs, onMounted, onBeforeUnmount } from 'vue'
 export default {
-  data() {
-    return {
+  setup() {
+    let state = reactive({
       catalogOffsetTop: 800,
       currentCatalogId: '',
       catalogData: [],
       isSticky: false
-    }
-  },
-  // computed: {
-  //   ...mapState([
-  //     'isTopbarBlock'
-  //   ])
-  // },
-  mounted() {
-    this.createCatalog()
-    this.catalogOffsetTop = document.querySelector('.catalog').offsetTop
-    window.addEventListener('scroll', this.catalogSticky)
-  },
-  beforeUnmount() {
-    window.removeEventListener('scroll', this.catalogSticky)
-  },
-  methods: {
+    })
+
     // 控制目录吸顶
-    catalogSticky() {
-      console.log('s');
+    let catalogSticky = debounce(() => {
       let scrollTop = document.scrollingElement.scrollTop
-      if (scrollTop >= this.catalogOffsetTop && this.isSticky == false) {
-        this.isSticky = true
+      if (scrollTop >= state.catalogOffsetTop && state.isSticky == false) {
+        state.isSticky = true
       }
-      if (scrollTop < this.catalogOffsetTop && this.isSticky) {
-        this.isSticky = false
+      if (scrollTop < state.catalogOffsetTop && state.isSticky) {
+        state.isSticky = false
       }
-    },
+    })
     // 生成目录树数据
-    createCatalog() {
-      console.log('created');
+    let createCatalog = () => {
       let catalog = []
       function Item(id, item, level){
         this.id = id
@@ -126,57 +139,72 @@ export default {
           addC3(catalogItem)
         }
       })
-      this.catalogData = catalog
+      state.catalogData = catalog
     }
-  }
+
+    onMounted(()=>{
+      createCatalog()
+      let catalog = document.querySelector('.catalog')
+      console.log(catalog);
+      state.catalogOffsetTop = catalog.offsetTop
+      window.addEventListener('scroll', catalogSticky)
+    })
+    onBeforeUnmount(()=>{
+      window.removeEventListener('scroll', catalogSticky)
+    })
+
+    return {
+      ...toRefs(state)
+    }
+  },
 }
 </script>
 
 <style lang='less' scoped>
-.catalog{
+.catalog {
   margin-top: 20px;
-  transition: all .2s;
+  transition: all 0.2s;
 
-  &.catalog-sticky{
+  &.catalog-sticky {
     width: 240px;
-    height: 95vh;
+    height: 75vh;
     position: fixed;
     top: 5.1rem;
     // right: 0;
     overflow-y: auto;
 
-    &::-webkit-scrollbar{
+    &::-webkit-scrollbar {
       display: none;
       width: 3px;
     }
-    &::-webkit-scrollbar-thumb{
+    &::-webkit-scrollbar-thumb {
       background: #e9e9e9;
     }
-    &::-webkit-scrollbar-track{
+    &::-webkit-scrollbar-track {
       background: transparent;
     }
-    &:hover::-webkit-scrollbar{
+    &:hover::-webkit-scrollbar {
       display: block;
     }
   }
 
-  &.is-topbar-block{
+  &.is-topbar-block {
     height: 90vh;
     top: 50px;
   }
 
-  .catalog-title{
+  .catalog-title {
     font-size: 14px;
   }
 
-  .catalog-body{
+  .catalog-body {
     overflow: hidden;
   }
 }
-.catalog-list{
+.catalog-list {
   position: relative;
 
-  &::before{
+  &::before {
     content: "";
     position: absolute;
     top: 0;
@@ -184,20 +212,20 @@ export default {
     bottom: 0;
     width: 2px;
     background-color: #ebedef;
-    opacity: .5;
+    opacity: 0.5;
   }
 
-  .catalog-item{
+  .catalog-item {
     font-size: 14px;
     font-weight: 400;
     line-height: 1.3;
     color: #333;
     list-style: none;
 
-    &.catalog-item-active{
+    &.catalog-item-active {
       color: @mainColor;
-      
-      >a{
+
+      > a {
         background: #ebedef;
       }
     }
@@ -210,11 +238,11 @@ export default {
       color: inherit;
       text-decoration: none;
       .ov1;
-      &:hover{
+      &:hover {
         background: #ebedef;
       }
 
-      &::before{
+      &::before {
         content: "";
         position: absolute;
         top: 50%;
@@ -227,10 +255,10 @@ export default {
       }
     }
 
-    &.c1{
+    &.c1 {
       font-weight: 600;
 
-      >a::before{
+      > a::before {
         left: 5px;
         margin-top: -3px;
         width: 6px;
@@ -238,23 +266,23 @@ export default {
       }
     }
 
-    &.c2{
-      >a{
+    &.c2 {
+      > a {
         margin: 0;
         padding-left: 36px;
 
-        &::before{
+        &::before {
           left: 24px;
         }
       }
     }
 
-    &.c3{
-      >a{
+    &.c3 {
+      > a {
         margin: 0;
         padding-left: 51px;
 
-        &::before{
+        &::before {
           left: 39px;
         }
       }

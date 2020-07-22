@@ -10,7 +10,7 @@
               <user-level :level="authorInfo.level" />
             </div>
             <div class="intro">
-              <svg-icon name="toolbox"></svg-icon>
+              <svg-icon name="toolbox" color="#72777b"></svg-icon>
               <p class="intro-txt">
                 <span>{{authorInfo.jobTitle}}</span>
                 <span>|</span>
@@ -18,7 +18,7 @@
               </p>
             </div>
             <div class="intro">
-              <svg-icon name="mycard"></svg-icon>
+              <svg-icon name="mycard"  color="#72777b"></svg-icon>
               <p class="intro-txt">
                 <span>{{authorInfo.selfDescription}}</span>
               </p>
@@ -124,7 +124,7 @@ import activitiesList from '@/components/user/activitiesList.vue'
 import postsList from '@/components/user/postsList.vue'
 import pinsList from '@/components/user/pinsList.vue'
 import sharesList from '@/components/user/sharesList.vue'
-import userAPI from '@/api/user.js'
+import userAPI from '@/api/user'
 import scroll from '@/mixins/scroll'
 
 export default {
@@ -137,11 +137,6 @@ export default {
   },
   props: ['id','title'],
   mixins: [scroll],
-  filters: {
-    date(val) {
-      return new Date(val).toLocaleDateString()
-    }
-  },
   data () {
     return {
       authorInfo: {},

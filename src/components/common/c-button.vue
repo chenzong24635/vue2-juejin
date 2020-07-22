@@ -4,6 +4,7 @@
   </button>
 </template>
 <script>
+import { computed } from 'vue'
 export default {
   name: '',
   props: {
@@ -18,9 +19,9 @@ export default {
       type: String,
     }
   },
-  computed: {
-    newType(){
-      let types = this.type.split(' ')
+  setup(props) {
+    let newType = computed(()=>{
+      let types = props.type.split(' ')
       let str =''
       try{
         types = types.map(item => {
@@ -31,15 +32,11 @@ export default {
         str = ''
       }
       return str
+    })
+    return {
+      newType
     }
-  },
-  components: {},
-  data () {
-    return {}
-  },
-  created () {
-  },
-  methods: {}
+  }
 }
 </script>
 <style scoped lang="less">

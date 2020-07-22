@@ -1,4 +1,4 @@
-function debounce(fn, delay = 500) {
+export function debounce(fn, delay = 500) {
   let timer = null;
   return function (args) {
     timer && clearTimeout(timer);
@@ -8,7 +8,7 @@ function debounce(fn, delay = 500) {
   }
 }
 
-function throttle(fn, delay = 500) {
+export function throttle(fn, delay = 500) {
   let timer = null;
   return function (args) {
     if(timer)return;
@@ -19,7 +19,4 @@ function throttle(fn, delay = 500) {
   }
 }
 
-export default{
-  debounce,
-  throttle,
-}
+

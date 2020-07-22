@@ -8,11 +8,10 @@
         @mouseleave="changeShow(list,2)"
       >
         <div class="list-cnt">
-          <div class="list-flags">
+          <div class="list-flags ov1">
             <p class="flag dot zl">专栏</p>
-            <p class="flag dot">{{list.entity.username}}</p>
-            <p class="flag dot">{{ list.entity.createdAt}}</p>
-            <!-- <p class="flag dot">{{ list.entity.createdAt | dateDis}}</p> -->
+            <p class="flag dot">{{list.entity.user.username}}</p>
+            <p class="flag dot">{{$_dateDis(list.entity.createdAt)}}</p>
             <p class="dot">
               <router-link 
                 :to="'/tag/'+ encodeURIComponent(tag.title)" 
@@ -59,12 +58,17 @@
   </div>
 </template>
 <script>
-import commonList from '@/mixins/commonList.js'
+import {$_dateDis} from '@/filters'
+import commonList from '@/mixins/commonList'
 export default {
-  mixins: [commonList]
+  mixins: [commonList],
+  setup() {
+    return {
+      $_dateDis
+    }
+  }
 }
 </script>
 <style scoped lang="less">
 @import '../../assets/css/commonList.less';
-
 </style>

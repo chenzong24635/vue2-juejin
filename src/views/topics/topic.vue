@@ -56,7 +56,7 @@
 <script>
 import pinList from '@/components/pins/list.vue'
 import scroll from '@/mixins/scroll'
-import topic from '@/api/topic.js'
+import topic from '@/api/topic'
 
 
 export default {

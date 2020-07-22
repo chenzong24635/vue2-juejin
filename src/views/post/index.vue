@@ -12,19 +12,18 @@
               <user-level :level="3" />
             </router-link>
             <div class="info-box-bottom">
-              <span>{{articleInfo.createdAt }}</span>
-              <!-- <span>{{articleInfo.createdAt | dateFilter}}</span> -->
+              <span>{{$_toLocaleDateString(articleInfo.createdAt) }}</span>
               <span>阅读 {{articleInfo.viewsCount}}</span>
             </div>
           </div>
-          <c-button type="success cutout"  @click="showLoginModel">关注</c-button>
+          <c-button type="success cutout" >关注</c-button>
         </div>
         <h1 class="title" >{{articleInfo.title}}</h1>
         <div class="html-content" v-if="articleContent" v-html="articleContent.content"></div>
         <focus-more :tags="articleInfo.tags || []" />
       </div>
       <div  id="comments">
-        <p>评论</p>
+        <h3 class="">评论</h3>
         <comment-list :lists="comments" :id="articleContent.entryId" />
         <div @click="getComments" class="more">查看更多&nbsp;&gt;</div>
       </div>
@@ -37,7 +36,7 @@
       <about-author :articleInfo="articleInfo" />
       <!-- <aside-book /> -->
       <related-article :lists="relatedEntryLists" />
-      <com-catalog />
+      <com-catalog :pid="id" />
     </aside>
     <left-actions 
       ref="panel" 
@@ -47,23 +46,41 @@
     />
   </div>
 </template>
-<script>
+<script lang="ts">
+interface objType{
+  [propertyName: string]: any
+}
+
+interface propsType{
+  id: string | number
+}
+
+interface stateType{
+  articleContent: objType,
+  articleInfo: objType,
+  relatedEntryLists: any[], // 侧边相关文章
+  recommendEntryLists: any[], // 底部相关文章推荐
+  isLike: boolean,
+  isLoading: boolean,
+  pageNu: number,
+  comments: any[],
+  [propertyName: string]: any
+}
+
 import aboutAuthor from '@/components/post/about-author.vue'
 // import asideBook from '@/components/post/aside-book.vue'
 import relatedArticle from '@/components/post/related-article.vue'
 import focusMore from '@/components/post/focus-more.vue'
 import comCatalog from '@/components/post/catalog.vue'
 import leftActions from '@/components/post/left-actions.vue'
-import commonList1 from '@/components/common/common-list1'
+import commonList1 from '@/components/common/common-list1.vue'
 
 import postAPI from '@/api/post'
 import scroll from '@/mixins/scroll'
-// import {$_toLocaleDateString} from '@/filters'
-import {mapActions} from 'vuex'
-import { reactive, toRefs,ref } from 'vue'
+import {$_toLocaleDateString} from '@/filters'
+import { reactive, toRefs,ref, onMounted } from 'vue'
 
 export default {
-  name: '',
   components: {
     aboutAuthor,
     // asideBook,
@@ -75,14 +92,8 @@ export default {
   },
   mixins: [scroll],
   props: ['id'],
-  // filters: {
-  //   dateFilter(val){
-  //     return new Date(val).toLocaleDateString()
-  //   }
-  // },
-  setup(props) {
-    console.log(props.id);
-    let state = reactive({
+  setup(props: propsType) {
+    let state: stateType = reactive({
       articleContent: {},
       articleInfo: {},
       relatedEntryLists: [], // 侧边相关文章
@@ -97,7 +108,7 @@ export default {
       console.log('点赞');
     }
 
-    let getArticleContent = async() => { // 文章主要内容
+    let getArticleContent = async(): void => { // 文章主要内容
       try {
         let {s, d} = await postAPI.article({
           uid: '',
@@ -114,7 +125,7 @@ export default {
         console.log(e)
       }
     }
-    let getArticleInfo = async() => { // 文章头部内容（作者，标题等）
+    let getArticleInfo = async(): void => { // 文章头部内容（作者，标题等）
       try {
         let {s, d} = await postAPI.article({
           uid: '',
@@ -131,14 +142,13 @@ export default {
         console.log(e)
       }
     }
-    let getComments = async() => { //评价
-      let createdAt = ''
-      let len = state.comments.length
+    let getComments = async(): void => { //评价
+      let createdAt: string = ''
+      let len: number = state.comments.length
       try {
         createdAt = state.comments[len-1].createdAt
       } catch (e) {
         createdAt = ''
-        console.log(e)
       }
       if(len >= state.count) return
       try {
@@ -156,7 +166,7 @@ export default {
         console.log(e)
       }
     }
-    let getRelatedEntry = async() => { // 相关文章
+    let getRelatedEntry = async(): void => { // 相关文章
       try {
         let {s, d} = await postAPI.relatedEntry({
           uid: '',
@@ -173,20 +183,21 @@ export default {
         console.log(e);
       }
     }
-    let getLists = () => {
-      state.getRecommendEntry()
+    let getLists = (): void => {
+      getRecommendEntry()
     }
-    let getRecommendEntry = async() => { // 相关推荐
+    let getRecommendEntry = async(): void => { // 相关推荐
       if(state.isLoading) return
       state.isLoading = true
-      let tagIds = ''
+      let tagIds: string = ''
       try{
         tagIds = state.articleInfo.tags.map(item => item.id).join('|')
       }catch{
         tagIds = ''
       }
       let last = state.recommendEntryLists.slice(-1)[0] //获取列表最后一个的 rankIndex
-      let before = last ? last.rankIndex : ''
+      console.log(last);
+      let before: string = last ? last.rankIndex : ''
       try {
         let {s, d} = await postAPI.recommendEntry({
           uid: '',
@@ -204,35 +215,27 @@ export default {
         state.isLoading = false
       }
     }
-
-
-    (async()=>{
+    const panel = ref(null) // 获取模板元素 panel
+    onMounted(async()=>{
       await getArticleContent()
       await getComments()
-      if (location.hash.includes('#comment')) {
-        const panel = ref(null)
-        console.log(panel.value);
-        panel.value.scrollIntoComment()
-        // $refs.panel.scrollIntoComment()
-      }
       await getArticleInfo()
       await getRelatedEntry()
       await getRecommendEntry()
-    })()
+      if (location.hash.includes('#comment')) {
+        panel.value.scrollIntoComment()
+      }
+    })
 
     return {
+      $_toLocaleDateString,
       ...toRefs(state),
       setGood,
       getComments,
-      getLists
+      getLists,
+      panel
     }
   },
-  methods: {
-    ...mapActions([
-      'showLoginModel'
-    ]),
-    
-  }
 }
 </script>
 <style scoped lang="less">
@@ -302,7 +305,10 @@ export default {
   font-size: 16px;
   font-weight: 400;
   text-align: center;
-  padding: 1.67rem 0 5px;
+  padding: 0 0 5px ;
+  h3{
+    padding: 10px 0 ;
+  }
   .more{
     padding: 10px 0;
     font-size: 13px;

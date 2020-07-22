@@ -10,7 +10,12 @@
     </li>
   </ul>
 </template>
-<script>
+<script lang="ts">
+interface objType{
+  [propertyName: string]: any
+}
+
+import { reactive, toRefs } from 'vue'
 export default {
   name: '',
   props: {
@@ -27,20 +32,20 @@ export default {
       default: true
     }
   },
-  data () {
+  setup (props,{emit}) {
+    let state = reactive({
+      newIndex: props.tabIndex,
+    })
+    let tabChange = (item: objType, index: number) => {
+      state.newIndex = index
+      emit('changed', index)
+    }
+
     return {
-      newIndex: 0
+      ...toRefs(state),
+      tabChange
     }
   },
-  created() {
-    this.newIndex = this.tabIndex
-  },
-  methods: {
-    tabChange(item, index) {
-      this.newIndex = index
-      this.$emit('changed', index)
-    }
-  }
 }
 </script>
 <style scoped lang="less">

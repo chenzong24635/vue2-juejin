@@ -40,6 +40,7 @@
   </li>
 </template>
 <script>
+import { computed } from 'vue'
 export default {
   name: 'comment-list-item',
   props: {
@@ -48,13 +49,16 @@ export default {
       required: true
     },
   },
-  computed:{
-    hasChild(){ //递归终止条件，避免抛错
-      return this.list.topComment && this.list.topComment.length
+  setup(props) {
+    let hasChild = computed(() => { //递归终止条件，避免抛错
+      return props.list.topComment && props.list.topComment.length
+    })
+    console.log(hasChild);
+    return  {
+      hasChild
     }
-  },
-  methods: {
   }
+
 }
 </script>
 <style scoped lang="less">

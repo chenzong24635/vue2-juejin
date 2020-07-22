@@ -13,4 +13,6 @@ import componentsInstall from '@/libs/componentsInstall'
 // Vue.prototype.$Alert = Alert
 // Vue.prototype.$utils = utils;
 
+
+
 createApp(App).use(router).use(store).use(componentsInstall).use(icons).mount('#app')
