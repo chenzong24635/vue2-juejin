@@ -9,7 +9,7 @@ import request from './index'
  */
 
 //全部话题
-export const topicList = (uid = '', device_id = '') => {
+export const topicList = (uid:string = '', device_id:string = '') => {
   return request({
     method: 'GET',
     url: '/v1/topicList',
@@ -27,7 +27,7 @@ export const topicList = (uid = '', device_id = '') => {
 }
 
 //关注话题
-export const topicListFollowed = (uid = '', device_id = '') => {
+export const topicListFollowed = (uid:string = '', device_id:string = '') => {
   return request({
     method: 'GET',
     url: '/v1/topicList/followed',

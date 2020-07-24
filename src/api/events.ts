@@ -35,7 +35,7 @@ const banner = () => {
   })
 }
 
-const eventList = (type = 1, cityAlias = '', pageNum = 1, pageSize = 20) => {
+const eventList = (type: number = 1, cityAlias: string = '', pageNum: number = 1, pageSize: number = 20) => {
   /* 
    * @params {type} 1:列表； 0:banner
    */

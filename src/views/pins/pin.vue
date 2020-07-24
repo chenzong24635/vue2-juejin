@@ -28,11 +28,10 @@ import rightSide from '@/components/pins/aside'
 import scroll from '@/mixins/scroll'
 
 import pinAPI from '@/api/pins'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, watch, onMounted } from 'vue'
 export default {
   components: {rightSide},
   props: ['id'],
-  mixins: [scroll],
   setup(props: propsType) {
     let state: stateType = reactive({
       comments: [],
@@ -42,7 +41,7 @@ export default {
     })
 
     // 内容
-    let getPinDetail = async(): void => {
+    let getPinDetail = async():Promise<void> => {
       try {
         let {s ,d} =  await pinAPI.pinDetail(props.id)
         if(s === 1) {
@@ -54,7 +53,7 @@ export default {
       }
     }
     //评论
-    let getLists = async(): void => {
+    let getLists = async():Promise<void> => {
       if(state.count && (state.comments >=state.count))return
       if(state.isLoading)return
       try {
@@ -71,7 +70,7 @@ export default {
       }
     }
     //评论的回复
-    // let getReply = async(id) => {
+    // let getReply = async(id):Promise<void> => {
     //   try {
     //     let {s ,d} = await pinAPI.pinReply(id)
     //     console.log(s,d);
@@ -79,11 +78,17 @@ export default {
     //     console.log(e)
     //   }
     // }
-
-    (async ()=>{
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+    onMounted(async ():Promise<void>=>{
       await getPinDetail()
       await getLists()
-    })()
+    })
 
     return {
       ...toRefs(state)

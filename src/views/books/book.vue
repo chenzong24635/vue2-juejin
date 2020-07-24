@@ -76,32 +76,20 @@
   </main>
 </template>
 <script lang="ts">
-interface objType{
-  [propertyName: string]: any
-}
-
 interface propsType{
-  id: string | number
+  id: string|number
 }
 
-interface stateType{
-  tabs: string[],
-  bookDesc: objType,
-  bookBuyers: any[],
-  bookSections: any[],
-  buyers: any[],
-  [propertyName: string]: any
-}
 
 import {$_read} from '@/filters'
 import bookAPI from '@/api/books'
-import { reactive, toRefs, computed } from 'vue';
+import { reactive, toRefs, computed, onMounted } from 'vue';
 
 
 export default {
   props: ['id'],
   setup(props: propsType) {
-    let state: stateType = reactive({
+    let state = reactive({
       tabs: ['目录','介绍'],
       bookDesc: {},
       bookBuyers: [],
@@ -114,7 +102,7 @@ export default {
       console.log(index);
     }
     
-    let getBookDesc = async(): void => {
+    let getBookDesc = async():Promise<void> => {
       try {
         let {s,d} = await bookAPI.bookDesc(props.id)
         if(s === 1) {
@@ -125,7 +113,7 @@ export default {
       }
     }
 
-    let getBookBuyers = async(): void => {
+    let getBookBuyers = async():Promise<void> => {
       try {
         let {s,d} = await bookAPI.bookBuyers(props.id)
         if(s === 1) {
@@ -136,7 +124,7 @@ export default {
       }
     }
 
-    let getBookSection = async(): void => {
+    let getBookSection = async():Promise<void> => {
       try {
         let {s,d} = await bookAPI.bookSection(props.id)
         if(s === 1) {
@@ -147,11 +135,11 @@ export default {
       }
     }
 
-    (() =>{
+    onMounted(() =>{
       getBookDesc()
       getBookBuyers()
       getBookSection()
-    })()
+    })
 
     return {
       $_read,

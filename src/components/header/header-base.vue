@@ -84,20 +84,38 @@
     </div>
   </header>
 </template>
-<script>
+<script lang="ts">
+interface objType{
+  [name:string]:any
+}
+interface baseHeaderType{
+  path: string,
+  title: string,
+  active: boolean,
+}
+
 
 import LoginBox from '@/views/login/login'
 // import RegisterBox from '@/views/login/register'
 
-import {mapState, mapMutations} from 'vuex'
+import { useStore} from 'vuex'
+import { reactive, toRefs ,computed} from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 export default {
   components: {
     LoginBox,
     // RegisterBox
   },
-  data () {
-    return {
+  setup () {
+    // setLoginModel
+    const store = useStore()
+    let isLogin = computed(()=>store.state.isLogin)
+    let loginModel = computed(()=>store.state.loginModel)
+    let setLoginModel = (val: boolean) => {
+      store.commit('setLoginModel',val)
+    }
+    let state = reactive({
       baseHeader: [
         {
           path: '/timeline',
@@ -131,54 +149,56 @@ export default {
       loginFormShow: false,
       writeBoxShow: false,
       searchVal: ''
-    }
-  },
-  computed: {
-    ...mapState([
-      'isLogin'
-    ])
-  },
-  methods: {
-    ...mapMutations([
-      'setLoginModel'
-    ]),
-    routeClick(item){
-      console.log(item);
-      this.$router.push({
+    })
+    console.log(state)
+    let router:objType = useRouter()
+    let route:objType = useRoute()
+    function routeClick(item:baseHeaderType):void {
+      router.push({
         path: item.path
       })
-      this.baseHeader.forEach(item => {
+      state.baseHeader.forEach((item:baseHeaderType) => {
         item.active = false
       })
       item.active = true
-    },
-    search() {
-      console.log();
-      let route = this.$route
-      let type = 'all'
-      // let query = ''
-      if(!this.searchVal.trim().length)return
-      if(route.name==='search') {
-        type = route.params.type
-      }
-      this.$router.push(`/search/${type}/${this.searchVal}`)
-      console.log(this.searchVal);
-    },
-    showWriteBox() { //未登录 点击写文章显示 box
-      this.writeBoxShow = !this.writeBoxShow;
-    },
-    addBtnMore() {
-      this.moreListShow = !this.moreListShow;
-    },
-    showHide1(bool = false) {
-      this.loginFormShow = bool;
-      this.writeBoxShow = false;
-    },
-    showHide2(bool = false) {
-      this.registerFormShow = bool;
-      this.writeBoxShow = false;
     }
-  }
+    function search() {
+      let type:string = 'all'
+      // let query = ''
+      if(!state.searchVal.trim().length)return
+      if(route.name.value==='search') {
+        type = route.params.value.type
+      }
+      router.push(`/search/${type}/${state.searchVal}`)
+    }
+    function showWriteBox():void { //未登录 点击写文章显示 box
+      state.writeBoxShow = !state.writeBoxShow;
+    }
+    function addBtnMore():void {
+      state.moreListShow = !state.moreListShow;
+    }
+    function showHide1(bool:boolean = false):void {
+      state.loginFormShow = bool;
+      state.writeBoxShow = false;
+    }
+    function showHide2(bool:boolean = false):void {
+      state.registerFormShow = bool;
+      state.writeBoxShow = false;
+    }
+
+    return {
+      isLogin,
+      loginModel,
+      setLoginModel,
+      ...toRefs(state),
+      routeClick,
+      search,
+      showWriteBox,
+      addBtnMore,
+      showHide1,
+      showHide2,
+    }
+  },
 }
 </script>
 <style lang="less" scoped>

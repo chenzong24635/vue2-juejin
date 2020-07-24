@@ -54,7 +54,7 @@ import headerSub from '@/components/header/header-sub'
 import eventsList from '@/components/events/list'
 import copyRight from '@/components/common/copy-right'
 import scroll from '@/mixins/scroll'
-import { reactive, computed, toRefs } from 'vue'
+import { reactive, computed, toRefs, onMounted, watch } from 'vue'
 
 
 export default {
@@ -64,7 +64,6 @@ export default {
     copyRight
   },
   props: ['id'],
-  mixins: [scroll],
   setup(props: propsType) {
     let defaultCity: defaultCityType[] = Object.freeze([
       {
@@ -107,7 +106,7 @@ export default {
     })
 
     // methods
-    let getCityList = async(): void => {
+    let getCityList = async(): Promise<void> => {
       try {
         let {s, d} = await eventAPI.cityList();
         if(s === 1) {
@@ -118,7 +117,7 @@ export default {
       }
     }
 
-    // let getBanner = async() => {
+    // let getBanner = async():Promise<void> => {
     //   try {
     //     let {s, d} = await eventAPI.banner();
     //     if(s === 1) {
@@ -129,7 +128,7 @@ export default {
     //   }
     // }
 
-    let getLists = async(): void => {
+    let getLists = async(): Promise<void> => {
       if(state.isLoading) return
       state.isLoading = true
       let id: string | number = props.id ==='all' ? '' : props.id
@@ -144,11 +143,18 @@ export default {
       }
     }
 
-    (async()=>{
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+    onMounted(async():Promise<void>=>{
       await getCityList();
       // await getBanner();
       await getLists();
-    })()
+    })
 
     return {
       defaultCity,

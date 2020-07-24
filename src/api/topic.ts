@@ -2,7 +2,7 @@
 import request from './index'
 
 // 列表
-const lists = (topicId, sortType = 'rank', page = 0, pageSize = 20) => {
+const lists = (topicId:string, sortType:string = 'rank', page:number = 0, pageSize:number = 20) => {
   return request({
     method: 'GET',
     url: '/v1/pinList/topic',
@@ -21,7 +21,7 @@ const lists = (topicId, sortType = 'rank', page = 0, pageSize = 20) => {
 
 // 话题信息
 // https://short-msg-ms.juejin.im/v1/topic/5abb61e1092dcb4620ca3322?uid=&device_id=&token=&src=web
-const topicDetail = (topicId) => {
+const topicDetail = (topicId:string) => {
   return request({
     method: 'GET',
     url: `/v1/topic/${topicId}`,
@@ -34,7 +34,7 @@ const topicDetail = (topicId) => {
   })
 }
 // 参加人
-const attenders = (topicId, page = 0, pageSize = 20) => {
+const attenders = (topicId:string, page:number = 0, pageSize:number = 20) => {
   return request({
     method: 'GET',
     url: '/v1/topic/attenders',

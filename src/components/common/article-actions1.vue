@@ -2,7 +2,7 @@
   <div class="actions1">
     <div class="action1">
       <div class="action1-left">
-        {{dateDis(date)}}
+        {{$_dateDis(date)}}
       </div>
       <div class="action1-right">
         <div class="praise">
@@ -17,12 +17,12 @@
   </div>
 </template>
 <script>
-import {dateDis} from '@/libs/util'
+import {$_dateDis} from '@/filters'
 export default {
   props: ['date'],
   setup() {
     return {
-      dateDis
+      $_dateDis
     }
   }
 }

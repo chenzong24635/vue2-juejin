@@ -51,7 +51,84 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+interface itemType{
+  id: string,
+  title: string,
+  tag: string,
+  level: string | number,
+  children: any[],
+}
+
+// 生成目录树数据
+function Item(id: string, item: HTMLElement, level: string | number){
+  this.id = id
+  this.title = item.textContent || '<未识别标题>'
+  this.tag = item.tagName
+  this.level = level
+  this.children = []
+}
+let createCatalog = () => {
+  let catalog: any[] = []
+  // 加入一级目录
+  function addC1(item: itemType){
+    catalog.push({ ...item, level: 'c1' })
+  }
+  // 加入二级目录
+  function addC2(item: itemType){
+    let lastC1 = catalog[catalog.length - 1]
+    if (!lastC1) {
+      addC1(item)
+      return
+    }
+    lastC1.children.push({ ...item, level: 'c2' })
+  }
+  // 加入三级目录
+  function addC3(item: itemType){
+    const lastC1 = catalog[catalog.length - 1]
+    if (!lastC1) {
+      addC1(item)
+      return
+    }
+    let lastC2 = lastC1.children[lastC1.children.length - 1]
+    if (!lastC2) {
+      addC2(item)
+      return
+    }
+    lastC2.children.push({ ...item, level: 'c3' })
+  }
+  document.querySelectorAll('.content h1,h2,h3,h4,h5,h6').forEach((item, index) => {
+    item.setAttribute('id', `heading-${index}`)
+    const catalogItem:itemType = new Item(`heading-${index}`, item)
+    if (!catalog[0]) {
+      addC1(catalogItem)
+      return
+    }
+    const lastC1 = catalog[catalog.length - 1]
+    const lastC2 = lastC1.children[lastC1.children.length - 1]
+    if (item.tagName == 'H1') {
+      addC1(catalogItem)
+    } else if (item.tagName == 'H2') {
+      if (lastC1.tag === 'H1') {
+        addC2(catalogItem)
+      } else {
+        addC1(catalogItem)
+      }
+    } else if (item.tagName == 'H3') {
+      if (lastC1.tag === 'H1' && lastC2 && lastC2.tag === 'H2') {
+        addC3(catalogItem)
+      } else if (lastC1.tag === 'H1' || lastC1.tag === 'H2') {
+        addC2(catalogItem)
+      } else {
+        addC1(catalogItem)
+      }
+    } else {
+      addC3(catalogItem)
+    }
+  })
+  // state.catalogData = catalog
+  return catalog
+}
 import {debounce} from '@/libs/util'
 import { reactive, toRefs, onMounted, onBeforeUnmount } from 'vue'
 export default {
@@ -65,7 +142,7 @@ export default {
 
     // 控制目录吸顶
     let catalogSticky = debounce(() => {
-      let scrollTop = document.scrollingElement.scrollTop
+      let scrollTop:number = document.scrollingElement.scrollTop
       if (scrollTop >= state.catalogOffsetTop && state.isSticky == false) {
         state.isSticky = true
       }
@@ -73,79 +150,11 @@ export default {
         state.isSticky = false
       }
     })
-    // 生成目录树数据
-    let createCatalog = () => {
-      let catalog = []
-      function Item(id, item, level){
-        this.id = id
-        this.title = item.textContent || '<未识别标题>'
-        this.tag = item.tagName
-        this.level = level
-        this.children = []
-      }
-      // 加入一级目录
-      function addC1(item){
-        catalog.push({ ...item, level: 'c1' })
-      }
-      // 加入二级目录
-      function addC2(item){
-        let lastC1 = catalog[catalog.length - 1]
-        if (!lastC1) {
-          addC1(item)
-          return
-        }
-        lastC1.children.push({ ...item, level: 'c2' })
-      }
-      // 加入三级目录
-      function addC3(item){
-        const lastC1 = catalog[catalog.length - 1]
-        if (!lastC1) {
-          addC1(item)
-          return
-        }
-        let lastC2 = lastC1.children[lastC1.children.length - 1]
-        if (!lastC2) {
-          addC2(item)
-          return
-        }
-        lastC2.children.push({ ...item, level: 'c3' })
-      }
-      document.querySelectorAll('.content h1,h2,h3,h4,h5,h6').forEach((item, index) => {
-        item.setAttribute('id', `heading-${index}`)
-        const catalogItem = new Item(`heading-${index}`, item)
-        if (!catalog[0]) {
-          addC1(catalogItem)
-          return
-        }
-        const lastC1 = catalog[catalog.length - 1]
-        const lastC2 = lastC1.children[lastC1.children.length - 1]
-        if (item.tagName == 'H1') {
-          addC1(catalogItem)
-        } else if (item.tagName == 'H2') {
-          if (lastC1.tag === 'H1') {
-            addC2(catalogItem)
-          } else {
-            addC1(catalogItem)
-          }
-        } else if (item.tagName == 'H3') {
-          if (lastC1.tag === 'H1' && lastC2 && lastC2.tag === 'H2') {
-            addC3(catalogItem)
-          } else if (lastC1.tag === 'H1' || lastC1.tag === 'H2') {
-            addC2(catalogItem)
-          } else {
-            addC1(catalogItem)
-          }
-        } else {
-          addC3(catalogItem)
-        }
-      })
-      state.catalogData = catalog
-    }
+
 
     onMounted(()=>{
-      createCatalog()
+      state.catalogData = createCatalog()
       let catalog = document.querySelector('.catalog')
-      console.log(catalog);
       state.catalogOffsetTop = catalog.offsetTop
       window.addEventListener('scroll', catalogSticky)
     })

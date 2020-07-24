@@ -7,17 +7,17 @@ const routes = [
   {
     name: 'test',
     path: '/test',
-    component: () => import('../views/A.vue'),
+    component: () => import('@/views/A.vue'),
   },
   ...main,
   ...tag,
-  // {
-  //   path: '*',
-  //   component: () => import('@/views/404.vue'),
-  //   meta: {
-  //     title: '找不到页面'
-  //   }
-  // },
+  {
+    path: '/:catchAll(.*)',
+    component: () => import('@/views/404.vue'),
+    meta: {
+      title: '找不到页面'
+    }
+  },
 ]
 
 const router = createRouter({

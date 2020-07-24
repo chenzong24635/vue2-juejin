@@ -3,6 +3,7 @@ import axiosRetry from 'axios-retry';
 import {baseURL} from '@/libs/config';
 
 
+
 const server = axios.create({
   baseURL,
   timeout: 1000,
@@ -14,7 +15,6 @@ const server = axios.create({
     'X-Juejin-Src': 'web'
   }
 });
-
 
 axiosRetry(server, { retries: 3 });
 

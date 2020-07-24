@@ -14,21 +14,10 @@
   </div>
 </template>
 <script lang="ts">
-// interface objType{
-//   [propertyName: string]: any
-// }
-// type objectType = objType | null
-
 interface propsType{
-  id: string | number
+  id: string
 }
 
-interface stateType{
-  navLists: any[],
-  lists: any[],
-  pageNum: number,
-  [propertyName: string]: any
-}
 
 import copyRight from '@/components/common/copy-right'
 import headerSub from '@/components/header/header-sub'
@@ -37,7 +26,7 @@ import booksAside from '@/components/books/books-aside'
 import booksAPI from '@/api/books'
 import scroll from '@/mixins/scroll'
 
-import {reactive, toRefs} from 'vue'
+import {reactive, toRefs, onMounted, watch} from 'vue'
 
 export default {
   components: {
@@ -47,15 +36,14 @@ export default {
     copyRight
   },
   props: ["id"],
-  mixins: [scroll],
   setup(props: propsType) {
-    let state: stateType = reactive({
+    let state = reactive({
       navLists: [],
       lists: [],
       pageNum: 1
     })
 
-    let getNavLists = async ():void => {
+    let getNavLists = async ():Promise<void> => {
       let {s, d} = await booksAPI.navList();
       if(s === 1){
         state.navLists = [
@@ -70,18 +58,27 @@ export default {
         ];
       }
     }
-    let getLists = async ():void => {
-      let id = props.id ==='all' ? '' : props.id
+    let getLists = async ():Promise<void> => {
+      let id:string = props.id ==='all' ? '' : props.id
       let {s, d} = await booksAPI.lists(id, state.pageNum++);
       if(s === 1){
         state.lists = state.lists.concat(d);
       }
       
-    } 
-    (() =>{
+    }
+
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+    onMounted(()=>{
       getNavLists()
       getLists()
-    })()
+    })
+
 
     return {
       ...toRefs(state),

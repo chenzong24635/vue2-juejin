@@ -15,7 +15,15 @@
     </ul>
   </div>
 </template>
-<script >
+<script lang="ts">
+interface objType{
+  [p:string]:any
+}
+interface propsType{
+  lists: any[],
+  id: string
+}
+
 import pinAPI from '@/api/pins'
 import { computed } from 'vue'
 export default {
@@ -30,7 +38,7 @@ export default {
       // required: true
     },
   },
-  setup(props) {
+  setup(props: propsType) {
     let listsNew = computed(()=>{
       let lists = props.lists.map(item=>{
         if(item.topComment && item.replyCount > item.topComment.length) {
@@ -44,7 +52,7 @@ export default {
       })
       return lists
     })
-    let replyMore = async (obj, objIndex) =>{
+    let replyMore = async (obj: objType, objIndex: number) =>{
       if(obj.isOver || !obj.pageNum)return
       try {
         let {s, d} = await pinAPI.pinReply(props.id, obj.id, obj.pageNum)

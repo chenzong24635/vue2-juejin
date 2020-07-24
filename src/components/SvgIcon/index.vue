@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { computed } from 'vue'
 export default {
   name: 'SvgIcon',
   props: {
@@ -29,14 +30,19 @@ export default {
       default: ''
     }
   },
-  computed: {
-    iconName() {
-      return `#icon-${this.name}`
-    },
-    svgClass() {
-      return 'svg-icon ' +   this.className
+  setup(props) {
+    let iconName = computed(()=>{
+      return `#icon-${props.name}`
+    }) 
+    let svgClass = computed(()=>{
+      return `svg-icon ${props.className}`
+    }) 
+    return {
+      iconName,
+      svgClass
     }
   }
+
 }
 </script>
 

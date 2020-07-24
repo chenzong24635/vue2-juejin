@@ -35,6 +35,7 @@
   </ul>
 </template>
 <script>
+import { reactive, toRefs } from 'vue'
 export default {
   name: '',
   props: {
@@ -43,26 +44,29 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
+  setup () {
+    let types = Object.freeze([
+      {
+        title: '热门',
+        order: 'rankIndex'
+      },
+      {
+        title: '最新',
+        order: 'createdAt'
+      },
+    ])
+    let state = reactive({
       typeIndex: 0,
-      types: [
-        {
-          title: '热门',
-          order: 'rankIndex'
-        },
-        {
-          title: '最新',
-          order: 'createdAt'
-        },
-      ]
+    })
+    function typeChange(item, index) {
+      state.typeIndex = index
+    }
+    return {
+      ...toRefs(state),
+      types,
+      typeChange
     }
   },
-  methods: {
-    typeChange(item, index) {
-      this.typeIndex = index
-    }
-  }
 }
 </script>
 <style scoped lang="less">

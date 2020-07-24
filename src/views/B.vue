@@ -1,13 +1,13 @@
 <template>
-  <p>b</p>
+  <div class="">
+    B
+  </div>
 </template>
-
 <script>
 export default {
+  name: 'componentB',
 
 }
 </script>
-
-<style>
-
+<style scoped >
 </style>

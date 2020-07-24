@@ -19,6 +19,8 @@
 </template>
 <script>
 import {mapActions} from 'vuex'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
   name: '',
@@ -36,32 +38,32 @@ export default {
       default: true
     },
   },
-  computed: {
-    listsNew: {
-      get (){
-        let arr = this.lists.map(item => {
-          if(item.node){
-            return item.node
-          }else {
-            return item
-          }  
-        })
-        return arr
-      }
+  setup(props) {
+    let listsNew = computed(()=>{
+      let arr = props.lists.map(item => {
+        if(item.node){
+          return item.node
+        }else {
+          return item
+        }  
+      })
+      return arr
+    }) 
+    let router = useRouter()
+    function linkTo(item) {
+      let routeUrl = router.resolve(`/user/${item.entity.id}`)
+      window.open(routeUrl.href, '_blank');
+    }
+    return {
+      listsNew,
+      linkTo
     }
   },
-  data () {
-    return {}
-  },
-  created () {},
+
   methods: {
     ...mapActions([
       'showLoginModel'
     ]),
-    linkTo(item) {
-      let routeUrl = this.$router.resolve(`/user/${item.entity.id}`)
-      window.open(routeUrl.href, '_blank');
-    }
   }
 }
 </script>

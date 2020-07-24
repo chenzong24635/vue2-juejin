@@ -42,7 +42,8 @@ export default {
     }
     // 跳转到评论区
     let scrollIntoComment = ():void => {
-      let offsetTop = document.querySelector('#comments').offsetTop
+      let comments: HTMLElement|null = document.querySelector('#comments')
+      let offsetTop:number = comments.offsetTop
       window.scrollTo({
         top: offsetTop
       })

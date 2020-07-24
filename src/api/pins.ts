@@ -1,7 +1,11 @@
 import request from './index'
 
+interface objType{
+  [p:string]: any
+}
+
 // 推荐，热门，关注
-const lists1 = (data) => {
+const lists1 = (data: objType) => {
   return request({
     method: 'POST',
     url: 'https://web-api.juejin.im/query',
@@ -10,7 +14,7 @@ const lists1 = (data) => {
 }
 
 //开源推荐...
-const lists2 = (topicId, page = 0, pageSize = 20) => {
+const lists2 = (topicId: string, page: number = 0, pageSize: number = 20) => {
   return request({
     method: 'GET',
     url: '/v1/pinList/topic',
@@ -42,7 +46,7 @@ const hotLists = () => {
 }
 
 // 沸点评论
-const pinComments = (id, pageNum = 1, pageSize = 20) => {
+const pinComments = (id: string, pageNum: number = 1, pageSize: number = 20) => {
   return request({
     method: 'GET',
     url: `/v1/comments/${id}`,
@@ -52,7 +56,7 @@ const pinComments = (id, pageNum = 1, pageSize = 20) => {
     } 
   })
 }
-const pinDetail = (msgId) => {
+const pinDetail = (msgId: string) => {
   return request({
     method: 'GET',
     url: '/v1/getByID',
@@ -68,7 +72,7 @@ const pinDetail = (msgId) => {
 
 // 沸点评论的回复
 // https://comment-wrapper-ms.juejin.im?pageNum=1&pageSize=10
-const pinReply  = (targetId, id, pageNum = 1, pageSize = 10) => {
+const pinReply  = (targetId: string, id: string, pageNum: number = 1, pageSize: number = 10) => {
   return request({
     method: 'GET',
     url: `/v1/comments/entry/${targetId}/comment/${id}`,
@@ -78,7 +82,7 @@ const pinReply  = (targetId, id, pageNum = 1, pageSize = 10) => {
     } 
   })
 }
-// const pinReply  = (id, pageNum = 1, pageSize = 10) => {
+// const pinReply  = (id: string, pageNum: number = 1, pageSize: number = 10) => {
 //   return request({
 //     method: 'GET',
 //     url: `/v1/reply/${id}`,

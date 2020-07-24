@@ -10,7 +10,7 @@
         <div class="list-cnt">
           <div class="list-flags ov1">
             <p class="flag dot zl">专栏</p>
-            <p class="flag dot">{{list.entity.user.username}}</p>
+            <p class="flag dot">{{list.entity.user && list.entity.user.username}}</p>
             <p class="flag dot">{{$_dateDis(list.entity.createdAt)}}</p>
             <p class="dot">
               <router-link 

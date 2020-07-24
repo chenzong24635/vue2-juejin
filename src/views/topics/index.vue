@@ -11,54 +11,54 @@
     <div class="root-view-bg"></div>
   </div>
 </template>
-<script>
+<script lang="ts">
+
+interface stateType{
+  focusLists: any[],
+  allLists: any[],
+  [property:string]: any
+}
 import topicsList from '@/components/topics/list';
 import {topicList, topicListFollowed} from '@/api/topics';
-import {mapState} from 'vuex';
+import { reactive, toRefs, onMounted } from 'vue';
 
 export default {
   components: {
     topicsList
   },
-  data() {
-    return {
+  setup() {
+    let state: stateType = reactive({
       focusLists: [],
       allLists: [],
+    })
+    let getTopicList = async():Promise<void> => {
+      let {s, d} = await topicList();
+      if(s === 1) {
+        state.allLists = d.list;
+      }
+    }
+    let getTopicListFollowed= async():Promise<void> => {
+      let {s, d} = await topicListFollowed();
+      if(s === 1) {
+        state.focusLists = d.list;
+      }
+    }
+
+    onMounted(()=>{
+      getTopicList()
+      // state.isLogin && getTopicListFollowed()
+    })
+
+    return {
+      ...toRefs(state),
+      getTopicListFollowed
     }
   },
-  computed: {
-    ...mapState([
-      'isLogin'
-    ])
-  },
-  created() {
-    this.getTopicList();
-    this.isLogin && this.getTopicListFollowed();
-  },
-  methods: {
-
-    async getTopicList() {
-      let {s, d} = await topicList();
-      console.log(s, d);
-      if(s === 1) {
-        this.allLists = d.list;
-      }
-    },
-    async getTopicListFollowed() {
-      let {s, d} = await topicListFollowed();
-      console.log(s, d);
-      if(s === 1) {
-        this.focusLists = d.list;
-      }
-    },
-  }
 }
 </script>
 <style scoped >
-
 .title{
   text-indent: 1.2rem;
   margin-top: 4rem;
 }
-
 </style>

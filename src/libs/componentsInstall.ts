@@ -9,8 +9,8 @@ export default {
   install(app) {
     // 批量注册公用组件
     const components = require.context('@/components/common', true, /\.vue$/)
-    components.keys().map(path => {
-      const fileName = path.replace(/(.*\/)*([^.]+).*/ig, "$2"); // 获取组件文件名
+    components.keys().map((path:string) => {
+      const fileName:string = path.replace(/(.*\/)*([^.]+).*/ig, "$2"); // 获取组件文件名
       app.component(fileName, components(path).default || components(path))
     })
   }

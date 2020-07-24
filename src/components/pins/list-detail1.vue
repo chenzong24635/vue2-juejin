@@ -35,7 +35,6 @@
   </div>
 </template>
 <script>
-import {mapActions} from 'vuex'
 export default {
   name: '',
   props: {
@@ -44,11 +43,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
-      'showLoginModel'
-    ]),
     foucs() {
-      this.showLoginModel()
     }
   }
 }

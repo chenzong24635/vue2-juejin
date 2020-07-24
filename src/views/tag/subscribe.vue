@@ -34,20 +34,19 @@ interface stateType {
   page: number,
   pageSize: number,
   isLoading: boolean,
-  searchVal: string | null | undefined,
+  searchVal: string,
   [proeprty: string]: any
 }
 
 import subscribeItem from  '@/components/tag/subscribe-item.vue'
 import tagAPI from '@/api/tag'
 import scroll from '@/mixins/scroll'
-import { reactive, toRefs } from 'vue';
+import { reactive, toRefs, onMounted, watch } from 'vue';
 
 export default {
   name: '',
   components: {subscribeItem},
   props: ['id'],
-  mixins: [scroll],
   setup () {
     let subNavs: subNavsType[] = Object.freeze([
       {
@@ -69,13 +68,13 @@ export default {
       searchVal: ''
     })
 
-    let reset = () => {
+    let reset = ():void => {
       state.lists = []
       state.page = 1
       state.isLoading = false
       state.hasNextPage = true
     }
-    let getLists = async() => {
+    let getLists = async():Promise<void> => {
       if(state.isLoading) return
       state.isLoading = true
       try{
@@ -101,7 +100,7 @@ export default {
       getLists();
     }
 
-    let search = async() => {
+    let search = async():Promise<void> => {
       reset()
       if(!state.searchVal.trim().length){
         //搜索内容为空时
@@ -119,7 +118,17 @@ export default {
       }
     }
 
-    getLists()
+        let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+
+    onMounted(():void => {
+      getLists();
+    });
 
     return {
       subNavs,

@@ -32,21 +32,43 @@
         :hasNextPage="hasNextPage"
       >
       </common-list2>
-        <activity-skeleton width="700px" v-show="isLoading && hasNextPage" />
+      <activity-skeleton width="700px" v-show="isLoading && hasNextPage" />
 
-      <div class="nodata" v-if="!lists.length">
+      <div class="nodata" v-if="!lists.length&&!hasNextPage">
         列表为空
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
+interface objType{
+  [property: string]: any
+}
+interface propsType{
+  query: string,
+  type: string | number,
+}
+
+interface subNavsType{
+  title: string,
+  type: string
+}
+
+interface stateType{
+  isLoading: boolean,
+  hasNextPage: boolean,
+  endCursor: string,
+  lists: any[],
+  apiParmas: objType,
+  [proeprty: string]: any
+}
+
 import tagList from '@/components/search/tag-list'
 import userList from '@/components/search/user-list'
 import scroll from '@/mixins/scroll'
 
 import timelineAPI from '@/api/timeline'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router';
 
 export default {
@@ -54,10 +76,9 @@ export default {
     tagList,
     userList
   },
-  mixins: [scroll],
   props: ['query','type'],
-  setup(props) {
-    let subNavs = Object.freeze([
+  setup(props: propsType) {
+    let subNavs: subNavsType[] = Object.freeze([
       {
         title: "综合",
         type: "all"
@@ -75,7 +96,7 @@ export default {
         type: "user"
       },
     ])
-    let state = reactive({
+    let state: stateType = reactive({
       isLoading: false,
       hasNextPage: true,
       endCursor: '',
@@ -98,11 +119,11 @@ export default {
       },
     })
 
-    let router = useRouter()
-    let subChange = (item) => {
+    let router: objType = useRouter()
+    let subChange = (item: subNavsType) => {
       router.replace({ name: 'search', params: { query: props.query, type: item.type}})
     }
-    let getLists = () => {
+    let getLists = ():void => {
       state.apiParmas.variables.after = state.endCursor;
       state.apiParmas.variables.type = props.type.toUpperCase();
       state.apiParmas.variables.query = props.query;
@@ -123,14 +144,21 @@ export default {
           console.log(e);
         })
     }
-
-    getLists()
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+    onMounted(()=>{
+      getLists()
+    })
 
     return {
       subNavs,
       ...toRefs(state),
       subChange,
-      getLists,
     }
   },
 }

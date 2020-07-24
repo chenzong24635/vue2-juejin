@@ -23,6 +23,7 @@
   </aside>
 </template>
 <script>
+import { computed } from 'vue'
 export default {
   name: '',
   props: {
@@ -35,11 +36,15 @@ export default {
       required: true
     }
   },
-  computed: {
-    newLists() { //只显示前三个
-      return this.lists.slice(0, 3)
+  setup(props){
+    let newLists = computed(() => { //只显示前三个
+      return props.lists.slice(0, 3)
+    })
+    return {
+      newLists
     }
-  },
+  }
+
 }
 </script>
 <style scoped lang="less">

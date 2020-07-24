@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div>
       <header-base v-if="!$route.meta.hideHeader"></header-base>
       <suspension-icon></suspension-icon>
     <router-view :key="$route.fullPath" />

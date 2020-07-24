@@ -17,9 +17,9 @@
 <script>
 export default {
   name: '',
-  data () {
+  setup () {
     return {
-      tags: [
+      tags: Object.freeze([
         {
           tagid: '55cdb52740ac79db3570607f',
           title: '架构'
@@ -52,7 +52,7 @@ export default {
           tagid: '56b5a7f3df0eea00544e1993',
           title: '掘金翻译计划'
         },
-      ],
+      ])
     }
   },
 }

@@ -1,7 +1,7 @@
 import request from './index'
 
 // 用户信息
-const author = (ids) => {
+const author = (ids:string) => {
   return request({
     method: 'GET',
     url: '/v1/get_multi_user',
@@ -17,7 +17,7 @@ const author = (ids) => {
 }
 
 // 动态
-const activities = (ownerId,after,size = 20) => {
+const activities = (ownerId:string,after:string,size:number = 20) => {
   return request({
     method: 'POST',
     url: 'https://web-api.juejin.im/query',
@@ -39,7 +39,7 @@ const activities = (ownerId,after,size = 20) => {
 }
 
 // 专栏
-const posts = (targetUid, order = 'createdAt', type = 'post', limit = 20) => {
+const posts = (targetUid:string, order:string = 'createdAt', type:string = 'post', limit:number = 20) => {
   return request({
     method: 'GET',
     url: '/v1/get_entry_by_self',
@@ -53,7 +53,7 @@ const posts = (targetUid, order = 'createdAt', type = 'post', limit = 20) => {
   })
 }
 // 沸点 
-const pins = (uid, before, limit = 20) => {
+const pins = (uid:string, before:string, limit:number = 20) => {
   return request({
     method: 'GET',
     url: '/v1/getUserList',
@@ -68,7 +68,7 @@ const pins = (uid, before, limit = 20) => {
   })
 }
 // 分享 
-const shares = (uid) => {
+const shares = (uid:string) => {
   return request({
     method: 'GET',
     url: '/v1/get_entry_by_self',

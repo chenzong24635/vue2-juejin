@@ -2,11 +2,13 @@
   <ul class="lists">
     <li class="list" v-for="item in lists" :key="item.objectId">
       <div class="list-img" >
-        <img :src="item.icon" :title="item.description">
+        <router-link target="_blank"  :to="'/topic/' + item.objectId" >
+          <img :src="item.icon" :title="item.description">
+        </router-link>
         <span class="list-img-num" v-if="type === 1">{{item.msgsCount}}</span>
       </div>
       <div class="list-content">
-        <router-link  class="list-title" to="" :title="item.description">
+        <router-link target="_blank"  class="list-title" :to="'/topic/' + item.objectId" :title="item.description">
           {{item.title}}
         </router-link>
         <p class="list-txt">
@@ -23,7 +25,6 @@
   </ul>
 </template>
 <script>
-import {mapActions} from 'vuex'
 
 export default {
   name: '',
@@ -39,11 +40,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'showLoginModel'
-    ]),
     foucs() {
-      this.showLoginModel()
     },
   }
 }
@@ -53,6 +50,7 @@ export default {
 .lists{
   .flex();
   flex-wrap: wrap;
+  margin-bottom: 100px;
 }
 .list{
   .flex(center);
@@ -65,11 +63,17 @@ export default {
   }
   &-img{
     position: relative;
-    width: 6rem;
-    height: 6rem;
     margin-right: 2%;
     cursor: pointer;
-    &>img{
+    a{
+      width: 6rem;
+      height: 6rem;
+      display: block;
+    }
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       border-radius: 1rem;
     }
     &-num{

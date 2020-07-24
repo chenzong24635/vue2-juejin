@@ -40,6 +40,7 @@
   </ul>
 </template>
 <script>
+import { computed } from 'vue'
 export default {
   name: '',
   props: {
@@ -52,14 +53,16 @@ export default {
       required: true
     }
   },
-  computed: {
-    listsNew(){
+
+  setup(props) {
+    let listsNew = computed(()=>{
       //点赞文章
-      let lists = this.lists.map(item => item.node).filter(item=>item.action === 'LIKE_ARTICLE')
+      let lists = props.lists.map(item => item.node).filter(item=>item.action === 'LIKE_ARTICLE')
       return lists
+    })
+    return {
+      listsNew
     }
-  },
-  updated() {
   }
 }
 </script>

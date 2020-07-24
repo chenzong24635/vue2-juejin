@@ -10,7 +10,7 @@
         <div class="list-cnt">
           <div class="list-flags">
             <p class="flag dot zl">专栏</p>
-            <p class="flag dot">{{list.user.username}}</p>
+            <p class="flag dot user-hover" @click="toUser(list)">{{list.user.username}}</p>
             <p class="flag dot">{{$_dateDis(list.createdAt)}}</p>
             <p class="dot">
               <router-link 
@@ -59,15 +59,28 @@
 import {$_dateDis} from '@/filters'
 
 import commonList from '@/mixins/commonList'
+import { useRouter } from 'vue-router'
 export default {
   mixins: [commonList],
   setup() {
+    let router = useRouter()
+    let toUser = (list) => {
+      let routeData = router.resolve({
+        name: "user",
+        params:{id: list.user.id}
+      });
+      window.open(routeData.href, '_blank');
+    }
     return {
-      $_dateDis
+      $_dateDis,
+      toUser
     }
   }
 }
 </script>
 <style scoped lang="less">
 @import '../../assets/css/commonList.less';
+.user-hover:hover{
+  color: @mainColor
+}
 </style>

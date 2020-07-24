@@ -62,14 +62,13 @@ import commonList1 from "@/components/common/common-list1";
 import scroll from "@/mixins/scroll";
 
 import tagAPI from "@/api/tag";
-import { reactive, toRefs, onMounted } from "vue";
+import { reactive, toRefs, onMounted, watch } from "vue";
 export default {
   name: "",
   components: {
     commonList1
   },
   props: ["title"],
-  mixins: [scroll],
   setup(props: propsType) {
     let tags: tagsType[] = Object.freeze([
       {
@@ -133,12 +132,7 @@ export default {
       isLoading: false
     });
 
-    onMounted(async ():void => {
-      await getTagDetail();
-      await getLists();
-    });
-
-    let getLists = async ():void => {
+    let getLists = async ():Promise<void> => {
       if (state.isLoading) return;
       state.isLoading = true;
       try {
@@ -159,7 +153,7 @@ export default {
         console.log(e);
       }
     };
-    let getTagDetail = async ():void => {
+    let getTagDetail = async ():Promise<void> => {
       try {
         let { s, d } = await tagAPI.tagDetail(encodeURIComponent(props.title));
         if (s === 1) {
@@ -189,6 +183,19 @@ export default {
     let filterId: () => string = (): string => {
       return state.tags.filter((item: tagsType) => item.title === props.title)[0].tagid;
     };
+
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+
+    onMounted(async ():Promise<void> => {
+      await getTagDetail();
+      await getLists();
+    });
 
     return {
       tags,

@@ -9,7 +9,7 @@
       />
     </div>
     <div class="middle-box">
-      <activity-skeleton v-if="isLoading && hasNextPage && routeName!=='following'" />
+      <activity-skeleton v-show="isLoading && hasNextPage && routeName!=='following'" />
       <pin-list :lists="lists" :type="routeName" />
     </div>
     <div class="right-side">
@@ -38,7 +38,7 @@ interface leftRouteParamsType {
 
 interface stateType{
   routeName: string,
-  apiParmas: objType | string,
+  apiParmas: objType|string,
   hasNextPage: boolean,
   isLoading: boolean,
   endCursor: string,
@@ -55,7 +55,7 @@ import pinList from '@/components/pins/list'
 
 import pinsAPI from '@/api/pins'
 import scroll from '@/mixins/scroll'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs, watch, onMounted } from 'vue'
 
 export default {
   components: {
@@ -64,11 +64,10 @@ export default {
     pinList
   },
   props: ['id'],
-  mixins: [scroll],
   setup(props: propsType){
     let state: stateType = reactive({
       routeName: '',
-      apiParmas: null,
+      apiParmas: {},
       hasNextPage: true,
       isLoading: false,
       endCursor: '',
@@ -105,7 +104,7 @@ export default {
       }
     }
 
-    let getLists = async(): void => {
+    let getLists = async():Promise<void> => {
       if(state.isLoading) return
       state.isLoading = true
       switch(state.routeName) {
@@ -126,8 +125,8 @@ export default {
       }
     }
 
-    let getListsRecommended = async (): void => { // 推荐
-      let apiParmas: objType | string = state.apiParmas;
+    let getListsRecommended = async ():Promise<void> => { // 推荐
+      let apiParmas: string = state.apiParmas;
       try {
         let { data } = await pinsAPI.lists1(apiParmas);
         let res = data.recommendedActivityFeed.items;
@@ -142,8 +141,8 @@ export default {
         state.isLoading = false
       }
     }
-    let getListsHot = async (): void => { // 热门
-      let apiParmas: objType | string = state.apiParmas;
+    let getListsHot = async ():Promise<void> => { // 热门
+      let apiParmas: objType = state.apiParmas;
       try{
         let { data } = await pinsAPI.lists1(apiParmas);
         let res = data.popularPinList.items;
@@ -158,9 +157,9 @@ export default {
         state.isLoading = false
       }
     }
-    let getListsFollowing = async (): void => { // 关注
+    let getListsFollowing = async ():Promise<void> => { // 关注
       if(!state.isLogin)return
-      let apiParmas: objType | string = state.apiParmas
+      let apiParmas: objType = state.apiParmas
       try{
         apiParmas.variables.since = new Date().toISOString();
         let { data } = await pinsAPI.lists1(apiParmas);
@@ -175,9 +174,10 @@ export default {
         state.isLoading = false
       }
     }
-    let getLists2 = async (): void => { // 开源推荐等
-      let apiParmas: objType | string = state.apiParmas;
+    let getLists2 = async ():Promise<void> => { // 开源推荐等
+      let apiParmas: string = state.apiParmas
       try{
+        console.log('---------',apiParmas)
         let {s, d} = await pinsAPI.lists2(apiParmas)
         if (s === 1) {
           if(d.total <= state.lists.length){
@@ -191,7 +191,7 @@ export default {
         state.isLoading = false
       }
     }
-    let getHotLists = async ():void => { // 推荐沸点
+    let getHotLists = async ():Promise<void> => { // 推荐沸点
       try {
         let {s, d} = await pinsAPI.hotLists()
         if (s === 1) {
@@ -201,13 +201,20 @@ export default {
         console.log(e);
       }
     }
-
-    (()=>{
+    
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+    onMounted(()=>{
       reset()
       getApiParmas()
       getHotLists()
       getLists()
-    })()
+    })
 
     return {
       leftRouteParams,

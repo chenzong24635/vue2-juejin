@@ -39,7 +39,13 @@
     </div>
   </li>
 </template>
-<script>
+<script lang="ts">
+interface objType{
+  [name:string]: any
+}
+interface propsType{
+  list: objType
+}
 import { computed } from 'vue'
 export default {
   name: 'comment-list-item',
@@ -49,7 +55,7 @@ export default {
       required: true
     },
   },
-  setup(props) {
+  setup(props:propsType) {
     let hasChild = computed(() => { //递归终止条件，避免抛错
       return props.list.topComment && props.list.topComment.length
     })

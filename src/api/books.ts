@@ -8,7 +8,7 @@ const navList = () => {
   })
 }
 
-const lists = (alias = '', pageNum = 1) => {
+const lists = (alias:string = '', pageNum:number = 1) => {
   return request({
     method: 'GET',
     url: '/v1/getListByLastTime',
@@ -24,7 +24,7 @@ const lists = (alias = '', pageNum = 1) => {
 }
 
 //购买人
-const bookBuyers = (id, pageNum = 1, pageSize=20) => {
+const bookBuyers = (id: string, pageNum:number = 1, pageSize:number=20) => {
   return request({
     method: 'GET',
     url: '/v1/getListBuy',
@@ -42,7 +42,7 @@ const bookBuyers = (id, pageNum = 1, pageSize=20) => {
 
 
 //小册头部信息,介绍
-const bookDesc = (id) => {
+const bookDesc = (id: string) => {
   return request({
     method: 'GET',
     url: '/v1/get',
@@ -56,7 +56,7 @@ const bookDesc = (id) => {
   })
 }
 //小册目录
-const bookSection = (id) => {
+const bookSection = (id: string) => {
   return request({
     method: 'GET',
     url: '/v1/getListSection',

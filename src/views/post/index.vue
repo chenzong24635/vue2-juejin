@@ -78,7 +78,7 @@ import commonList1 from '@/components/common/common-list1.vue'
 import postAPI from '@/api/post'
 import scroll from '@/mixins/scroll'
 import {$_toLocaleDateString} from '@/filters'
-import { reactive, toRefs,ref, onMounted } from 'vue'
+import { reactive, toRefs,ref, onMounted, watch } from 'vue'
 
 export default {
   components: {
@@ -90,7 +90,6 @@ export default {
     leftActions,
     commonList1
   },
-  mixins: [scroll],
   props: ['id'],
   setup(props: propsType) {
     let state: stateType = reactive({
@@ -108,7 +107,7 @@ export default {
       console.log('点赞');
     }
 
-    let getArticleContent = async(): void => { // 文章主要内容
+    let getArticleContent = async():Promise<void> => { // 文章主要内容
       try {
         let {s, d} = await postAPI.article({
           uid: '',
@@ -125,7 +124,7 @@ export default {
         console.log(e)
       }
     }
-    let getArticleInfo = async(): void => { // 文章头部内容（作者，标题等）
+    let getArticleInfo = async():Promise<void> => { // 文章头部内容（作者，标题等）
       try {
         let {s, d} = await postAPI.article({
           uid: '',
@@ -142,7 +141,7 @@ export default {
         console.log(e)
       }
     }
-    let getComments = async(): void => { //评价
+    let getComments = async():Promise<void> => { //评价
       let createdAt: string = ''
       let len: number = state.comments.length
       try {
@@ -166,7 +165,7 @@ export default {
         console.log(e)
       }
     }
-    let getRelatedEntry = async(): void => { // 相关文章
+    let getRelatedEntry = async():Promise<void> => { // 相关文章
       try {
         let {s, d} = await postAPI.relatedEntry({
           uid: '',
@@ -186,7 +185,7 @@ export default {
     let getLists = (): void => {
       getRecommendEntry()
     }
-    let getRecommendEntry = async(): void => { // 相关推荐
+    let getRecommendEntry = async():Promise<void> => { // 相关推荐
       if(state.isLoading) return
       state.isLoading = true
       let tagIds: string = ''
@@ -216,7 +215,15 @@ export default {
       }
     }
     const panel = ref(null) // 获取模板元素 panel
-    onMounted(async()=>{
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      (prev,now)=>{
+        console.log(prev,now)
+        getRecommendEntry()
+      }
+    )
+    onMounted(async():Promise<void>=>{
       await getArticleContent()
       await getComments()
       await getArticleInfo()

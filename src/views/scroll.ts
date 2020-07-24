@@ -1,9 +1,9 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { debounce } from '../libs/util';
+import { debounce } from '@/libs/util';
 
 export default function scroll(){
     let scrollTop = ref(0)
-    let isBottom = ref(false)
+    let bool = ref(false)
     let scrollBottom = debounce(() => {
       let rect = document.body.getBoundingClientRect();
       let _scrollTop = -rect.top; // 滚动条距离顶部的高度
@@ -14,10 +14,11 @@ export default function scroll(){
         return
       }
       scrollTop.value = _scrollTop;
-      if (_scrollTop + _clientHeight > (_bodyHeight - _clientHeight / 1.5)) { // 距离顶部+当前高度 >=文档总高度 即代表滑动到底部
-        isBottom.value = true
+      if (_scrollTop + _clientHeight > (_bodyHeight - _clientHeight / 2)) { // 距离顶部+当前高度 >=文档总高度 即代表滑动到底部
+        bool.value = true
+        // this.getLists();
       }else{
-        isBottom.value = false
+        bool.value = false
       }
     })
     onMounted(()=>{
@@ -28,6 +29,6 @@ export default function scroll(){
       window.removeEventListener('scroll', scrollBottom)
     })
     return {
-      isBottom
+      bool
     }
 }

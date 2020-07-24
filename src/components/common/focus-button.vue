@@ -5,9 +5,6 @@
 export default {
   name: '',
   props: ['id'],
-  data () {
-    return {}
-  },
   setup () {
     let focus = ()=>{}
     return {

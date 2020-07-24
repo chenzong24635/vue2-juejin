@@ -53,96 +53,128 @@
     </aside>
   </div>
 </template>
-<script>
+<script lang="ts">
+interface objType{
+  [property: string]: any
+}
+interface propsType{
+  id: string,
+  [property: string]: any
+}
+interface sortsType{
+  sort: string,
+  type: string,
+}
+interface stateType{
+  sortType: string,
+  sortIndex: number,
+  page: number,
+  pageSize: number,
+  lists: any[],
+  isLoading: boolean,
+  attenders: objType,
+  attendersLists:any[],
+  [property: string]: any
+}
+
 import pinList from '@/components/pins/list.vue'
 import scroll from '@/mixins/scroll'
 import topic from '@/api/topic'
-
+import { reactive, toRefs, computed, onMounted, watch } from 'vue'
 
 export default {
   name: '',
   components: {pinList},
   props: ['id'],
-  mixins: [scroll],
-  data () {
-    return {
+  setup (props: propsType) {
+    let sorts: sortsType[] = Object.freeze([
+      {
+        sort: 'rank',
+        title: '热门'
+      },
+      {
+        sort: 'newest',
+        title: '最新'
+      },
+    ])
+    let state: stateType = reactive({
       sortType: 'rank',
       sortIndex: 0,
-      sorts: [
-        {
-          sort: 'rank',
-          title: '热门'
-        },
-        {
-          sort: 'newest',
-          title: '最新'
-        },
-      ],
       page: 0,
       pageSize: 20,
       lists: [],
       isLoading: false,
       attenders: {}, //侧边栏-参与人
-      info: {} // 侧边栏-话题信息
+      info: {}, // 侧边栏-话题信息
+      attendersLists: computed(()=>state.attenders.list.slice(0,12))
+    })
+
+    let sortChange = (item: stateType, index: number):void => {
+      state.sortIndex = index;
+      state.sortType = sorts[index].sort;
+      reset();
+      getLists();
     }
-  },
-  computed: {
-    attendersLists() {
-      return this.attenders.list.slice(0,12)
+
+    let reset = ():void => {
+      state.page = 0
+      state.pageSize = 20
+      state.lists = []
     }
-  },
-  created () {
-    this.getTopicDetail();
-    this.getLists();
-    this.getAttenders();
+    let getLists = async():Promise<void> => {
+      if(state.isLoading) return 
+      state.isLoading = true
+      try{
+        let {s, d} = await topic.lists(props.id, state.sortType ,state.page, state.pageSize)
+        if(s === 1) {
+          state.lists = state.lists.concat(d.list)
+          state.page++
+          state.isLoading = false
+        }
+      }catch(e){
+        console.log(e);
+      }
+    }
+    let getTopicDetail = async():Promise<void> => {
+      try{
+        let {s, d} = await topic.topicDetail(props.id)
+        if(s === 1) {
+          state.info = d
+        }
+      }catch(e){
+        console.log(e);
+      }
+    }
+    let getAttenders = async():Promise<void> => { //参加人
+      try{
+        let {s, d} = await topic.attenders(props.id)
+        if(s === 1) {
+          state.attenders = d
+        }
+      }catch(e){
+        console.log(e);
+      }
+    }
+
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+    onMounted(()=>{
+      getTopicDetail();
+      getLists();
+      getAttenders();
+    })
+
+    return {
+      ...toRefs(state),
+      sortChange
+    }
   },
   methods: {
-    sortChange(item, index) {
-      this.sortIndex = index;
-      this.sortType = this.sorts[index].sort;
-      this.reset();
-      this.getLists();
-    },
-    reset() {
-      this.page = 0
-      this.pageSize = 20
-      // this.total = 0,
-      this.lists = []
-    },
-    async getLists() {
-      if(this.isLoading) return false
-      this.isLoading = true
-      try{
-        let {s, d} = await topic.lists(this.id, this.sortType ,this.page, this.pageSize)
-        if(s === 1) {
-          this.lists = this.lists.concat(d.list)
-          this.page++
-          this.isLoading = false
-        }
-      }catch(e){
-        console.log(e);
-      }
-    },
-    async getTopicDetail() {
-      try{
-        let {s, d} = await topic.topicDetail(this.id)
-        if(s === 1) {
-          this.info = d
-        }
-      }catch(e){
-        console.log(e);
-      }
-    },
-    async getAttenders() { //参加人
-      try{
-        let {s, d} = await topic.attenders(this.id)
-        if(s === 1) {
-          this.attenders = d
-        }
-      }catch(e){
-        console.log(e);
-      }
-    }
   }
 }
 </script>

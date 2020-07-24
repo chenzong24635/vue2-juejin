@@ -1,10 +1,10 @@
 <template>
   <div class="">
-    <article-nothing v-if="type === 'following' && !isLogin" title="你关注人的动态会出现在这里">
+    <!-- <article-nothing v-if="type === 'following' && !isLogin" title="你关注人的动态会出现在这里">
       <template>
         <c-button @click="login" type="primary cutout">登录</c-button>
       </template>
-    </article-nothing>
+    </article-nothing> -->
     <ul>
       <li class="list" v-for="item in lists" :key="item.id">
         <template v-if="type === 'recommended' || type === 'following'">
@@ -30,7 +30,6 @@
 <script>
 import listDetail1 from './list-detail1.vue'
 import listDetail2 from './list-detail2.vue'
-import {mapState,mapActions} from 'vuex'
 
 export default {
   name: '',
@@ -49,25 +48,6 @@ export default {
       required: true
     }
   },
-  computed: {
-    ...mapState([
-      'isLogin'
-    ]),
-  },
-  data () {
-    return {}
-  },
-  created () {
-    console.log(this.$attrs);
-  },
-  methods: {
-    ...mapActions([
-      'showLoginModel'
-    ]),
-    login() {
-      this.showLoginModel()
-    }
-  }
 }
 </script>
 <style scoped lang="less">

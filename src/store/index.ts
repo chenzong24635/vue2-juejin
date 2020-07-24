@@ -9,6 +9,7 @@ export default Vuex.createStore({
   mutations: {
     //显示隐藏 登录注册框
     setLoginModel(state, val) {
+      console.log();
       state.loginModel = val
     },
   },

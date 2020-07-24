@@ -46,9 +46,9 @@
           <!-- <span v-if="item.showCount" class="tab-count">{{item.count}}</span> -->
           <ul v-if="item.selects && item.showSelects && item.selects.length" class="selects">
             <li
+              v-for="(item1, index1) in item.selects" 
               @click.stop="chooseSelect(item1, index1, item, index)"
               :class="['select', item.selectIndex === index1 ? 'active' : '']" 
-              v-for="(item1, index1) in item.selects" 
               :key="index1"
             >
               {{item1.title}}
@@ -112,20 +112,42 @@
         </div>
         <div class="item">
           <p class="item-title">加入于</p>
-          <p class="item-count">{{authorInfo.createdAt }}</p>
+          <p class="item-count">{{$_toLocaleDateString(authorInfo.createdAt)}}</p>
           <!-- <p class="item-count">{{authorInfo.createdAt | date}}</p> -->
         </div>
       </section>
     </aside>
   </main>
 </template>
-<script>
+<script lang="ts">
+
+interface propsType{
+  id: string,
+  title: string
+}
+interface tabsType{
+  title: string,
+  route: string,
+  showCount: boolean,
+  [name: string]: any
+}
+interface tabsSelectsType{
+  title: string,
+  route: string,
+  type?: string,
+  count?: number,
+}
+
+
 import activitiesList from '@/components/user/activitiesList.vue'
 import postsList from '@/components/user/postsList.vue'
 import pinsList from '@/components/user/pinsList.vue'
 import sharesList from '@/components/user/sharesList.vue'
 import userAPI from '@/api/user'
 import scroll from '@/mixins/scroll'
+import { reactive, toRefs, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { $_toLocaleDateString } from '@/filters';
 
 export default {
   name: '',
@@ -136,9 +158,8 @@ export default {
     sharesList,
   },
   props: ['id','title'],
-  mixins: [scroll],
-  data () {
-    return {
+  setup (props: propsType) {
+    let state = reactive({
       authorInfo: {},
       after: '',
       isLoading: false,
@@ -227,69 +248,29 @@ export default {
         },
       ],
       lists: [],
-    }
-  },
-  created () {
-    this.getAuthor()
-    // 根据路由切换tab
-    this.tabs.some((item, index) => {
-      if(item.selects) {
-        return item.selects.some((item1) => {
-          if(item1.route === this.title){
-            this.tabIndex = index
-            return true
-          }
-        })
-      }else{
-        if(item.route === this.title){
-          this.tabIndex = index
-          return true
-        }
-      }
     })
-    this.getLists()
-  },
-  methods: {
-    changeTab(item, index) {
-      if(item.selects) {
-        this.hideSelects('showSelects')
-        item.showSelects = !item.showSelects
-      } else {
-        this.hideSelects('')
-        this.tabIndex = index
-        this.routeTo(item.route)
-        this.reset()
-        this.getLists()
-      }
-    },
-    chooseSelect(item1, index1, item, index){
-      // 设置当前下拉框 选中
-      this.hideSelects('')
-      item.selectIndex = index1
-      this.tabIndex = index
-      this.reset()
-      this.routeTo(item1.route)
-      this.getLists()
-    },
-    routeTo(route) {
-      this.$router.push(`/user/${this.id}/${route}`)
-    },
+
+    
+    let router = useRouter()
+    let routeTo = (route: string,):void => {
+      router.push(`/user/${props.id}/${route}`)
+    }
     /** 
      * @parmas {String} type:showSelects 有下拉框；type:selectIndex 其他
      */
-    hideSelects(type) {
+    let hideSelects = (type:string):void => {
       console.log('hide');
       if(type === 'showSelects') {
         // 设置所有下拉框 未选中
-        this.tabs.forEach(item => {
+        state.tabs.forEach(item => {
           (item.showSelects !== 'undefined') && (item[type] = false)
         })
       }else if(type === 'selectIndex'){
-        this.tabs.forEach(item => {
+        state.tabs.forEach(item => {
           (item.selectIndex !== 'undefined') && (item[type] = -1)
         })
       }else{
-        this.tabs.forEach(item => {
+        state.tabs.forEach(item => {
           if(item.showSelects !== 'undefined'){
             item['showSelects'] = false
           }
@@ -298,90 +279,157 @@ export default {
           }
         })
       }
-    },
-    reset() {
-      this.lists = [];
-      this.after = '';
-      this.hasNextPage = true;
-      this.isLoading = false;
+    }
+    let reset = ():void => {
+      state.lists = [];
+      state.after = '';
+      state.hasNextPage = true;
+      state.isLoading = false;
       
-    },
-    getLists() {
-      if(this.isLoading) return
-      this.isLoading = true
-      let listsObj = {
-        0: 'getActivities',
-        1: 'getPosts',
-        2: 'getPins',
-        3: 'getShares',
-        4: 'getLikes',
-        5: 'getPraise',
-        6: 'getBooks',
-        7: 'getCollections',
-        8: 'getTags',
-      }
-      this[listsObj[this.tabIndex]]()
-    },
-    async getAuthor() { // 用户信息
-      if(!this.hasNextPage)return
+    }
+    let getLists = async():Promise<void> => {
+      if(state.isLoading) return
+      state.isLoading = true
+      let listArr = [
+        getActivities(),
+        getPosts(),
+        getPins(),
+        getShares(),
+        getLikes(),
+        getPraise(),
+        getBooks(),
+        getCollections(),
+        getTags(),
+      ]
+      console.log(state.tabIndex)
+      listArr[state.tabIndex]
+      
+    }
+    let getAuthor = async():Promise<void> => { // 用户信息
+      if(!state.hasNextPage)return
       try{
-        let {s, d} = await userAPI.author(this.id)
+        let {s, d} = await userAPI.author(props.id)
         if(s === 1){
-          this.authorInfo = d[this.id]
+          state.authorInfo = d[props.id]
         }
       }catch(e){
         console.log(e);
       }
-      console.log(this.authorInfo);
-    },
-    async getActivities() { //动态
-      if(!this.hasNextPage)return
+      console.log(state.authorInfo);
+    }
+    let getActivities = async():Promise<void> => { //动态
+      if(!state.hasNextPage)return
       try{
-        let {data} = await userAPI.activities(this.id, this.after)
+        let {data} = await userAPI.activities(props.id, state.after)
         let items = data.ownActivityFeed.items
-        this.lists = this.lists.concat(items.edges)
-        this.hasNextPage = items.pageInfo.hasNextPage
-        this.after = items.pageInfo.endCursor
-        this.isLoading = false
+        state.lists = state.lists.concat(items.edges)
+        state.hasNextPage = items.pageInfo.hasNextPage
+        state.after = items.pageInfo.endCursor
+        state.isLoading = false
+        
+        console.log(items);
       }catch(e){
         console.log(e);
       }
-    },
-    async getPosts() { //专栏
+    }
+    let getPosts = async():Promise<void> => { //专栏
       try{
-        let {s, d} = await userAPI.posts(this.id)
+        let {s, d} = await userAPI.posts(props.id)
         if(s === 1) {
-          this.lists = d.entrylist
-          this.isLoading = false
+          state.lists = d.entrylist
+          state.isLoading = false
         }
       }catch(e){
         console.log(e);
       }
-    },
-    async getPins() { //沸点
+    }
+    let getPins = async():Promise<void> => { //沸点
       try{
-        let {s, d} = await userAPI.pins(this.id, this.after)
+        let {s, d} = await userAPI.pins(props.id, state.after)
         if(s === 1) {
-          this.lists = d.list
-          this.isLoading = false
+          state.lists = d.list
+          state.isLoading = false
         }
       }catch(e){
         console.log(e);
       }
-    },
-    async getShares() { //分享
-    },
-    async getLikes() { //赞-文章
-    },
-    async getPraise() { //赞-沸点
-    },
-    async getBooks() { //小册
-    },
-    async getCollections() { //收藏集
-    },
-    async getTags() { //关注
-    },
-  }
+    }
+    let changeTab = (item: tabsType, index: number):void => {
+      if(item.selects) {
+        hideSelects('showSelects')
+        item.showSelects = !item.showSelects
+      } else {
+        hideSelects('')
+        state.tabIndex = index
+        routeTo(item.route)
+        reset()
+        getLists()
+      }
+    }
+    let chooseSelect = (item1:tabsSelectsType, index1:number, item:tabsType, index:number):void =>{
+      // 设置当前下拉框 选中
+      hideSelects('')
+      item.selectIndex = index1
+      state.tabIndex = index
+      reset()
+      routeTo(item1.route)
+      getLists()
+    }
+    let getShares = async():Promise<void> => { //分享
+    }
+    let getLikes = async():Promise<void> => { //赞-文章
+    }
+    let getPraise = async():Promise<void> => { //赞-沸点
+    }
+    let getBooks = async():Promise<void> => { //小册
+    }
+    let getCollections = async():Promise<void> => { //收藏集
+    }
+    let getTags = async():Promise<void> => { //关注
+    }
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      ()=>{
+        getLists()
+      }
+    )
+    onMounted(()=>{
+      getAuthor()
+      // 根据路由切换tab
+      state.tabs.some((item: tabsType, index: number) => {
+        if(item.selects) {
+          return item.selects.some((item1:tabsSelectsType) => {
+            if(item1.route === state.title){
+              state.tabIndex = index
+              return true
+            }
+          })
+        }else{
+          if(item.route === state.title){
+            state.tabIndex = index
+            return true
+          }
+        }
+      })
+      getLists()
+    })
+    return {
+      $_toLocaleDateString,
+      ...toRefs(state),
+      getActivities,
+      getPosts,
+      getPins,
+      changeTab,
+      chooseSelect,
+      getShares,
+      getLikes,
+      getPraise,
+      getBooks,
+      getCollections,
+      getTags
+    }
+  },
 }
 </script>
 <style scoped lang="less">

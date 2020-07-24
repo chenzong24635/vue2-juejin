@@ -18,7 +18,7 @@
             >{{item.title}}</li>
           </ul>
         </nav>
-        <activity-skeleton v-if="isLoading && hasNextPage" />
+        <activity-skeleton v-show="isLoading && hasNextPage" />
       </common-list1>
       <home-right />
     </div>
@@ -53,12 +53,11 @@ import homeHeaderParams from '@/components/timeline/homeHeaderParams'
 import timelineAPI from '@/api/timeline'
 import scroll from '@/mixins/scroll'
 
-// import {name,t0,t1} from '@/types/timeline/index.ts'
-// console.log(t0);
-// console.log(t1);
-// console.log(name);
+import {nameType} from '@/types/commons/index.ts'
+console.log(nameType);
 
-import {reactive, toRefs} from 'vue'
+
+import {reactive, toRefs, watch, onMounted} from 'vue'
 // import { useRouter } from 'vue-router'
 
 export default {
@@ -67,7 +66,6 @@ export default {
     homeRight,
   },
   props: ['id'],
-  mixins: [scroll],
   setup(props:objType) {
     let state: stateType = reactive({
       isLoading: false,
@@ -140,26 +138,18 @@ export default {
         })
     }
 
-    // computed()
-    // const count = computed(
-    //   [
-    //     ()=>state.subIndex,
-    //     ()=>state.order,
-    //   ],
-    //   (
-    //     [subIndex, order],
-    //     [presubIndex, preorder],
-    //   )=> {
-    //     console.log([subIndex, order],
-    //     [presubIndex, preorder],);
-    //   }
-    // )
-    // console.log(count);    
-
-    (() =>{
+    let {isBottom} = scroll()
+    watch(
+      ()=>isBottom.value,
+      (prev,now)=>{
+        console.log(prev,now);
+        getLists()
+      }
+    )
+    onMounted(()=>{
       getApiData()
       getLists()
-    })()
+    })
 
     return {
       homeHeaderParams,

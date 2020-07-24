@@ -34,9 +34,6 @@ export default {
       type: Boolean
     }
   },
-  setup () {
-    
-  },
   methods: {
     closeModal() {
       this.$emit('close-modal', false);

@@ -8,9 +8,8 @@
           <div class="list-message">
             <p class="list-title">{{item.title}}</p>
             <div class="list-date">
-              <svg-icon name="calendar"></svg-icon>
-              <span>{{item.startTime}}</span>
-              <!-- <span>{{item.startTime | date}}</span> -->
+              <img src="https://b-gold-cdn.xitu.io/v3/static/img/calendar.8e47027.png" alt="">
+              <span>{{date(item.startTime)}}</span>
             </div>
             <div class="list-address">
               <p class="list-address-city">
@@ -27,16 +26,21 @@
     </ul>
   </div>
 </template>
-<script>
-let dayArr = {
-  0: '周日',
-  1: '周一',
-  2: '周二',
-  3: '周三',
-  4: '周四',
-  5: '周五',
-  6: '周六',
+<script lang="ts">
+interface propsType{
+  [name:string]:any
 }
+
+import { computed } from 'vue'
+let dayArr = Object.freeze([
+  '周日',
+  '周一',
+  '周二',
+  '周三',
+  '周四',
+  '周五',
+  '周六',
+])
 export default {
   name: '',
   components: {},
@@ -46,23 +50,25 @@ export default {
       required: true
     }
   },
-  filters: {
-    date: function(val) {
-      val = new Date(val)
-      let month = (val.getMonth() + 1 + '').padStart(2,0)
-      let date = (val.getDate() + '').padStart(2,0)
-      let day = dayArr[val.getDay()]
+  setup(props:propsType){
+    let date = (val:string):string => {
+      let val1 = new Date(val)
+      let month = (val1.getMonth() + 1 + '').padStart(2,'0')
+      let date = (val1.getDate() + '').padStart(2,'0')
+      let day = dayArr[val1.getDay()]
       return month + '-' + date + ' ' + day
-    },
-  },
-  computed: {
-    listsNew() {
+    }
+    let listsNew = computed(() => {
       let nowDate = +new Date()
-      return this.lists.map(item => {
+      return props.lists.map(item => {
         let activeDate = +new Date(item.endTime)
         item.isActive = activeDate > nowDate
         return item
       })
+    })
+    return {
+      date,
+      listsNew
     }
   },
 }
@@ -111,6 +117,9 @@ export default {
   &-date{
     margin: 10px 0;
     .flex(@ai:center);
+    img{
+      width: 12px;
+    }
     &>span{margin-left: 6px;}
   }
   &-address{
