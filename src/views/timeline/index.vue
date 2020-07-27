@@ -53,10 +53,6 @@ import homeHeaderParams from '@/components/timeline/homeHeaderParams'
 import timelineAPI from '@/api/timeline'
 import scroll from '@/mixins/scroll'
 
-import {nameType} from '@/types/commons/index.ts'
-console.log(nameType);
-
-
 import {reactive, toRefs, watch, onMounted} from 'vue'
 // import { useRouter } from 'vue-router'
 

@@ -14,10 +14,8 @@
   </div>
 </template>
 <script lang="ts">
-interface propsType{
-  id: string
-}
-
+import{ProxyType}from '@/types/commons'
+import{navListsType,}from './types'
 
 import copyRight from '@/components/common/copy-right'
 import headerSub from '@/components/header/header-sub'
@@ -36,33 +34,38 @@ export default {
     copyRight
   },
   props: ["id"],
-  setup(props: propsType) {
-    let state = reactive({
-      navLists: [],
-      lists: [],
-      pageNum: 1
+  setup(props) {
+    let navListsState: ProxyType<navListsType> = reactive({
+      navLists:[
+        {
+          id: "0",
+          name: "全部",
+          score: "0",
+          createdAt: "2018-08-21T15:12:19.000Z",
+          alias: "all",
+        }
+      ]
     })
 
     let getNavLists = async ():Promise<void> => {
       let {s, d} = await booksAPI.navList();
       if(s === 1){
-        state.navLists = [
-          {
-            id: "0",
-            name: "全部",
-            score: "0",
-            createdAt: "2018-08-21T15:11:46.000Z",
-            alias: "all",
-          },
+        navListsState.navLists = [
+          ...navListsState.navLists,
           ...d
         ];
+        console.log(3,navListsState.navLists);
       }
     }
+    let listsState = reactive({
+      lists: [],
+      pageNum: 1
+    })
     let getLists = async ():Promise<void> => {
       let id:string = props.id ==='all' ? '' : props.id
-      let {s, d} = await booksAPI.lists(id, state.pageNum++);
+      let {s, d} = await booksAPI.lists(id, listsState.pageNum++);
       if(s === 1){
-        state.lists = state.lists.concat(d);
+        listsState.lists = listsState.lists.concat(d);
       }
       
     }
@@ -74,14 +77,14 @@ export default {
         getLists()
       }
     )
+    getNavLists()
     onMounted(()=>{
-      getNavLists()
       getLists()
     })
 
-
     return {
-      ...toRefs(state),
+      ...toRefs(navListsState),
+      ...toRefs(listsState),
       getLists
     }
   },

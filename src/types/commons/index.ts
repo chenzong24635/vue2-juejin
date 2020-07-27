@@ -1,6 +1,16 @@
-export interface nameType{
-  name: string
+export interface ProxyType<T>{
+  [[Handler]]: {
+    get: Function,
+    set: Function,
+    deleteProperty: Function,
+    has: Function,
+    ownKeys: Function,
+  },
+  [[Target]]: T,
+  [[IsRevoked]]: boolean,
 }
-// export declare interface nameType{
-//   name: string
-// }
+
+export interface propsBaseType{
+  id: string,
+  age: number
+}

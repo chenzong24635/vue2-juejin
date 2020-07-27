@@ -76,10 +76,7 @@
   </main>
 </template>
 <script lang="ts">
-interface propsType{
-  id: string|number
-}
-
+// import{propsBaseType}from '@/types/commons'
 
 import {$_read} from '@/filters'
 import bookAPI from '@/api/books'
@@ -88,9 +85,9 @@ import { reactive, toRefs, computed, onMounted } from 'vue';
 
 export default {
   props: ['id'],
-  setup(props: propsType) {
+  setup(props) {
+    let tabs  = Object.freeze(['目录','介绍'])
     let state = reactive({
-      tabs: ['目录','介绍'],
       bookDesc: {},
       bookBuyers: [],
       bookSections: [],
@@ -143,6 +140,7 @@ export default {
 
     return {
       $_read,
+      tabs,
       ...toRefs(state),
       tabChange,
       getBookDesc,
@@ -172,7 +170,7 @@ export default {
   padding: 20px;
   color: #71777c;
   &-img{
-    width: 130px;
+    // width: 130px;
     height: 182px;
     border-radius: 2px;
     margin-right: 20px;
