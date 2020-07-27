@@ -56,8 +56,9 @@ export default {
 
   setup(props) {
     let listsNew = computed(()=>{
+
       //点赞文章
-      let lists = props.lists.map(item => item.node).filter(item=>item.action === 'LIKE_ARTICLE')
+      let lists = props.lists.map(item => item.node ? item.node : item).filter(item=>item.action === 'LIKE_ARTICLE')
       return lists
     })
     return {

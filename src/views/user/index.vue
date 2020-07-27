@@ -120,24 +120,8 @@
   </main>
 </template>
 <script lang="ts">
-
-interface propsType{
-  id: string,
-  title: string
-}
-interface tabsType{
-  title: string,
-  route: string,
-  showCount: boolean,
-  [name: string]: any
-}
-interface tabsSelectsType{
-  title: string,
-  route: string,
-  type?: string,
-  count?: number,
-}
-
+import{objType}from '@/types/commons'
+import {tabsType,tabsSelectsType} from '@/types/user'
 
 import activitiesList from '@/components/user/activitiesList.vue'
 import postsList from '@/components/user/postsList.vue'
@@ -158,7 +142,7 @@ export default {
     sharesList,
   },
   props: ['id','title'],
-  setup (props: propsType) {
+  setup (props: objType) {
     let state = reactive({
       authorInfo: {},
       after: '',
@@ -251,35 +235,34 @@ export default {
     })
 
     
-    let router = useRouter()
+    let router:objType = useRouter()
     let routeTo = (route: string,):void => {
       router.push(`/user/${props.id}/${route}`)
     }
     /** 
      * @parmas {String} type:showSelects 有下拉框；type:selectIndex 其他
      */
-    let hideSelects = (type:string):void => {
-      console.log('hide');
-      if(type === 'showSelects') {
-        // 设置所有下拉框 未选中
-        state.tabs.forEach(item => {
-          (item.showSelects !== 'undefined') && (item[type] = false)
-        })
-      }else if(type === 'selectIndex'){
-        state.tabs.forEach(item => {
-          (item.selectIndex !== 'undefined') && (item[type] = -1)
-        })
-      }else{
-        state.tabs.forEach(item => {
-          if(item.showSelects !== 'undefined'){
-            item['showSelects'] = false
-          }
-          if(item.selectIndex !== 'undefined'){
-            item['selectIndex'] =  -1
-          }
-        })
-      }
-    }
+    // let hideSelects = (type:string):void => {
+    //   if(type === 'showSelects') {
+    //     // 设置所有下拉框 未选中
+    //     state.tabs.forEach(item => {
+    //       (item.showSelects !== 'undefined') && (item[type] = false)
+    //     })
+    //   }else if(type === 'selectIndex'){
+    //     state.tabs.forEach(item => {
+    //       (item.selectIndex !== 'undefined') && (item[type] = -1)
+    //     })
+    //   }else{
+    //     state.tabs.forEach(item => {
+    //       if(item.showSelects !== 'undefined'){
+    //         item['showSelects'] = false
+    //       }
+    //       if(item.selectIndex !== 'undefined'){
+    //         item['selectIndex'] =  -1
+    //       }
+    //     })
+    //   }
+    // }
     let reset = ():void => {
       state.lists = [];
       state.after = '';
@@ -301,9 +284,8 @@ export default {
         getCollections(),
         getTags(),
       ]
-      console.log(state.tabIndex)
+      console.log(state.tabIndex);
       listArr[state.tabIndex]
-      
     }
     let getAuthor = async():Promise<void> => { // 用户信息
       if(!state.hasNextPage)return
@@ -315,7 +297,6 @@ export default {
       }catch(e){
         console.log(e);
       }
-      console.log(state.authorInfo);
     }
     let getActivities = async():Promise<void> => { //动态
       if(!state.hasNextPage)return
@@ -326,8 +307,7 @@ export default {
         state.hasNextPage = items.pageInfo.hasNextPage
         state.after = items.pageInfo.endCursor
         state.isLoading = false
-        
-        console.log(items);
+        console.log('---',state.lists);
       }catch(e){
         console.log(e);
       }
@@ -355,20 +335,24 @@ export default {
       }
     }
     let changeTab = (item: tabsType, index: number):void => {
-      if(item.selects) {
-        hideSelects('showSelects')
-        item.showSelects = !item.showSelects
-      } else {
-        hideSelects('')
-        state.tabIndex = index
-        routeTo(item.route)
-        reset()
-        getLists()
-      }
+      state.tabIndex = index
+      routeTo(item.route)
+      reset()
+      getLists()
+      // if(item.selects) {
+      //   hideSelects('showSelects')
+      //   item.showSelects = !item.showSelects
+      // } else {
+      //   hideSelects('')
+      //   state.tabIndex = index
+      //   routeTo(item.route)
+      //   reset()
+      //   getLists()
+      // }
     }
     let chooseSelect = (item1:tabsSelectsType, index1:number, item:tabsType, index:number):void =>{
       // 设置当前下拉框 选中
-      hideSelects('')
+      // hideSelects('')
       item.selectIndex = index1
       state.tabIndex = index
       reset()
@@ -397,16 +381,16 @@ export default {
     onMounted(()=>{
       getAuthor()
       // 根据路由切换tab
-      state.tabs.some((item: tabsType, index: number) => {
+      state.tabs.some((item, index: number) => {
         if(item.selects) {
           return item.selects.some((item1:tabsSelectsType) => {
-            if(item1.route === state.title){
+            if(item1.route === props.title){
               state.tabIndex = index
               return true
             }
           })
         }else{
-          if(item.route === state.title){
+          if(item.route === props.title){
             state.tabIndex = index
             return true
           }

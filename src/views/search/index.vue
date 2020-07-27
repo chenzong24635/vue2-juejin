@@ -41,27 +41,8 @@
   </div>
 </template>
 <script lang="ts">
-interface objType{
-  [property: string]: any
-}
-interface propsType{
-  query: string,
-  type: string | number,
-}
-
-interface subNavsType{
-  title: string,
-  type: string
-}
-
-interface stateType{
-  isLoading: boolean,
-  hasNextPage: boolean,
-  endCursor: string,
-  lists: any[],
-  apiParmas: objType,
-  [proeprty: string]: any
-}
+import{objType}from '@/types/commons'
+import {subNavsType,stateType} from '@/types/search'
 
 import tagList from '@/components/search/tag-list'
 import userList from '@/components/search/user-list'
@@ -77,8 +58,8 @@ export default {
     userList
   },
   props: ['query','type'],
-  setup(props: propsType) {
-    let subNavs: subNavsType[] = Object.freeze([
+  setup(props: objType) {
+    let subNavs = Object.freeze([
       {
         title: "综合",
         type: "all"
@@ -96,12 +77,7 @@ export default {
         type: "user"
       },
     ])
-    let state: stateType = reactive({
-      isLoading: false,
-      hasNextPage: true,
-      endCursor: '',
-      lists: [],
-      apiParmas: {
+    let apiParmas = reactive({
         operationName: "",
         query: "",
         variables: {
@@ -116,20 +92,25 @@ export default {
             id: "a53db5867466eddc50d16a38cfeb0890"
           }
         }
-      },
+      })
+    let state: stateType = reactive({
+      isLoading: false,
+      hasNextPage: true,
+      endCursor: '',
+      lists: [],
     })
 
     let router: objType = useRouter()
-    let subChange = (item: subNavsType) => {
+    let subChange = (item: subNavsType): void => {
       router.replace({ name: 'search', params: { query: props.query, type: item.type}})
     }
-    let getLists = ():void => {
-      state.apiParmas.variables.after = state.endCursor;
-      state.apiParmas.variables.type = props.type.toUpperCase();
-      state.apiParmas.variables.query = props.query;
+    let getLists = (): void => {
+      apiParmas.variables.after = state.endCursor;
+      apiParmas.variables.type = props.type.toUpperCase();
+      apiParmas.variables.query = props.query;
       if(state.isLoading || !state.hasNextPage) return
       state.isLoading = true
-      timelineAPI.lists(state.apiParmas)
+      timelineAPI.lists(apiParmas)
         .then(res => {
           if(state.hasNextPage && res.data){
             let result = res.data.search;

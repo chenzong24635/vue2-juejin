@@ -54,28 +54,8 @@
   </div>
 </template>
 <script lang="ts">
-interface objType{
-  [property: string]: any
-}
-interface propsType{
-  id: string,
-  [property: string]: any
-}
-interface sortsType{
-  sort: string,
-  type: string,
-}
-interface stateType{
-  sortType: string,
-  sortIndex: number,
-  page: number,
-  pageSize: number,
-  lists: any[],
-  isLoading: boolean,
-  attenders: objType,
-  attendersLists:any[],
-  [property: string]: any
-}
+import{objType}from '@/types/commons'
+import {sortsType,stateType} from '@/types/topic'
 
 import pinList from '@/components/pins/list.vue'
 import scroll from '@/mixins/scroll'
@@ -86,17 +66,8 @@ export default {
   name: '',
   components: {pinList},
   props: ['id'],
-  setup (props: propsType) {
-    let sorts: sortsType[] = Object.freeze([
-      {
-        sort: 'rank',
-        title: '热门'
-      },
-      {
-        sort: 'newest',
-        title: '最新'
-      },
-    ])
+  setup (props: objType) {
+
     let state: stateType = reactive({
       sortType: 'rank',
       sortIndex: 0,
@@ -108,8 +79,18 @@ export default {
       info: {}, // 侧边栏-话题信息
       attendersLists: computed(()=>state.attenders.list.slice(0,12))
     })
-
-    let sortChange = (item: stateType, index: number):void => {
+    
+    let sorts = Object.freeze([
+      {
+        sort: 'rank',
+        title: '热门'
+      },
+      {
+        sort: 'newest',
+        title: '最新'
+      },
+    ])
+    let sortChange = (item: sortsType, index: number):void => {
       state.sortIndex = index;
       state.sortType = sorts[index].sort;
       reset();

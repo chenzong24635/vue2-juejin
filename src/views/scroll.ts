@@ -1,10 +1,10 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { debounce } from '@/libs/util';
 
-export default function scroll(){
+export default function scroll(): boolean{
     let scrollTop = ref(0)
     let bool = ref(false)
-    let scrollBottom = debounce(() => {
+    let scrollBottom = debounce(():void => {
       let rect = document.body.getBoundingClientRect();
       let _scrollTop = -rect.top; // 滚动条距离顶部的高度
       let _bodyHeight = rect.height; // 当前页面的总高度

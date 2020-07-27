@@ -19,23 +19,26 @@
       :key="item.objectId"
     >
       <div class="post-top">
-        <img :src="item.user.avatarLarge" alt="" class="post-avatar">
+        <img :src="item.user && item.user.avatarLarge" alt="" class="post-avatar">
         <p class="post-user">
-          <span>{{item.user.username}}</span>
-          <span>{{item.createdAt}}</span>
-          <!-- <span>{{item.createdAt | dateDis}}</span> -->
+          <span>{{item.user&&item.user.username}}</span>
+          <span style="padding: 0 6px">·</span>
+          <span>{{$_dateDis(item.createdAt)}}</span>
         </p>
       </div>
-      <router-link target="_blank" class="post-img" :to="item.originalUrl.replace(/https:\/\/juejin.im/,'')">
+      <router-link target="_blank" :to="replaceUrl(item.originalUrl)">
+        <div v-if="item.screenshot" class="post-img" >
         <div class="post-img-bg" :style="{backgroundImage: `url(${item.screenshot})`}"></div>
+        </div>
+        <div class="post-title" :to="replaceUrl(item.originalUrl)">{{item.title}}</div>
+        <div :class="['post-content', item.screenshot?'ov1':'ov3']" :to="replaceUrl(item.originalUrl)">{{item.content}}</div>
       </router-link>
-      <router-link target="_blank" class="post-title" :to="item.originalUrl.replace(/https:\/\/juejin.im/,'')">{{item.title}}</router-link>
-      <router-link target="_blank" class="post-content ov1" :to="item.originalUrl.replace(/https:\/\/juejin.im/,'')">{{item.content}}</router-link>
     </li>
   </ul>
 </template>
 <script>
-import { reactive, toRefs } from 'vue'
+import {$_dateDis}from '@/filters'
+import { ref } from 'vue'
 export default {
   name: '',
   props: {
@@ -55,16 +58,19 @@ export default {
         order: 'createdAt'
       },
     ])
-    let state = reactive({
-      typeIndex: 0,
-    })
+    let typeIndex = ref(0)
     function typeChange(item, index) {
-      state.typeIndex = index
+      typeIndex.value = index
+    }
+    function replaceUrl(val) {
+      return val && val.replace(/https:\/\/juejin.im/,'')
     }
     return {
-      ...toRefs(state),
+      $_dateDis,
+      typeIndex,
       types,
-      typeChange
+      typeChange,
+      replaceUrl,
     }
   },
 }
@@ -131,7 +137,7 @@ export default {
     font-weight: bold;
     letter-spacing: 2px;
     color: #000;
-    line-height: 1.3;
+    line-height: 2;
   }
   &-content{
     color: #8b8b8b;

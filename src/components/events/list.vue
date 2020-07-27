@@ -27,9 +27,7 @@
   </div>
 </template>
 <script lang="ts">
-interface propsType{
-  [name:string]:any
-}
+import { objType } from '@/types/commons/index';
 
 import { computed } from 'vue'
 let dayArr = Object.freeze([
@@ -50,8 +48,8 @@ export default {
       required: true
     }
   },
-  setup(props:propsType){
-    let date = (val:string):string => {
+  setup(props:objType){
+    let date: (val:string) => string = (val:string):string => {
       let val1 = new Date(val)
       let month = (val1.getMonth() + 1 + '').padStart(2,'0')
       let date = (val1.getDate() + '').padStart(2,'0')
@@ -60,7 +58,7 @@ export default {
     }
     let listsNew = computed(() => {
       let nowDate = +new Date()
-      return props.lists.map(item => {
+      return props.lists.map((item:objType) => {
         let activeDate = +new Date(item.endTime)
         item.isActive = activeDate > nowDate
         return item

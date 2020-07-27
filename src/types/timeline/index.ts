@@ -1,5 +1,15 @@
-  export interface t0 {
-    name: boolean;
+  export interface stateType{
+    isLoading: boolean,
+    hasNextPage: boolean,
+    endCursor: string,
+    lists: any[],
+    order: string,
+    subIndex: number,
+    apiParmas: objectType,
+    [propertyName: string]: any
   }
-  export type t1 = string | number
-  export let name = 1
+  
+  export interface subNavsType{
+    title: string,
+    order: string
+  }

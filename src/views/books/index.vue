@@ -1,5 +1,6 @@
 <template>
   <div class="">
+  
     <header-sub 
       :headerSubs="navLists" 
       mainRoute="books"
@@ -14,8 +15,8 @@
   </div>
 </template>
 <script lang="ts">
-import{ProxyType}from '@/types/commons'
-import{navListsType,}from './types'
+import{objType}from '@/types/commons'
+import{booksStateType}from '@/types/books'
 
 import copyRight from '@/components/common/copy-right'
 import headerSub from '@/components/header/header-sub'
@@ -34,39 +35,36 @@ export default {
     copyRight
   },
   props: ["id"],
-  setup(props) {
-    let navListsState: ProxyType<navListsType> = reactive({
-      navLists:[
-        {
-          id: "0",
-          name: "全部",
-          score: "0",
-          createdAt: "2018-08-21T15:12:19.000Z",
-          alias: "all",
-        }
-      ]
+  setup(props: objType) {
+    let listsState: booksStateType = reactive({
+      navLists: [],
+      lists: [],
+      pageNum: 1
     })
 
     let getNavLists = async ():Promise<void> => {
       let {s, d} = await booksAPI.navList();
       if(s === 1){
-        navListsState.navLists = [
-          ...navListsState.navLists,
+        listsState.navLists = [
+          {
+            id: "0",
+            name: "全部",
+            score: "0",
+            createdAt: "2018-08-21T15:12:19.000Z",
+            alias: "all",
+          },
           ...d
-        ];
-        console.log(3,navListsState.navLists);
+        ]
       }
     }
-    let listsState = reactive({
-      lists: [],
-      pageNum: 1
-    })
     let getLists = async ():Promise<void> => {
       let id:string = props.id ==='all' ? '' : props.id
       let {s, d} = await booksAPI.lists(id, listsState.pageNum++);
       if(s === 1){
         listsState.lists = listsState.lists.concat(d);
       }
+    console.log(listsState.navLists);        
+
       
     }
 
@@ -77,13 +75,13 @@ export default {
         getLists()
       }
     )
-    getNavLists()
     onMounted(()=>{
+      getNavLists()
+
       getLists()
     })
 
     return {
-      ...toRefs(navListsState),
       ...toRefs(listsState),
       getLists
     }

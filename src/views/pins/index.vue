@@ -22,31 +22,8 @@
   </div>
 </template>
 <script lang="ts">
-interface objType{
-  [propertyName: string]: any
-}
-
-interface propsType{
-  id: string | number
-}
-
-interface leftRouteParamsType {
-  name: string,
-  title: string,
-  apiData?: objType
-}
-
-interface stateType{
-  routeName: string,
-  apiParmas: objType|string,
-  hasNextPage: boolean,
-  isLoading: boolean,
-  endCursor: string,
-  lists: any[],
-  hotLists: any[],
-  [propertyName: string]: any
-}
-
+import{objType}from '@/types/commons'
+import {leftRouteParamsType,pinsStateType} from '@/types/pins'
 
 import leftRouteParams from '@/components/pins/leftRouteParams'
 import headerSub from '@/components/header/header-sub'
@@ -64,8 +41,8 @@ export default {
     pinList
   },
   props: ['id'],
-  setup(props: propsType){
-    let state: stateType = reactive({
+  setup(props: objType){
+    let state: pinsStateType = reactive({
       routeName: '',
       apiParmas: {},
       hasNextPage: true,
@@ -76,20 +53,11 @@ export default {
     })
 
     // methods 
-    let reset = (): void => {
-      state.lists = [];
-      state.hasNextPage= true;
-      state.isLoading = false;
-      state.endCursor= '';
-    }
-
     let getApiParmas = (): void => {
       try{
         let route: leftRouteParamsType = leftRouteParams.filter((item: leftRouteParamsType) => {
           return item.name === props.id
         })[0]
-        //推荐 返回的数据格式不同于其他，传给list-detail
-        state.isRecommended = route.name === 'recommended' ? true : false
         state.routeName =  route.name
 
         if(route.apiData) { // 推荐 热门 关注
@@ -107,6 +75,7 @@ export default {
     let getLists = async():Promise<void> => {
       if(state.isLoading) return
       state.isLoading = true
+      console.log(state.routeName);
       switch(state.routeName) {
         case 'recommended':
           state.apiParmas.variables.after = state.endCursor;
@@ -177,7 +146,6 @@ export default {
     let getLists2 = async ():Promise<void> => { // 开源推荐等
       let apiParmas: string = state.apiParmas
       try{
-        console.log('---------',apiParmas)
         let {s, d} = await pinsAPI.lists2(apiParmas)
         if (s === 1) {
           if(d.total <= state.lists.length){
@@ -209,18 +177,15 @@ export default {
         getLists()
       }
     )
-    onMounted(()=>{
-      reset()
-      getApiParmas()
-      getHotLists()
-      getLists()
+    onMounted(async()=>{
+      await getApiParmas()
+      await getHotLists()
+      await getLists()
     })
 
     return {
       leftRouteParams,
       ...toRefs(state),
-      reset,
-      getApiParmas,
       getLists,
     }
   },

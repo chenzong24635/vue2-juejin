@@ -76,7 +76,8 @@
   </main>
 </template>
 <script lang="ts">
-// import{propsBaseType}from '@/types/commons'
+import{objType}from '@/types/commons'
+import{bookStateType}from '@/types/books'
 
 import {$_read} from '@/filters'
 import bookAPI from '@/api/books'
@@ -85,9 +86,9 @@ import { reactive, toRefs, computed, onMounted } from 'vue';
 
 export default {
   props: ['id'],
-  setup(props) {
+  setup(props: objType) {
     let tabs  = Object.freeze(['目录','介绍'])
-    let state = reactive({
+    let state: bookStateType = reactive({
       bookDesc: {},
       bookBuyers: [],
       bookSections: [],

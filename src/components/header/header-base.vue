@@ -85,15 +85,11 @@
   </header>
 </template>
 <script lang="ts">
-interface objType{
-  [name:string]:any
-}
 interface baseHeaderType{
   path: string,
   title: string,
   active: boolean,
 }
-
 
 import LoginBox from '@/views/login/login'
 // import RegisterBox from '@/views/login/register'
@@ -101,6 +97,7 @@ import LoginBox from '@/views/login/login'
 import { useStore} from 'vuex'
 import { reactive, toRefs ,computed} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { objType } from '@/types/commons/index';
 
 export default {
   components: {
@@ -118,12 +115,12 @@ export default {
     let state = reactive({
       baseHeader: [
         {
-          path: '/timeline',
+          path: '/timeline/recommended',
           title: '首页',
           active: false,
         },
         {
-          path: '/pins',
+          path: '/pins/recommended',
           title: '沸点',
           active: false,
         },
@@ -133,12 +130,12 @@ export default {
           active: false,
         },
         {
-          path: '/books',
+          path: '/books/all',
           title: '小册',
           active: false,
         },
         {
-          path: '/events',
+          path: '/events/all',
           title: '活动',
           active: false,
         },
@@ -150,7 +147,6 @@ export default {
       writeBoxShow: false,
       searchVal: ''
     })
-    console.log(state)
     let router:objType = useRouter()
     let route:objType = useRoute()
     function routeClick(item:baseHeaderType):void {
@@ -172,7 +168,7 @@ export default {
       router.push(`/search/${type}/${state.searchVal}`)
     }
     function showWriteBox():void { //未登录 点击写文章显示 box
-      state.writeBoxShow = !state.writeBoxShow;
+      // state.writeBoxShow = !state.writeBoxShow;
     }
     function addBtnMore():void {
       state.moreListShow = !state.moreListShow;

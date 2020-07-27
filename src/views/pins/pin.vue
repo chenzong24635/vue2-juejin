@@ -9,20 +9,9 @@
   </div>
 </template>
 <script lang="ts">
-// interface objType{
-//   [propertyName: string]: any
-// }
+import{objType}from '@/types/commons'
+import {pinDetailType,pinListType} from '@/types/pins'
 
-interface propsType{
-  id: string | number
-}
-interface stateType{
-  comments: any[],
-  count: number,
-  pageNum: number,
-  isLoading: boolean,
-  [propertyName: string]: any
-}
 
 import rightSide from '@/components/pins/aside'
 import scroll from '@/mixins/scroll'
@@ -32,12 +21,10 @@ import { reactive, toRefs, watch, onMounted } from 'vue'
 export default {
   components: {rightSide},
   props: ['id'],
-  setup(props: propsType) {
-    let state: stateType = reactive({
+  setup(props: objType) {
+    let pinDetailState: pinDetailType = reactive({
       comments: [],
       count: 0,
-      pageNum: 1,
-      isLoading: false,
     })
 
     // 内容
@@ -45,25 +32,30 @@ export default {
       try {
         let {s ,d} =  await pinAPI.pinDetail(props.id)
         if(s === 1) {
-          state.comments = d.comments
-          state.count = d.count
+          pinDetailState.comments = d.comments
+          pinDetailState.count = d.count
         }
       } catch (e) {
         console.log(e)
       }
     }
+
+    let pinListState: pinListType = reactive({
+      pageNum: 1,
+      isLoading: false,
+    })
     //评论
     let getLists = async():Promise<void> => {
-      if(state.count && (state.comments >=state.count))return
-      if(state.isLoading)return
+      if(pinDetailState.count && (pinDetailState.comments.length >=pinDetailState.count))return
+      if(pinListState.isLoading)return
       try {
-        state.isLoading = true
-        let {s ,d} = await pinAPI.pinComments(props.id, state.pageNum)
+        pinListState.isLoading = true
+        let {s ,d} = await pinAPI.pinComments(props.id, pinListState.pageNum)
         if(s === 1) {
-          state.comments = state.comments.concat(d.comments)
-          state.count = d.count
-          state.pageNum++
-          state.isLoading = false
+          pinDetailState.comments = pinDetailState.comments.concat(d.comments)
+          pinDetailState.count = d.count
+          pinListState.pageNum++
+          pinListState.isLoading = false
         }
       } catch (e) {
         console.log(e)
@@ -91,7 +83,8 @@ export default {
     })
 
     return {
-      ...toRefs(state)
+      ...toRefs(pinDetailState),
+      ...toRefs(pinListState)
     }
   },
 }

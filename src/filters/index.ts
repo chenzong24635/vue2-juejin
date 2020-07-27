@@ -1,4 +1,4 @@
-export function $_dateDis(date: string|number) {
+export function $_dateDis(date: string|number): string {
   let stime:number = new Date(date + '').getTime()
   let etime:number = Date.now()
   let dtime:number = etime - stime
@@ -21,11 +21,11 @@ export function $_dateDis(date: string|number) {
   return '刚刚'
 }
 
-export function $_toLocaleDateString(date: string|number){
+export function $_toLocaleDateString(date: string|number): string{
   return new Date(date).toLocaleDateString()
 }
 
-export function $_read(val: string|number) {
+export function $_read(val: string|number): string {
   let size:number = 10 //每秒10字
   let time:number = val / size
   let m:number = ~~(time / 60)

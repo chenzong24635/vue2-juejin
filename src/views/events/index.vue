@@ -29,25 +29,8 @@
   </div>
 </template>
 <script lang="ts">
-interface propsType{
-  id: string | number
-}
-
-interface defaultCityType{
-  cityName: string,
-  cityAlias: string,
-  weight: number
-}
-
-interface stateType{
-  cityList: any[],
-  allCity: any[],
-  lists: any[],
-  pageNum: number,
-  isLoading: boolean,
-  [propertyName: string]: any
-
-}
+import{objType}from '@/types/commons'
+import {cityStateType,listStateType} from '@/types/events'
 
 import eventAPI from '@/api/events'
 import headerSub from '@/components/header/header-sub'
@@ -64,8 +47,8 @@ export default {
     copyRight
   },
   props: ['id'],
-  setup(props: propsType) {
-    let defaultCity: defaultCityType[] = Object.freeze([
+  setup(props: objType) {
+    let defaultCity = Object.freeze([
       {
         cityName: "热门活动",
         cityAlias: "all",
@@ -97,9 +80,12 @@ export default {
         weight: 0
       }
     ])
-    let state: stateType = reactive({
+
+    let cityState: cityStateType = reactive({
       cityList: [],
-      allCity: computed(()=>[...defaultCity,...state.cityList]),
+      allCity: computed(()=>[...defaultCity,...cityState.cityList]),
+    })
+    let listState: listStateType = reactive({
       lists: [],
       pageNum: 1,
       isLoading: false,
@@ -110,7 +96,7 @@ export default {
       try {
         let {s, d} = await eventAPI.cityList();
         if(s === 1) {
-          state.cityList = d;
+          cityState.cityList = d;
         } 
       } catch (e) {
         console.log(e);
@@ -129,14 +115,14 @@ export default {
     // }
 
     let getLists = async(): Promise<void> => {
-      if(state.isLoading) return
-      state.isLoading = true
-      let id: string | number = props.id ==='all' ? '' : props.id
+      if(listState.isLoading) return
+      listState.isLoading = true
+      let id: string | undefined = props.id ==='all' ? '' : props.id
       try {
-        let {s, d} = await eventAPI.eventList(1, id, state.pageNum++);
+        let {s, d} = await eventAPI.eventList(1, id, listState.pageNum++);
         if(s === 1){
-          state.lists = state.lists.concat(d);
-          state.isLoading = false
+          listState.lists = listState.lists.concat(d);
+          listState.isLoading = false
         }
       } catch (e) {
         console.log(e);
@@ -158,7 +144,8 @@ export default {
 
     return {
       defaultCity,
-      ...toRefs(state),
+      ...toRefs(cityState),
+      ...toRefs(listState),
       getCityList,
       getLists,
     }

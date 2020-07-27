@@ -25,26 +25,8 @@
   </div>
 </template>
 <script lang="ts">
-interface objType{
-  [propertyName: string]: any
-}
-type objectType = objType | null
-
-interface stateType{
-  isLoading: boolean,
-  hasNextPage: boolean,
-  endCursor: string,
-  lists: any[],
-  order: string,
-  subIndex: number,
-  apiParmas: objectType,
-  [propertyName: string]: any
-}
-
-interface subNavsType{
-  title: string,
-  order: string
-}
+import{objType}from '@/types/commons'
+import {subNavsType,stateType} from '@/types/timeline'
 
 import headerSub from '@/components/header/header-sub'
 import homeRight from '@/components/timeline/right'
@@ -73,7 +55,19 @@ export default {
       apiParmas: null,
     })
 
-    let subNavs: subNavsType[] = Object.freeze([
+    let getApiData = ():void => {
+      let params = null
+      try{
+        params = homeHeaderParams.filter((item: objType) => {
+          return item.name === props.id
+        })[0].apiData
+      }catch(e){
+        params = homeHeaderParams[0].apiData
+      }
+      state.apiParmas = params
+    }
+
+    let subNavs = Object.freeze([
       {
         title: "热门",
         order: "POPULAR"
@@ -87,20 +81,6 @@ export default {
         order: "THREE_DAYS_HOTTEST"
       }
     ])
-    // 方法
-    let getApiData = ():void => {
-      let params = null
-      try{
-        params = homeHeaderParams.filter((item: objType) => {
-          return item.name === props.id
-        })[0].apiData
-      }catch(e){
-        params = homeHeaderParams[0].apiData
-      }
-      state.apiParmas = params
-    }
-
-    
     let subChange = (item: subNavsType, index: number):void => {
       state.subIndex = index;
       state.order = subNavs.filter((item1: subNavsType) => item1.title === item.title)[0].order;
@@ -137,8 +117,7 @@ export default {
     let {isBottom} = scroll()
     watch(
       ()=>isBottom.value,
-      (prev,now)=>{
-        console.log(prev,now);
+      ()=>{
         getLists()
       }
     )

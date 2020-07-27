@@ -9,38 +9,37 @@
     </button>
   </div>
 </template>
-<script>
-import { reactive, toRefs, onMounted } from 'vue';
+<script lang="ts">
+import {  onMounted, ref } from 'vue';
+import { objType } from '../../types/commons';
 export default {
   name: '',
   setup () {
-    let state = reactive({
-      showTopBtn: false
-    })
-    let backTop =() => {
+    let showTopBtn = ref(false)
+    let backTop =():void => {
       window.scrollTo({ 
         top: 0, 
         // behavior: "smooth"
       });
     }
-    let handleScroll =() => {
-      let rect = document.body.getBoundingClientRect();
-      let scrollTop = - rect.top;
-      let bodyHeight = rect.height;
+    let handleScroll =():void => {
+      let rect:objType = document.body.getBoundingClientRect();
+      let scrollTop:number = - rect.top;
+      let bodyHeight:number = rect.height;
       // console.log(scrollTop)
       //滚动 超过1/10时显示
       if (scrollTop > bodyHeight / 10 ) {
-        state.showTopBtn = true;
+        showTopBtn.value = true;
       } else {
-        state.showTopBtn = false;
+        showTopBtn.value  = false;
       }
     }
-    onMounted(()=>{
+    onMounted(():void=>{
       window.addEventListener("scroll", handleScroll);
     })
 
     return {
-      ...toRefs(state),
+      showTopBtn,
       backTop
     }
   },

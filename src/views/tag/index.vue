@@ -28,108 +28,30 @@
   </div>
 </template>
 <script lang="ts">
-interface objType{
-  [propertyName: string]: any
-}
-
-interface propsType {
-  title: string | number;
-}
-
-interface tagsType {
-  tagid: string;
-  title: string;
-}
-interface subNavsType {
-  sort: string;
-  title: string;
-}
-
-interface stateType {
-  sort: string,
-  subIndex: number,
-  tagid: string,
-  page: number,
-  pageSize: number,
-  total: number,
-  lists: any[],
-  subscribe: objType,
-  isLoading: boolean,
-  [property: string]: any
-}
+import{objType}from '@/types/commons'
+import {subNavsType,stateType} from '@/types/tag'
 
 import commonList1 from "@/components/common/common-list1";
 import scroll from "@/mixins/scroll";
 
 import tagAPI from "@/api/tag";
-import { reactive, toRefs, onMounted, watch } from "vue";
+import { reactive, toRefs, onMounted, watch, ref } from "vue";
 export default {
   name: "",
   components: {
     commonList1
   },
   props: ["title"],
-  setup(props: propsType) {
-    let tags: tagsType[] = Object.freeze([
-      {
-        tagid: "55cdb52740ac79db3570607f",
-        title: "架构"
-      },
-      {
-        tagid: "5597a3cae4b08a686ce5d0fb",
-        title: "开源"
-      },
-      {
-        tagid: "55cd843d60b203b0519307a9",
-        title: "算法"
-      },
-      {
-        tagid: "555e9abee4b00c57d9956152",
-        title: "GuitHub"
-      },
-      {
-        tagid: "55979fe6e4b08a686ce562fe",
-        title: "面试"
-      },
-      {
-        tagid: "559c814be4b0d4d1b1e9521e",
-        title: "代码规范"
-      },
-      {
-        tagid: "56e65334da2f60004c50910f",
-        title: "产品"
-      },
-      {
-        tagid: "56b5a7f3df0eea00544e1993",
-        title: "掘金翻译计划"
-      }
-    ]);
-
-    let subNavs: subNavsType[] = Object.freeze([
-      {
-        sort: "rankIndex",
-        title: "热门"
-      },
-      {
-        sort: "createdAt",
-        title: "最新"
-      },
-      {
-        sort: "hotIndex",
-        title: "最热"
-      }
-    ]);
-
+  setup(props: objType) {
     let state:stateType = reactive({
       sort: "rankIndex",
-      subIndex: 0,
       tagid: "",
       page: 0,
       pageSize: 20,
       total: 0,
       lists: [],
-      subscribe: {},
-      isLoading: false
+      isLoading: false,
+      subscribe: {}
     });
 
     let getLists = async ():Promise<void> => {
@@ -153,6 +75,7 @@ export default {
         console.log(e);
       }
     };
+
     let getTagDetail = async ():Promise<void> => {
       try {
         let { s, d } = await tagAPI.tagDetail(encodeURIComponent(props.title));
@@ -165,23 +88,35 @@ export default {
       }
     };
 
-    
+    let subIndex = ref(0)
+    let subNavs = Object.freeze([
+      {
+        sort: "rankIndex",
+        title: "热门"
+      },
+      {
+        sort: "createdAt",
+        title: "最新"
+      },
+      {
+        sort: "hotIndex",
+        title: "最热"
+      }
+    ]);
     let subChange = (item: subNavsType, index: number): void => {
-      state.subIndex = index;
+      subIndex.value = index;
       state.sort = subNavs.filter(
         (item1: subNavsType) => item1.title === item.title
       )[0].sort;
       reset();
       getLists();
     };
+    
     let reset = (): void => {
       state.page = 0
       state.pageSize = 20
       state.total = 0
       state.lists = []
-    };
-    let filterId: () => string = (): string => {
-      return state.tags.filter((item: tagsType) => item.title === props.title)[0].tagid;
     };
 
     let {isBottom} = scroll()
@@ -198,13 +133,11 @@ export default {
     });
 
     return {
-      tags,
       subNavs,
+      subIndex,
       ...toRefs(state),
       getLists,
-      getTagDetail,
       subChange,
-      filterId
     };
   }
 };

@@ -16,16 +16,10 @@
   </div>
 </template>
 <script lang="ts">
-interface objType{
-  [p:string]:any
-}
-interface propsType{
-  lists: any[],
-  id: string
-}
 
 import pinAPI from '@/api/pins'
 import { computed } from 'vue'
+import { objType } from '../../types/commons'
 export default {
   name: 'commentList',
   props: {
@@ -38,9 +32,9 @@ export default {
       // required: true
     },
   },
-  setup(props: propsType) {
+  setup(props: objType) {
     let listsNew = computed(()=>{
-      let lists = props.lists.map(item=>{
+      let lists = props.lists.map((item:objType)=>{
         if(item.topComment && item.replyCount > item.topComment.length) {
           // 评论未加载完
           item.pageNum = 1
@@ -58,7 +52,7 @@ export default {
         let {s, d} = await pinAPI.pinReply(props.id, obj.id, obj.pageNum)
         if(s !== 1)return
         if(obj.pageNum === 1) {
-          listsNew.value.forEach(item => {
+          listsNew.value.forEach((item:objType) => {
             if(item.id === obj.id) {
               item.topComment = d.comments
             }

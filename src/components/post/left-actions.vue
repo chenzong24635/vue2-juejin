@@ -42,7 +42,7 @@ export default {
     }
     // 跳转到评论区
     let scrollIntoComment = ():void => {
-      let comments: HTMLElement|null = document.querySelector('#comments')
+      let comments: HTMLElement = document.querySelector('#comments')
       let offsetTop:number = comments.offsetTop
       window.scrollTo({
         top: offsetTop
@@ -50,24 +50,26 @@ export default {
     }
     // qq分享
     let qqShare = ():void => {
-      let info = this.$parent.articInfo
-      if (info && info.originalUrl) {
-        let title = `${info.title} - ${info.user.username} - 掘金专栏`
-        let url = info.originalUrl
-        let summary = info.content
-        let pic = encodeURIComponent(info.screenshot || 'https://user-gold-cdn.xitu.io/2019/11/29/16eb707805061e9e?w=1000&h=675&f=jpeg&s=99661')
-        window.open(`https://connect.qq.com/widget/shareqq/index.html?title=${title}&url=${url}&summary=${summary}&pics=${pic}&site=掘金`, '_blank', 'noopener noreferrer')
-      }
+      console.log('qq');
+      // let info = this.$parent.articInfo
+      // if (info && info.originalUrl) {
+      //   let title = `${info.title} - ${info.user.username} - 掘金专栏`
+      //   let url = info.originalUrl
+      //   let summary = info.content
+      //   let pic = encodeURIComponent(info.screenshot || 'https://user-gold-cdn.xitu.io/2019/11/29/16eb707805061e9e?w=1000&h=675&f=jpeg&s=99661')
+      //   window.open(`https://connect.qq.com/widget/shareqq/index.html?title=${title}&url=${url}&summary=${summary}&pics=${pic}&site=掘金`, '_blank', 'noopener noreferrer')
+      // }
     }
     // 微博分享
     let weiboShare = ():void => {
-      let info = this.$parent.articInfo
-      if (info && info.originalUrl) {
-        let title = `${info.title} - ${info.user.username} - 掘金专栏`
-        let url = info.originalUrl
-        let pic = encodeURIComponent(info.screenshot || 'https://user-gold-cdn.xitu.io/2019/11/29/16eb707805061e9e?w=1000&h=675&f=jpeg&s=99661')
-        window.open(`https://service.weibo.com/share/share.php?title=${title}&url=${url}&pic=${pic}`, '_blank', 'noopener noreferrer')
-      }
+      console.log('weibo');
+      // let info = this.$parent.articInfo
+      // if (info && info.originalUrl) {
+      //   let title = `${info.title} - ${info.user.username} - 掘金专栏`
+      //   let url = info.originalUrl
+      //   let pic = encodeURIComponent(info.screenshot || 'https://user-gold-cdn.xitu.io/2019/11/29/16eb707805061e9e?w=1000&h=675&f=jpeg&s=99661')
+      //   window.open(`https://service.weibo.com/share/share.php?title=${title}&url=${url}&pic=${pic}`, '_blank', 'noopener noreferrer')
+      // }
     }
     return {
       praise,

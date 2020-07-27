@@ -47,25 +47,9 @@
   </div>
 </template>
 <script lang="ts">
-interface objType{
-  [propertyName: string]: any
-}
+import{objType}from '@/types/commons'
+import {stateType} from '@/types/post'
 
-interface propsType{
-  id: string | number
-}
-
-interface stateType{
-  articleContent: objType,
-  articleInfo: objType,
-  relatedEntryLists: any[], // 侧边相关文章
-  recommendEntryLists: any[], // 底部相关文章推荐
-  isLike: boolean,
-  isLoading: boolean,
-  pageNu: number,
-  comments: any[],
-  [propertyName: string]: any
-}
 
 import aboutAuthor from '@/components/post/about-author.vue'
 // import asideBook from '@/components/post/aside-book.vue'
@@ -91,7 +75,7 @@ export default {
     commonList1
   },
   props: ['id'],
-  setup(props: propsType) {
+  setup(props: objType) {
     let state: stateType = reactive({
       articleContent: {},
       articleInfo: {},
@@ -99,7 +83,6 @@ export default {
       recommendEntryLists: [], // 底部相关文章推荐
       isLike: false,
       isLoading: false,
-      pageNu: 1,
       comments: []
     })
 
@@ -218,8 +201,7 @@ export default {
     let {isBottom} = scroll()
     watch(
       ()=>isBottom.value,
-      (prev,now)=>{
-        console.log(prev,now)
+      ()=>{
         getRecommendEntry()
       }
     )

@@ -22,33 +22,35 @@
   </div>
 </template>
 <script lang="ts">
-interface subNavsType {
-  sort: string;
-  title: string;
-}
-
-interface stateType {
-  sort: string,
-  subIndex: number,
-  lists: any[],
-  page: number,
-  pageSize: number,
-  isLoading: boolean,
-  searchVal: string,
-  [proeprty: string]: any
-}
+// import{objType}from '@/types/commons'
+import {subNavsType} from '@/types/tag'
+import {subStateType,listStateType} from '@/types/subscribe'
 
 import subscribeItem from  '@/components/tag/subscribe-item.vue'
 import tagAPI from '@/api/tag'
 import scroll from '@/mixins/scroll'
-import { reactive, toRefs, onMounted, watch } from 'vue';
+import { reactive, toRefs, onMounted, watch, ref } from 'vue';
 
 export default {
   name: '',
   components: {subscribeItem},
   props: ['id'],
   setup () {
-    let subNavs: subNavsType[] = Object.freeze([
+    let listState: listStateType = reactive({
+      lists: [],
+      page: 1,
+      pageSize: 40,
+      isLoading: false,
+    })
+
+    let reset = ():void => {
+      listState.lists = []
+      listState.page = 1
+      listState.isLoading = false
+      listState.hasNextPage = true
+    }
+
+    let subNavs = Object.freeze([
       {
         sort: 'hot',
         title: '最热'
@@ -58,67 +60,56 @@ export default {
         title: '最新'
       },
     ])
-    let state: stateType = reactive({
-      sort: 'hot',
+    let subNavsState:subStateType = reactive({
       subIndex: 0,
-      lists: [],
-      page: 1,
-      pageSize: 40,
-      isLoading: false,
-      searchVal: ''
+      sort: 'hot',
     })
-
-    let reset = ():void => {
-      state.lists = []
-      state.page = 1
-      state.isLoading = false
-      state.hasNextPage = true
-    }
-    let getLists = async():Promise<void> => {
-      if(state.isLoading) return
-      state.isLoading = true
-      try{
-        let {s, d} = await tagAPI.subscribe(state.sort, state.page, state.pageSize);
-        if(s === 1) {
-          state.lists = state.lists.concat(d.tags)
-          state.page++
-          state.isLoading = false
-        }
-      }catch(e){
-        console.log(e);
-      }
-    }
-
     let subChange = (item: subNavsType, index: number) => {
-      state.subIndex = index;
+      subNavsState.subIndex = index;
       try{
-        state.sort = subNavs.filter((item1: subNavsType) => item1.title === item.title)[0].sort;
+        subNavsState.sort = subNavs.filter((item1: subNavsType) => item1.title === item.title)[0].sort;
       }catch{
-        state.sort = 'hot'
+        subNavsState.sort = 'hot'
       }
       reset();
       getLists();
     }
 
-    let search = async():Promise<void> => {
-      reset()
-      if(!state.searchVal.trim().length){
-        //搜索内容为空时
-        getLists();
-        return
-      }
+    let getLists = async():Promise<void> => {
+      if(listState.isLoading) return
+      listState.isLoading = true
       try{
-        let {s, d} = await tagAPI.subscribeSearch(state.sort, state.searchVal, state.page, state.pageSize);
+        let {s, d} = await tagAPI.subscribe(subNavsState.sort, listState.page, listState.pageSize);
         if(s === 1) {
-          state.lists = d.tags
-          state.hasNextPage = state.lists.length >= d.total
+          listState.lists = listState.lists.concat(d.tags)
+          listState.page++
+          listState.isLoading = false
         }
       }catch(e){
         console.log(e);
       }
     }
 
-        let {isBottom} = scroll()
+    let searchVal = ref('')
+    let search = async():Promise<void> => {
+      reset()
+      if(!searchVal.value.trim().length){
+        //搜索内容为空时
+        getLists();
+        return
+      }
+      try{
+        let {s, d} = await tagAPI.subscribeSearch(subNavsState.sort, searchVal.value, listState.page, listState.pageSize);
+        if(s === 1) {
+          listState.lists = d.tags
+          listState.hasNextPage = listState.lists.length >= d.total
+        }
+      }catch(e){
+        console.log(e);
+      }
+    }
+
+    let {isBottom} = scroll()
     watch(
       ()=>isBottom.value,
       ()=>{
@@ -132,7 +123,9 @@ export default {
 
     return {
       subNavs,
-      ...toRefs(state),
+      searchVal,
+      ...toRefs(subNavsState),
+      ...toRefs(listState),
       subChange,
       search
     }

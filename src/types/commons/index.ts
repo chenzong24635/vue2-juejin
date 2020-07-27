@@ -1,3 +1,7 @@
+export interface objType{
+  [propertyName: string]: any
+}
+
 export interface ProxyType<T>{
   [[Handler]]: {
     get: Function,
@@ -12,5 +16,5 @@ export interface ProxyType<T>{
 
 export interface propsBaseType{
   id: string,
-  age: number
+  // age: number
 }

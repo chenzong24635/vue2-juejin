@@ -8,12 +8,11 @@ const server = axios.create({
   // retry: 3,
   // retryDelay: 1000,
   headers: {
-    // 'Content-Type': 'json',
+    'Content-Type': 'application/json; charset=utf-8',
     'X-Agent': 'Juejin/Web',
     'X-Juejin-Src': 'web'
   }
 });
-// console.log(server);
 axiosRetry(server, { retries: 3 });
 
 server.interceptors.request.use(function (config) {

@@ -12,12 +12,8 @@
   </div>
 </template>
 <script lang="ts">
+import {stateType} from '@/types/topics'
 
-interface stateType{
-  focusLists: any[],
-  allLists: any[],
-  [property:string]: any
-}
 import topicsList from '@/components/topics/list';
 import {topicList, topicListFollowed} from '@/api/topics';
 import { reactive, toRefs, onMounted } from 'vue';

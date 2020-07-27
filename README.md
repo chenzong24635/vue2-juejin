@@ -1,4 +1,6 @@
 ## ts类型不支持
+* as 类型断言不支持
+
 * 'object' is not defined 
 
 不支持object类型

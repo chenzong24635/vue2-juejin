@@ -11,11 +11,9 @@
   </ul>
 </template>
 <script lang="ts">
-interface objType{
-  [propertyName: string]: any
-}
 
 import { reactive, toRefs } from 'vue'
+import { objType } from '../../types/commons/index';
 export default {
   name: '',
   props: {
@@ -32,7 +30,7 @@ export default {
       default: true
     }
   },
-  setup (props,{emit}) {
+  setup (props: objType,{emit}) {
     let state = reactive({
       newIndex: props.tabIndex,
     })

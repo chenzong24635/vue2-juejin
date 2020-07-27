@@ -22,8 +22,9 @@
     </ul>
   </aside>
 </template>
-<script>
+<script lang="ts">
 import { computed } from 'vue'
+import { objType } from '@/types/commons'
 export default {
   name: '',
   props: {
@@ -36,8 +37,8 @@ export default {
       required: true
     }
   },
-  setup(props){
-    let newLists = computed(() => { //只显示前三个
+  setup(props: objType){
+    let newLists: any[] = computed(() => { //只显示前三个
       return props.lists.slice(0, 3)
     })
     return {
