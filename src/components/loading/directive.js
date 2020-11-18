@@ -1,11 +1,10 @@
-import Vue from 'vue'
 import LoadingComponent from './index.vue'
 // 使用 Vue.extend构造组件子类
-const LoadingContructor = Vue.extend(LoadingComponent)
 
 // 定义一个名为loading的指令
 export default{
-  install(){
+  install(Vue){
+    const LoadingContructor = Vue.extend(LoadingComponent)
     Vue.directive('loading', {
       /**
        * 只调用一次，在指令第一次绑定到元素时调用，可以在这里做一些初始化的设置

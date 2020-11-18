@@ -68,7 +68,7 @@ export default {
     return {
       sortType: 'rank',
       sortIndex: 0,
-      sorts: [
+      sorts: Object.freeze([
         {
           sort: 'rank',
           title: '热门'
@@ -77,7 +77,7 @@ export default {
           sort: 'newest',
           title: '最新'
         },
-      ],
+      ]),
       page: 0,
       pageSize: 20,
       lists: [],

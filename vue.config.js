@@ -88,6 +88,17 @@ module.exports = {
     }
   },
   chainWebpack(config) {
+    config
+    .module
+      .rule('vue')
+      .use('vue-loader')
+      .loader('vue-loader')
+      .tap(options => {
+        options.transformAssetUrls = {
+          avatar: 'img-src',
+        }
+        return options;
+      });
     if (isProduction) {
       if (process.env.npm_config_report) {
         config
@@ -98,13 +109,27 @@ module.exports = {
       }
     } else {
     }
-    
+    // xss攻击
+    /* config.module.rule("vue").use("vue-loader").loader("vue-loader").tap(options => {
+      options.compilerOptions.directives = {
+        html(node, directiveMeta) {
+          (node.props || (node.props = [])).push({
+            name: "innerHTML",
+            value: `xss(_s(${directiveMeta.value}))`
+          });
+        }
+      };
+      return options;
+    }); */
     config.resolve.alias.set('vue$','vue/dist/vue.esm.js')
 
     // 对vue-cli内部的 webpack 配置进行更细粒度的修改
     config.optimization.minimizer('terser').tap((args) => {
         // 去除生产环境console
-        args[0].terserOptions.compress.drop_console = true
+        // args[0].terserOptions.compress.drop_console = true
+        let pure_funcs = args[0].terserOptions.compress.pure_funcs || []
+        pure_funcs.push('console.log')
+        args[0].terserOptions.compress.pure_funcs=pure_funcs
         return args
     })
 

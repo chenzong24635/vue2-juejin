@@ -5,7 +5,7 @@ import {baseURL} from '@/libs/config.js';
 
 const server = axios.create({
   baseURL,
-  timeout: 1000,
+  timeout: 5000,
   // retry: 3,
   // retryDelay: 1000,
   headers: {

@@ -5,13 +5,13 @@
     <div class="catalog-body">
       <ul class="catalog-list">
         <li class="catalog-item" :class="[c1.level, {'catalog-item-active' : c1.id === currentCatalogId }]" v-for="c1 in catalogData" :key="c1.id">
-          <a class="ellipsis" :href="'#'+c1.id" :title="c1.title" @click="currentCatalogId = c1.id">{{ c1.title }}</a>
+          <router-link  class="ellipsis" :to="'#'+c1.id" :title="c1.title" @click="currentCatalogId = c1.id">{{ c1.title }}</router-link>
           <ul v-if="c1.children.length">
             <li class="catalog-item" :class="[c2.level, {'catalog-item-active' : c2.id === currentCatalogId }]" v-for="c2 in c1.children" :key="c2.id">
-              <a class="ellipsis" :href="'#'+c2.id" :title="c2.title" @click="currentCatalogId = c2.id">{{ c2.title }}</a>
+              <router-link class="ellipsis" :to="'#'+c2.id" :title="c2.title" @click="currentCatalogId = c2.id">{{ c2.title }}</router-link>
               <ul v-if="c2.children.length">
                 <li class="catalog-item" :class="[c3.level, {'catalog-item-active' : c3.id === currentCatalogId }]" v-for="c3 in c2.children" :key="c3.id">
-                  <a class="ellipsis" :href="'#'+c3.id" :title="c3.title" @click="currentCatalogId = c3.id">{{ c3.title }}</a>
+                  <router-link class="ellipsis" :to="'#'+c3.id" :title="c3.title" @click="currentCatalogId = c3.id">{{ c3.title }}</router-link>
                 </li>
               </ul>
             </li>

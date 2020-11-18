@@ -10,10 +10,11 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.scrollBottom)
+    this.$once('hook:beforeDestroy',() => {
+      window.removeEventListener('scroll', this.scrollBottom)
+    })
   },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.scrollBottom)
-  },
+
   methods: {
     scrollBottom() {
       let rect = document.body.getBoundingClientRect();

@@ -1,9 +1,17 @@
 
---------
+# 
+package.json
+```json
+"eslintConfig": {
+  "rules": {
+    "no-unused-vars": "off" // 添加
+  }
+}
+```
 
 # flex 布局中，保持内容不超出容器的解决办法
 
-- 设置 min-width:0
+- min-width:0;
 - flex: 1;width:0;
 - flex: 1;overflow: hidden;
 

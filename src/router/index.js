@@ -8,9 +8,15 @@ import tag from './tag.routes'
 
 const routes = [
   {
-    name: 'test',
-    path: '/test',
+    name: 'A',
+    path: '/A',
     component: () => import('../views/A.vue'),
+  },
+  {
+    name: 'B',
+    path: '/B/:id?/name',
+    props: true,
+    component: () => import('../views/B.vue'),
   },
   ...main,
   ...tag,

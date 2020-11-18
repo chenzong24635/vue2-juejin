@@ -1,7 +1,7 @@
 export default [
   {
     path: '/',
-    redirect: '/timeline/recommended'
+    redirect: '/A'
   },
   {
     path: '/timeline',

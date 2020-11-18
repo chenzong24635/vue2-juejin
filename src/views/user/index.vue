@@ -156,7 +156,7 @@ export default {
         likedPinCount: 0, //zan-沸点数
         purchasedBookletCount: 0, //小册数
       },
-      tabs: [
+      tabs: Object.freeze([
         {
           title: '动态',
           route: 'activities',
@@ -229,7 +229,7 @@ export default {
             },
           ]
         },
-      ],
+      ]),
       lists: [],
     }
   },

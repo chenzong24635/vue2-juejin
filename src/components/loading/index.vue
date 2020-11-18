@@ -30,12 +30,13 @@ export default {
     right: 0;
     bottom: 0;
     display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 9999;
     background-color: rgba(0, 0, 0, 0.3);
   }
   &-box{
     text-align: center;
-    margin: auto;
     color: #fff;
     p{margin-top: 10px;}
     .loading{

@@ -83,7 +83,7 @@ export default {
   props: ['id'],
   data () {
     return {
-      tabs: ['目录','介绍'],
+      tabs: Object.freeze(['目录','介绍']),
       bookDesc: {},
       bookBuyers: [],
       bookSections: [],

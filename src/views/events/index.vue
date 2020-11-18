@@ -77,7 +77,7 @@ export default {
         }
       },
       cityList: [],
-      defaultCity: [
+      defaultCity: Object.freeze([
         {
           cityName: "热门活动",
           cityAlias: "all",
@@ -108,7 +108,7 @@ export default {
           cityAlias: "hangzhou",
           weight: 0
         }
-      ],
+      ]),
       lists: [],
       pageNum: 1,
       isLoading: false,

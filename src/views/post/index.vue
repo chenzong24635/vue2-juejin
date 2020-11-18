@@ -93,7 +93,7 @@ export default {
   async created () {
     await this.getArticleContent()
     await this.getComments()
-    if (location.hash === '#comment') {
+    if (location.hash.includes('#comment')) {
       this.$refs.panel.scrollIntoComment()
     }
     await this.getArticleInfo()

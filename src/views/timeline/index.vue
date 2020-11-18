@@ -58,7 +58,7 @@ export default {
       lists: [],
       order: 'POPULAR',
       subIndex: 0,
-      subNavs: [
+      subNavs: Object.freeze([
         {
           title: "热门",
           order: "POPULAR"
@@ -71,7 +71,7 @@ export default {
           title: "热榜",
           order: "THREE_DAYS_HOTTEST"
         }
-      ],
+      ]),
       apiParmas: {},
     }
   },

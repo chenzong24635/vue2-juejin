@@ -33,7 +33,7 @@ export default {
   mixins: [scroll],
   data () {
     return {
-      subNavs: [
+      subNavs: Object.freeze([
         {
           sort: 'hot',
           title: '最热'
@@ -42,7 +42,7 @@ export default {
           sort: 'new',
           title: '最新'
         },
-      ],
+      ]),
       sort: 'hot',
       subIndex: 0,
       lists: [],

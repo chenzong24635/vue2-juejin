@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <!-- <keep-alive> -->
       <header-base v-if="!$route.meta.hideHeader"></header-base>
       <suspension-icon></suspension-icon>
+    <!-- <keep-alive> -->
+      <router-view ></router-view>
     <!-- </keep-alive> -->
-    <router-view/>
   </div>
 </template>
 <script>

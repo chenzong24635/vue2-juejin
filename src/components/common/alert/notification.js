@@ -14,6 +14,8 @@ Alert.newInstance = properties => {
     }
   });
   const component = Instance.$mount();
+  console.log(Instance);
+  console.log(component);
   document.body.appendChild(component.$el);
   const alert = Instance.$children[0];
   return {

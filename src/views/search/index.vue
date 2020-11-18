@@ -59,7 +59,7 @@ export default {
       endCursor: '',
       lists: [],
       subIndex: 0,
-      subNavs: [
+      subNavs: Object.freeze([
         {
           title: "综合",
           type: "all"
@@ -76,7 +76,7 @@ export default {
           title: "用户",
           type: "user"
         },
-      ],
+      ]),
       apiParmas: {
         operationName: "",
         query: "",
